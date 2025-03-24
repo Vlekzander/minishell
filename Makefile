@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -Iinclude -I$(LIBFT_DIR)/include
-LDFLAGS = -L$(LIBFT_DIR) -lft
+LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 LIBFT_DIR=libft
 LIBFT_LIB=$(LIBFT_DIR)/libft.a
 SOURCES_DIRS = src
@@ -25,7 +25,7 @@ $(NAME): $(OBJECTS)
 
 norm:
 	@echo "$(BLUE)✦ Running norminette...$(RESET)"
-	@norminette src include | grep Error || echo "$(GREEN)➤ No norms errors.$(RESET)"
+	@norminette | grep Error || echo "$(GREEN)➤ No norms errors.$(RESET)"
 
 clean:
 	@echo "$(BLUE)✦ Cleaning object files...$(RESET)"
