@@ -3,8 +3,8 @@ CFLAGS = -Wall -Wextra -Werror -Iinclude -I$(LIBFT_DIR)/include -Itest/include
 LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 LIBFT_DIR=libft
 LIBFT_LIB=$(LIBFT_DIR)/libft.a
-SOURCES_DIRS = src src/error
-SOURCES_DIRS_TEST = src/error test/src
+SOURCES_DIRS = src src/error src/lexer
+SOURCES_DIRS_TEST = src/error src/lexer test/src test/src/test_utils
 SOURCES = $(foreach dir, $(SOURCES_DIRS), $(wildcard $(dir)/*.c))
 SOURCES_TEST = $(foreach dir, $(SOURCES_DIRS_TEST), $(wildcard $(dir)/*.c))
 OBJECTS = $(SOURCES:.c=.o)
@@ -14,7 +14,7 @@ DEPS_TEST = $(SOURCES_TEST:.c=.d)
 NAME = minishell
 NAME_TEST = tests
 
-all: $(NAME) test
+all: $(NAME) $(NAME_TEST)
 
 $(NAME): $(OBJECTS)
 	@echo "$(BLUE)✦ Building libraries...$(RESET)\r"

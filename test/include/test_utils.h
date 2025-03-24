@@ -1,0 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test_utils.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/24 23:20:26 by apierret          #+#    #+#             */
+/*   Updated: 2025/03/24 23:45:55 by apierret         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef TEST_UTILS_H
+# define TEST_UTILS_H
+# include "libft.h"
+
+int	lst_equal(t_list *a, t_list *b, int (*cmp)(void *, void *));
+int	token_equal(void *tk_a, void *tk_b);
+
+#endif

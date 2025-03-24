@@ -6,50 +6,36 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 16:22:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/03/24 16:41:38 by apierret         ###   ########.fr       */
+/*   Updated: 2025/03/24 23:58:32 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "data.h"
+#include "lexer.h"
 #include "munit.h"
+#include "test_utils.h"
 
-static int addition(int a, int b)
-{
-	return (a + b);
-}
-
-static MunitResult test_addition_positive(const MunitParameter params[], void* data)
-{
-  	(void) params;
-  	(void) data;
-	munit_assert_int(addition(2, 3), ==, 5);
-	return (MUNIT_OK);
-}
-
-static MunitResult test_addition_zero(const MunitParameter params[], void* data)
+static MunitResult	tokenize_test(const MunitParameter params[], void* data)
 {
 	(void) params;
 	(void) data;
-	munit_assert_int(addition(0, 0), ==, 0);
-	return (MUNIT_OK);
-}
-
-static MunitResult test_addition_negatif(const MunitParameter params[], void* data)
-{
-	(void) params;
-	(void) data;
-	munit_assert_int(addition(-2, -3), ==, -5);
+	t_list	*list = NULL;
+	t_list	*tested = NULL;
+	ft_lstadd_back(&list, ft_lstnew(&(t_token){TK_WORD, "Hello"}));
+	ft_lstadd_back(&list, ft_lstnew(&(t_token){TK_WORD, "World"}));
+	tokenize(&tested, "Hello World");
+	munit_assert_true(lst_equal(list, tested, token_equal));
+	//TODO Clean tested
 	return (MUNIT_OK);
 }
 
 static MunitTest tests[] = {
-	{ "/addition/positive", test_addition_positive, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
-	{ "/addition/zero",     test_addition_zero,     NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
-	{ "/addition/negatif",  test_addition_negatif,  NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
+	{"/lexer/tokenize/helloworld", tokenize_test, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
 	{ NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
 
-static const MunitSuite math_utils = {
-	"/math-utils",
+static const MunitSuite suite = {
+	"",
 	tests,
 	NULL,
 	1,
@@ -58,5 +44,5 @@ static const MunitSuite math_utils = {
 
 int main(int argc, char* argv[])
 {
-	return (munit_suite_main(&math_utils, NULL, argc, argv));
+	return (munit_suite_main(&suite, NULL, argc, argv));
 }
