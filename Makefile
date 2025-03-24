@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -Werror -Iinclude -I$(LIBFT_DIR)/include
 LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 LIBFT_DIR=libft
 LIBFT_LIB=$(LIBFT_DIR)/libft.a
-SOURCES_DIRS = src
+SOURCES_DIRS = src src/error
 SOURCES = $(foreach dir, $(SOURCES_DIRS), $(wildcard $(dir)/*.c))
 OBJECTS = $(SOURCES:.c=.o)
 DEPS = $(SOURCES:.c=.d)
