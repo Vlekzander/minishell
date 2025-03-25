@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:23:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/03/25 18:54:31 by apierret         ###   ########.fr       */
+/*   Updated: 2025/03/25 22:54:26 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@
 
 static void	add_token(t_list **list, t_token_type type, char *value)
 {
+	size_t	i;
 	if (list == NULL || value == NULL)
 		return ;
 	if (ft_strlen(value) > 0)
 		ft_lstadd_back(list, ft_lstnew(create_token(type, value)));
-	while (*value++ != '\0')
-		*value = '\0';
+	i = 0;
+	while (value[i] != '\0')
+		value[i++]= '\0';
 }
 
-static void	process_group(char c, char *group)
+static void	handle_group(char c, char *group)
 {
 	if (group == NULL)
 		return ;
@@ -32,6 +34,46 @@ static void	process_group(char c, char *group)
 		*group = c;
 	else if (*group == c)
 		*group = 0;
+}
+
+static t_token_type	get_type(char *str)
+{
+	if (ft_strncmp(str, "|", 2) == 0)
+		return (TK_PIPE);
+	if (ft_strncmp(str, "<", 2) == 0)
+		return (TK_REDIR_IN);
+	if (ft_strncmp(str, ">", 2) == 0)
+		return (TK_REDIR_OUT);
+	if (ft_strncmp(str, ">>", 3) == 0)
+		return (TK_REDIR_APPEND);
+	if (ft_strncmp(str, "<<", 3) == 0)
+		return (TK_REDIR_HEREDOC);
+	if (ft_strncmp(str, "&&", 3) == 0)
+		return (TK_AND);
+	if (ft_strncmp(str, "||", 3) == 0)
+		return (TK_OR);
+	return (TK_WORD);
+}
+
+static int	match_operator(char *input)
+{
+	if (!input)
+		return (0);
+	if (input[0] == '<' && input[1] == '<')
+		return (2);
+	if (input[0] == '>' && input[1] == '>')
+		return (2);
+	if (input[0] == '|' && input[1] == '|')
+		return (2);
+	if (input[0] == '&' && input[1] == '&')
+		return (2);
+	if (input[0] == '<')
+		return (1);
+	if (input[0] == '>')
+		return (1);
+	if (input[0] == '|')
+		return (1);
+	return (0);
 }
 
 t_error	tokenize(t_list **tokens, char *input)
@@ -52,7 +94,16 @@ t_error	tokenize(t_list **tokens, char *input)
 	while (input[i] != '\0')
 	{
 		if (ft_strchr("'\"", input[i]) && (group == 0 || group == input[i]))
-			process_group(input[i], &group);
+			handle_group(input[i], &group);
+		else if (group == 0 && match_operator(input +i) > 0)
+		{
+			j = 0;
+			add_token(tokens, TK_WORD, buf);
+			ft_strlcpy(buf, input + i, match_operator(input +i) +1);
+			add_token(tokens, get_type(buf), buf);
+			i += match_operator(input +i);
+			continue;
+		}
 		else if (group == 0 && ft_strchr(" \t\n", input[i]))
 		{
 			j = 0;
