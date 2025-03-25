@@ -6,11 +6,10 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 11:15:50 by apierret          #+#    #+#             */
-/*   Updated: 2025/03/25 11:37:23 by apierret         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:55:46 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
 #include "data.h"
 #include "test_utils.h"
 
@@ -37,20 +36,18 @@ static t_token_type	get_type(char *str)
 	return (TK_WORD);
 }
 
-t_list	*create_token_list(int count, ...)
+t_list	*create_token_list(char **strings)
 {
-	va_list args;
+	size_t	i;
 	t_list	*list = NULL;
-	char	*str;
 	t_token	*token;
 
-	va_start(args, count);
-	for (int i = 0; i < count; i++)
+	i = 0;
+	while (strings[i] != NULL)
 	{
-		str = va_arg(args, char *);
-		token = create_token(get_type(str), str);
+		token = create_token(get_type(strings[i]), strings[i]);
 		ft_lstadd_back(&list, ft_lstnew(token));
+		i++;
 	}
-	va_end(args);
 	return (list);
 }
