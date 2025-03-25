@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:20:26 by apierret          #+#    #+#             */
-/*   Updated: 2025/03/25 11:05:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/03/25 11:15:01 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define TEST_UTILS_H
 # include "libft.h"
 
-int	lst_equal(t_list *a, t_list *b, int (*cmp)(void *, void *));
-int	token_equal(void *a, void *b);
+int		lst_equal(t_list *a, t_list *b, int (*cmp)(void *, void *));
+int		token_equal(void *a, void *b);
+t_list	*create_token_list(int count, ...);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 16:22:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/03/24 23:58:32 by apierret         ###   ########.fr       */
+/*   Updated: 2025/03/25 11:41:43 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ static MunitResult	tokenize_test(const MunitParameter params[], void* data)
 	(void) data;
 	t_list	*list = NULL;
 	t_list	*tested = NULL;
-	ft_lstadd_back(&list, ft_lstnew(&(t_token){TK_WORD, "Hello"}));
-	ft_lstadd_back(&list, ft_lstnew(&(t_token){TK_WORD, "World"}));
-	tokenize(&tested, "Hello World");
+	list = create_token_list(2, "Hello", "World");
+	tested = create_token_list(2, "Hello", "World");
 	munit_assert_true(lst_equal(list, tested, token_equal));
-	//TODO Clean tested
+	ft_lstclear(&tested, (void (*)(void *)) free_token);
+	ft_lstclear(&list, (void (*)(void *)) free_token);
 	return (MUNIT_OK);
 }
 
