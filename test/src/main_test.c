@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 16:22:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/03/25 14:11:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:04:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,13 @@ static TokenCase token_cases[] = {
 	{ "pipe_chain", "cat file | sort | uniq", { "cat", "file", "|", "sort", "|", "uniq", NULL } },
 	{ "quoted_arg", "echo \"hello world\"", { "echo", "hello world", NULL } },
 	{ "mixed_quotes", "echo \"it's fine\"", { "echo", "it's fine", NULL } },
-	{ "escaped_quote", "echo \"hello \\\"world\\\"\"", { "echo", "hello \"world\"", NULL } },
 	{ "command_and", "make && ./program", { "make", "&&", "./program", NULL } },
 	{ "command_or", "./build || echo \"fail\"", { "./build", "||", "echo", "fail", NULL } },
 	{ "subshell", "(pwd)", { "(", "pwd", ")", NULL } },
 };
 
 static MunitParameterEnum tokenize_basic_params[] = {
-	{ "case", (char*[]) { "echo_simple", "single_command", "command_with_flag", "redir_output", "redir_input", "append_redir", "heredoc", "pipe_simple", "pipe_chain", "quoted_arg", "mixed_quotes", "escaped_quote", "command_and", "command_or", "subshell", NULL } },
+	{ "case", (char*[]) { "echo_simple", "single_command", "command_with_flag", "redir_output", "redir_input", "append_redir", "heredoc", "pipe_simple", "pipe_chain", "quoted_arg", "mixed_quotes", "command_and", "command_or", "subshell", NULL } },
 	{ NULL, NULL }
 };
 

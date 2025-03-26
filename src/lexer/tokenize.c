@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:23:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/03/25 22:54:26 by apierret         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:02:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ static t_token_type	get_type(char *str)
 		return (TK_AND);
 	if (ft_strncmp(str, "||", 3) == 0)
 		return (TK_OR);
+	if (ft_strncmp(str, "(", 2) == 0)
+		return (TK_PARENT_OPEN);
+	if (ft_strncmp(str, ")", 2) == 0)
+		return (TK_PARENT_CLOSE);
 	return (TK_WORD);
 }
 
@@ -103,6 +107,12 @@ t_error	tokenize(t_list **tokens, char *input)
 			add_token(tokens, get_type(buf), buf);
 			i += match_operator(input +i);
 			continue;
+		} else if (group == 0 && ft_strchr("()", input[i]))
+		{
+			j = 0;
+			add_token(tokens, TK_WORD, buf);
+			buf[0] = input[i];
+			add_token(tokens, get_type(buf), buf);
 		}
 		else if (group == 0 && ft_strchr(" \t\n", input[i]))
 		{
