@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:23:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/03/26 12:02:57 by apierret         ###   ########.fr       */
+/*   Updated: 2025/03/27 18:52:43 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 static void	add_token(t_list **list, t_token_type type, char *value)
 {
 	size_t	i;
+
 	if (list == NULL || value == NULL)
 		return ;
 	if (ft_strlen(value) > 0)
@@ -26,98 +27,98 @@ static void	add_token(t_list **list, t_token_type type, char *value)
 		value[i++]= '\0';
 }
 
-static void	handle_group(char c, char *group)
+static int	is_quote(char c)
 {
-	if (group == NULL)
-		return ;
-	if (*group == 0)
-		*group = c;
-	else if (*group == c)
-		*group = 0;
+	return (c == '"' || c == '\'');
 }
 
-static t_token_type	get_type(char *str)
+static int	is_operator(char *str)
 {
-	if (ft_strncmp(str, "|", 2) == 0)
-		return (TK_PIPE);
-	if (ft_strncmp(str, "<", 2) == 0)
-		return (TK_REDIR_IN);
-	if (ft_strncmp(str, ">", 2) == 0)
-		return (TK_REDIR_OUT);
-	if (ft_strncmp(str, ">>", 3) == 0)
-		return (TK_REDIR_APPEND);
-	if (ft_strncmp(str, "<<", 3) == 0)
-		return (TK_REDIR_HEREDOC);
-	if (ft_strncmp(str, "&&", 3) == 0)
-		return (TK_AND);
-	if (ft_strncmp(str, "||", 3) == 0)
-		return (TK_OR);
-	if (ft_strncmp(str, "(", 2) == 0)
-		return (TK_PARENT_OPEN);
-	if (ft_strncmp(str, ")", 2) == 0)
-		return (TK_PARENT_CLOSE);
-	return (TK_WORD);
-}
-
-static int	match_operator(char *input)
-{
-	if (!input)
+	if (!str)
 		return (0);
-	if (input[0] == '<' && input[1] == '<')
-		return (2);
-	if (input[0] == '>' && input[1] == '>')
-		return (2);
-	if (input[0] == '|' && input[1] == '|')
-		return (2);
-	if (input[0] == '&' && input[1] == '&')
-		return (2);
-	if (input[0] == '<')
+	if (str[0] == '<' && str[1] == '<')
 		return (1);
-	if (input[0] == '>')
+	if (str[0] == '>' && str[1] == '>')
 		return (1);
-	if (input[0] == '|')
+	if (str[0] == '|' && str[1] == '|')
+		return (1);
+	if (str[0] == '&' && str[1] == '&')
+		return (1);
+	if (str[0] == '<')
+		return (1);
+	if (str[0] == '>')
+		return (1);
+	if (str[0] == '|')
+		return (1);
+	if (str[0] == '(')
+		return (1);
+	if (str[0] == ')')
 		return (1);
 	return (0);
+}
+
+static int	is_separator(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n');
+}
+
+static char	handle_quote(char c, char current)
+{
+	if (current == 0)
+		return (c);
+	if (current == c)
+		return (0);
+	return (current);
+}
+
+static void process_operator(t_list **tokens, char *input, char *buf, size_t *i)
+{
+	if (tokens == NULL || input == NULL || buf == NULL || i == NULL)
+		return ;
+	add_token(tokens, TK_WORD, buf);
+	ft_strlcpy(buf, input + *i, 3);
+	if (get_token_type(buf) == TK_WORD)
+		buf[1] = '\0';
+	*i += ft_strlen(buf);
+	add_token(tokens, get_token_type(buf), buf);
+}
+
+static void process_separator(t_list **tokens, char *buf)
+{
+	if (tokens == NULL || buf == NULL)
+		return;
+	add_token(tokens, TK_WORD, buf);
 }
 
 t_error	tokenize(t_list **tokens, char *input)
 {
 	char	*buf;
+	char	quote;
 	size_t	i;
 	size_t	j;
-	char	group;
 
 	if (tokens == NULL || input == NULL)
 		return (ERR_IMPLEMENTATION);
 	buf = ft_calloc(ft_strlen(input) +1, sizeof(char));
 	if (buf == NULL)
 		return (ERR_ALLOCATION);
-	group = 0;
+	quote = 0;
 	i = 0;
 	j = 0;
 	while (input[i] != '\0')
 	{
-		if (ft_strchr("'\"", input[i]) && (group == 0 || group == input[i]))
-			handle_group(input[i], &group);
-		else if (group == 0 && match_operator(input +i) > 0)
+		if (is_quote(input[i]) && (quote == 0 || quote == input[i]))
+			quote = handle_quote(input[i], quote);
+		else if (quote == 0 && is_operator(input + i))
 		{
+			process_operator(tokens, input, buf, &i);
 			j = 0;
-			add_token(tokens, TK_WORD, buf);
-			ft_strlcpy(buf, input + i, match_operator(input +i) +1);
-			add_token(tokens, get_type(buf), buf);
-			i += match_operator(input +i);
 			continue;
-		} else if (group == 0 && ft_strchr("()", input[i]))
-		{
-			j = 0;
-			add_token(tokens, TK_WORD, buf);
-			buf[0] = input[i];
-			add_token(tokens, get_type(buf), buf);
 		}
-		else if (group == 0 && ft_strchr(" \t\n", input[i]))
+		else if (quote == 0 && is_separator(input[i]))
 		{
+			process_separator(tokens, buf);
 			j = 0;
-			add_token(tokens, TK_WORD, buf);
 		}
 		else
 			buf[j++] = input[i];

@@ -18,21 +18,21 @@ static t_token_type	get_type(char *str)
 	if (ft_strncmp(str, "|", 2) == 0)
 		return (TK_PIPE);
 	if (ft_strncmp(str, "<", 2) == 0)
-		return (TK_REDIR_IN);
+		return (TK_IN);
 	if (ft_strncmp(str, ">", 2) == 0)
-		return (TK_REDIR_OUT);
+		return (TK_OUT);
 	if (ft_strncmp(str, ">>", 3) == 0)
-		return (TK_REDIR_APPEND);
+		return (TK_APPEND);
 	if (ft_strncmp(str, "<<", 3) == 0)
-		return (TK_REDIR_HEREDOC);
+		return (TK_HEREDOC);
 	if (ft_strncmp(str, "&&", 3) == 0)
 		return (TK_AND);
 	if (ft_strncmp(str, "||", 3) == 0)
 		return (TK_OR);
 	if (ft_strncmp(str, "(", 2) == 0)
-		return (TK_PARENT_OPEN);
+		return (TK_P_OPEN);
 	if (ft_strncmp(str, ")", 2) == 0)
-		return (TK_PARENT_CLOSE);
+		return (TK_P_CLOSE);
 	return (TK_WORD);
 }
 
