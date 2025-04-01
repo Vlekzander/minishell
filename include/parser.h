@@ -1,30 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_token_list.c                                :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/25 11:15:50 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/01 16:32:33 by apierret         ###   ########.fr       */
+/*   Created: 2025/04/01 16:22:41 by apierret          #+#    #+#             */
+/*   Updated: 2025/04/01 16:27:09 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "data.h"
-#include "test_utils.h"
+#ifndef PARSER_H
+# define PARSER_H
+# include "data.h"
+# include "error.h"
 
-t_list	*create_token_list(char **strings)
-{
-	size_t	i;
-	t_list	*list = NULL;
-	t_token	*token;
+t_error	parse_ast(t_ast **ast, t_list *tokens);
 
-	i = 0;
-	while (strings[i] != NULL)
-	{
-		token = create_token(get_token_type(strings[i]), strings[i]);
-		ft_lstadd_back(&list, ft_lstnew(token));
-		i++;
-	}
-	return (list);
-}
+#endif
