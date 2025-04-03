@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:34:27 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/03 10:16:02 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/03 13:41:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,24 @@
 
 typedef struct s_case
 {
-	char* name;
+	char	*name;
 	union
 	{
 		struct
 		{
-			char* input;
-			char* expected_tokens[10];
+			char	*input;
+			char	*expected_tokens[10];
+		};
+		struct
+		{
+			char	*tokens[10];
+			void	*ast;
 		};
 	};
 } t_case;
 
 t_case	*find_case(t_case cases[], const char *name);
 MunitResult	tokenize_basic_tests(const MunitParameter params[], void* data);
+MunitResult	parse_ast_basic_tests(const MunitParameter params[], void* data);
 
 #endif
