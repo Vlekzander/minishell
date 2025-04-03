@@ -12,7 +12,7 @@ OBJECTS_TEST = $(SOURCES_TEST:.c=.o)
 DEPS = $(SOURCES:.c=.d)
 DEPS_TEST = $(SOURCES_TEST:.c=.d)
 NAME = minishell
-NAME_TEST = tests
+NAME_TEST = minishell_tests
 
 all: $(NAME) $(NAME_TEST)
 
