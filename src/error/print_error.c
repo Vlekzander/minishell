@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:44:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/03/25 18:34:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:06:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ static char	*error_message(t_error error)
 		return ("Implementation error, are you serious?");
 	if (error == ERR_ALLOCATION)
 		return ("Memory allocation failed.");
+	if (error == ERR_SYNTAX)
+		return ("Syntex error.");
 	return ("Unknown error");
 }
 

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:28:35 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/03 13:44:03 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:59:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static t_case ast_cases[] = {
 	{
 		.name = "simple_echo",
 		.tokens = { "echo", "hello", NULL },
-		.ast = &(t_ast){
+		.excepted_ast = &(t_ast){
 			.type = NODE_COMMAND,
 			.exit_code = 0,
 			.command = &(t_command){
@@ -33,7 +33,7 @@ static t_case ast_cases[] = {
 	{
 		.name = "pipe_ls_grep",
 		.tokens = { "ls", "|", "grep", ".c", NULL },
-		.ast = &(t_ast){
+		.excepted_ast = &(t_ast){
 			.type = NODE_PIPELINE,
 			.exit_code = 0,
 			.pipeline = &(t_list){
@@ -56,7 +56,7 @@ static t_case ast_cases[] = {
 	{
 		.name = "redir_output",
 		.tokens = { "echo", "hi", ">", "out.txt", NULL },
-		.ast = &(t_ast){
+		.excepted_ast = &(t_ast){
 			.type = NODE_COMMAND,
 			.exit_code = 0,
 			.command = &(t_command){
@@ -87,9 +87,9 @@ MunitResult	parse_ast_basic_tests(const MunitParameter params[], void* data)
 	tested = NULL;
 	if (tc == NULL)
 		return (munit_log(MUNIT_LOG_ERROR, "Test case not found"), MUNIT_ERROR);
-	tokens = create_token_list(tc->expected_tokens);
+	tokens = create_token_list(tc->tokens);
 	parse_ast(&tested, tokens);
-	equal = ast_equal(ast_cases->ast, tested);
+	equal = ast_equal(tc->excepted_ast, tested);
 	free_ast(tested);
 	ft_lstclear(&tokens, (void (*)(void *)) free_token);
 	if (!equal)
