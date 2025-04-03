@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 16:34:22 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/03 10:15:43 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/03 12:23:51 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ MunitResult	tokenize_basic_tests(const MunitParameter params[], void* data)
 
 	(void) data;
 	tc = find_case(token_cases, munit_parameters_get(params, "case"));
+	excepted = NULL;
+	tested = NULL;
 	if (tc == NULL)
 		return (munit_log(MUNIT_LOG_ERROR, "Test case not found"), MUNIT_ERROR);
 	excepted = create_token_list(tc->expected_tokens);
