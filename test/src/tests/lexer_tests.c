@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 16:34:22 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/02 16:37:18 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/03 10:15:43 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,21 @@ static t_case token_cases[] = {
 
 MunitResult	tokenize_basic_tests(const MunitParameter params[], void* data)
 {
-	(void) data;
-	t_case	*tc = find_case(token_cases, munit_parameters_get(params, "case"));
-	t_list		*excepted = NULL;
-	t_list		*tested = NULL;
-	t_error		result;
+	t_case	*tc;
+	t_list	*excepted;
+	t_list	*tested;
+	int		equal;
 
+	(void) data;
+	tc = find_case(token_cases, munit_parameters_get(params, "case"));
 	if (tc == NULL)
 		return (munit_log(MUNIT_LOG_ERROR, "Test case not found"), MUNIT_ERROR);
 	excepted = create_token_list(tc->expected_tokens);
-	result = tokenize(&tested, tc->input);
-	munit_assert_true(lst_equal(excepted, tested, token_equal));
-	munit_assert_true(result == ERR_NONE);
+	tokenize(&tested, tc->input);
+	equal = lst_equal(excepted, tested, token_equal);
 	ft_lstclear(&tested, (void (*)(void *)) free_token);
 	ft_lstclear(&excepted, (void (*)(void *)) free_token);
+	if (!equal)
+		return (MUNIT_FAIL);
 	return (MUNIT_OK);
 }
