@@ -6,19 +6,19 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 16:22:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/03 13:43:38 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:28:11 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tests.h"
 
 static MunitParameterEnum tokenize_basic_params[] = {
-	{ "case", (char*[]) { "echo_simple", "single_command", "command_with_flag", "redir_output", "redir_input", "append_redir", "heredoc", "pipe_simple", "pipe_chain", "quoted_arg", "mixed_quotes", "command_and", "command_or", "subshell", NULL } },
+	{ "case", (char*[]) { "single_command", "one_arg", "multiple_args", "redir_out", "redir_append", "redir_in", "redir_heredoc", "redir_out_inverted", "redir_append_inverted", "redir_in_inverted", "redir_heredoc_inverted", "single_pipe", "multiple_pipes", "pipes_and_redir", "quoted_arg", "mixed_quotes", "command_and", "command_or", "subshell", NULL } },
 	{ NULL, NULL }
 };
 
 static MunitParameterEnum parse_ast_basic_params[] = {
-	{ "case", (char*[]) { "simple_echo", "pipe_ls_grep", "redir_output", NULL } },
+	{ "case", (char*[]) { "single_command", "one_arg", "multiple_args", "redir_out", "redir_append", "redir_in", "redir_heredoc", "redir_out_inverted", "redir_append_inverted", "redir_in_inverted", "redir_heredoc_inverted", "single_pipe", "multiple_pipes", "pipes_and_redir", NULL } },
 	{ NULL, NULL }
 };
 

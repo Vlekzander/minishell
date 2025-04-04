@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:34:27 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/03 15:58:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:14:53 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ typedef struct s_case
 		struct
 		{
 			char	*input;
-			char	*expected_tokens[10];
+			char	*expected_tokens[100];
 		};
 		struct
 		{
-			char	*tokens[10];
+			char	*tokens[100];
 			void	*excepted_ast;
 		};
 	};

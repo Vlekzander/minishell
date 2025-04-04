@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 16:34:22 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/03 12:23:51 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:28:54 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,20 @@
 #include "test_utils.h"
 
 static t_case token_cases[] = {
-	{ "echo_simple",     { { "echo hello", { "echo", "hello", NULL } } } },
 	{ "single_command",  { { "pwd", { "pwd", NULL } } } },
-	{ "command_with_flag", { { "ls -a", { "ls", "-a", NULL } } } },
-	{ "redir_output",    { { "echo hello > out.txt", { "echo", "hello", ">", "out.txt", NULL } } } },
-	{ "redir_input",     { { "cat < file.txt", { "cat", "<", "file.txt", NULL } } } },
-	{ "append_redir",    { { "echo hi >> log.txt", { "echo", "hi", ">>", "log.txt", NULL } } } },
-	{ "heredoc",         { { "cat << EOF", { "cat", "<<", "EOF", NULL } } } },
-	{ "pipe_simple",     { { "ls | grep .c", { "ls", "|", "grep", ".c", NULL } } } },
-	{ "pipe_chain",      { { "cat file | sort | uniq", { "cat", "file", "|", "sort", "|", "uniq", NULL } } } },
+	{ "one_arg",     { { "echo hello", { "echo", "hello", NULL } } } },
+	{ "multiple_args", { { "echo hello world", { "echo", "hello", "world", NULL } } } },
+	{ "redir_out", { { "echo hello > out.txt", { "echo", "hello", ">", "out.txt", NULL } } } },
+	{ "redir_append", { { "echo world >> out.txt", { "echo", "world", ">>", "out.txt", NULL } } } },
+	{ "redir_in", { { "cat < in.txt", { "cat", "<", "in.txt", NULL } } } },
+	{ "redir_heredoc", { { "cat << END", { "cat", "<<", "END", NULL } } } },
+	{ "redir_out_inverted", { { "> out.txt echo hello", { ">", "out.txt", "echo", "hello", NULL } } } },
+	{ "redir_append_inverted", { { ">> out.txt echo world", { ">>", "out.txt", "echo", "world", NULL } } } },
+	{ "redir_in_inverted", { { "< in.txt cat", { "<", "in.txt", "cat", NULL } } } },
+	{ "redir_heredoc_inverted", { { "<< END cat", { "<<", "END", "cat", NULL } } } },
+	{ "single_pipe", { { "ls | grep .c", { "ls", "|", "grep", ".c", NULL } } } },
+	{ "multiple_pipes", { { "ls | grep .c | wc -l", { "ls", "|", "grep", ".c", "|", "wc", "-l", NULL } } } },
+	{ "pipes_and_redir", { { "cat < in.txt | grep hello | wc -l > out.txt", { "cat", "<", "in.txt", "|", "grep", "hello", "|", "wc", "-l", ">", "out.txt", NULL } } } },
 	{ "quoted_arg",      { { "echo \"hello world\"", { "echo", "hello world", NULL } } } },
 	{ "mixed_quotes",    { { "echo \"it's fine\"", { "echo", "it's fine", NULL } } } },
 	{ "command_and",     { { "make && ./program", { "make", "&&", "./program", NULL } } } },
