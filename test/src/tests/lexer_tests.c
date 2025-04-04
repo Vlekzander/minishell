@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 16:34:22 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/04 12:28:54 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:34:23 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,14 @@ static t_case token_cases[] = {
 	{ "command_and",     { { "make && ./program", { "make", "&&", "./program", NULL } } } },
 	{ "command_or",      { { "./build || echo \"fail\"", { "./build", "||", "echo", "fail", NULL } } } },
 	{ "subshell",        { { "(pwd)", { "(", "pwd", ")", NULL } } } },
+	{ "and_with_redir", { { "echo success > out.txt && cat < in.txt", { "echo", "success", ">", "out.txt", "&&", "cat", "<", "in.txt", NULL } } } },
+	{ "or_with_pipe", { { "false || ls | grep .h", { "false", "||", "ls", "|", "grep", ".h", NULL } } } },
+	{ "subshell_with_pipe", { { "(ls -la) | wc -l", { "(", "ls", "-la", ")", "|", "wc", "-l", NULL } } } },
+	{ "subshell_and_redir", { { "(echo hello) > out.txt && echo done", { "(", "echo", "hello", ")", ">", "out.txt", "&&", "echo", "done", NULL } } } },
+	{ "nested_logic", { { "make && (./run || echo \"fallback\")", { "make", "&&", "(", "./run", "||", "echo", "fallback", ")", NULL } } } },
+	{ "deep_nested_group", { { "(((echo ok)))", { "(", "(", "(", "echo", "ok", ")", ")", ")", NULL } } } },
+	{ "multi_op_complex", { { "(cat file | grep error) && echo \"found\" || echo \"none\"", { "(", "cat", "file", "|", "grep", "error", ")", "&&", "echo", "found", "||", "echo", "none", NULL } } } },
+
 	{ NULL }
 };
 
