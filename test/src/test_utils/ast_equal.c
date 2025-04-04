@@ -6,10 +6,11 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 12:07:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/03 13:30:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/04 14:43:29 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <munit.h>
 #include <string.h>
 
 #include "test_utils.h"
@@ -37,6 +38,21 @@ static int	str_array_equal(char **a, char **b)
 	return (a[i] == b[i]);
 }
 
+static int	redir_equal(t_redir *a, t_redir *b)
+{
+	if (a == NULL || b == NULL)
+		return (a == b);
+	if (a->append != b->append)
+		return (0);
+	if (!str_equal(a->in, b->in))
+		return (0);
+	if (!str_equal(a->out, b->out))
+		return (0);
+	if (!str_equal(a->heredoc, b->heredoc))
+		return (0);
+	return (1);
+}
+
 static int	command_equal(t_command *a, t_command *b)
 {
 	if (a == NULL || b == NULL)
@@ -45,13 +61,7 @@ static int	command_equal(t_command *a, t_command *b)
 		return (0);
 	if (!str_array_equal(a->args, b->args))
 		return (0);
-	if (a->redir.append != b->redir.append)
-		return (0);
-	if (!str_equal(a->redir.in, b->redir.in))
-		return (0);
-	if (!str_equal(a->redir.out, b->redir.out))
-		return (0);
-	if (!str_equal(a->redir.heredoc, b->redir.heredoc))
+	if (!redir_equal(&a->redir, &b->redir))
 		return (0);
 	return (1);
 }
@@ -62,7 +72,7 @@ static int	pipeline_equal(t_list *a, t_list *b)
 		return (a == b);
 	while (a != NULL && b != NULL)
 	{
-		if (!command_equal(a->content, b->content))
+		if (!ast_equal(a->content, b->content))
 			return (0);
 		a = a->next;
 		b = b->next;
@@ -83,6 +93,6 @@ int	ast_equal(t_ast *a, t_ast *b)
 	if (a->type == NODE_AND || a->type == NODE_OR)
 		return (ast_equal(a->left, b->left) && ast_equal(a->right, b->right));
 	if (a->type == NODE_SUBSHELL)
-		return (ast_equal(a->child, b->child));
+		return (ast_equal(a->child, b->child) && redir_equal(&a->redir, &b->redir));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/03 15:04:32 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/04 14:07:29 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,17 @@ typedef struct s_ast
 	int			exit_code;
 	union
 	{
-		t_command		*command;
-		t_list			*pipeline;
-		struct s_ast	*child;
+		t_command	*command;
+		t_list		*pipeline;
 		struct
 		{
-			struct s_ast	*left;
+			t_redir			redir;
+			struct s_ast	*child;
+		};
+		struct
+		{
 			struct s_ast	*right;
+			struct s_ast	*left;
 		};
 	};
 }	t_ast;
