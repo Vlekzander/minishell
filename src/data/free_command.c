@@ -6,12 +6,25 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 15:04:41 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/04 15:06:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:48:26 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "data.h"
+
+static void	free_redir(t_redir	*redir)
+{
+	if (redir == NULL)
+		return ;
+	if (redir->type == REDIR_IN)
+		free(redir->in);
+	if (redir->type == REDIR_OUT)
+		free(redir->out);
+	if (redir->type == REDIR_HEREDOC)
+		free(redir->heredoc);
+	free(redir);
+}
 
 void	free_command(t_command *command)
 {
@@ -27,11 +40,6 @@ void	free_command(t_command *command)
 			free(command->args[i++]);
 		free(command->args);
 	}
-	if (command->redir.in != NULL)
-		free(command->redir.in);
-	if (command->redir.out != NULL)
-		free(command->redir.out);
-	if (command->redir.heredoc != NULL)
-		free(command->redir.heredoc);
+	ft_lstclear(&command->redirs, (void (*)(void *)) free_redir);
 	free(command);
 }

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/04 14:07:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:49:21 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,33 @@ typedef enum e_node_type
 	NODE_SUBSHELL
 }	t_node_type;
 
-typedef struct s_redirect
+typedef enum e_redir_type
 {
-	char	*in;
-	char	*out;
-	char	*heredoc;
-	int		append;
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_HEREDOC
+}	t_redir_type;
+
+typedef struct s_redir
+{
+	t_redir_type	type;
+	union
+	{
+		char	*in;
+		char	*heredoc;
+		struct
+		{
+			char	*out;
+			int		append;
+		};
+	};
 }	t_redir;
 
 typedef struct s_command
 {
 	char		*path;
 	char		**args;
-	t_redir		redir;
+	t_list		*redirs;
 }	t_command;
 
 typedef struct s_ast
@@ -68,7 +82,7 @@ typedef struct s_ast
 		t_list		*pipeline;
 		struct
 		{
-			t_redir			redir;
+			t_list			*redirs;
 			struct s_ast	*child;
 		};
 		struct

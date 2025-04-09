@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:28:35 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/04 15:05:08 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:43:39 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "pwd",
 				.args = (char*[]){"pwd", NULL},
-				.redir = { NULL, NULL, NULL, 0 }
+				NULL
 			}
 		}
 	},
@@ -39,7 +39,7 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "echo",
 				.args = (char*[]){"echo", "hello", NULL},
-				.redir = { NULL, NULL, NULL, 0 }
+				NULL
 			}
 		}
 	},
@@ -52,7 +52,7 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "echo",
 				.args = (char*[]){"echo", "hello", "world", NULL},
-				.redir = { NULL, NULL, NULL, 0 }
+				NULL
 			}
 		}
 	},
@@ -65,7 +65,11 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "echo",
 				.args = (char*[]){"echo", "hello", NULL},
-				.redir = { NULL, "out.txt", NULL, 0 }
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_OUT, .out = "out.txt", .append = 0},
+					.next = NULL
+				}
 			}
 		}
 	},
@@ -78,7 +82,11 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "echo",
 				.args = (char*[]){"echo", "world", NULL},
-				.redir = { NULL, "out.txt", NULL, 1 }
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_OUT, .out = "out.txt", .append = 1},
+					.next = NULL
+				}
 			}
 		}
 	},
@@ -91,7 +99,11 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "echo",
 				.args = (char*[]){"cat", NULL},
-				.redir = { "in.txt", NULL, NULL, 0 }
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_IN, .in = "in.txt"},
+					.next = NULL
+				}
 			}
 		}
 	},
@@ -104,7 +116,11 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "echo",
 				.args = (char*[]){"cat", NULL},
-				.redir = { NULL, NULL, "END", 0 }
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_HEREDOC, .heredoc = "END"},
+					.next = NULL
+				}
 			}
 		}
 	},
@@ -117,7 +133,11 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "echo",
 				.args = (char*[]){"echo", "hello", NULL},
-				.redir = { NULL, "out.txt", NULL, 0 }
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_OUT, .out = "out.txt", .append = 0},
+					.next = NULL
+				}
 			}
 		}
 	},
@@ -130,7 +150,11 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "echo",
 				.args = (char*[]){"echo", "world", NULL},
-				.redir = { NULL, "out.txt", NULL, 1 }
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_OUT, .out = "out.txt", .append = 1},
+					.next = NULL
+				}
 			}
 		}
 	},
@@ -143,7 +167,11 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "echo",
 				.args = (char*[]){"cat", NULL},
-				.redir = { "in.txt", NULL, NULL, 0 }
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_IN, .in = "in.txt"},
+					.next = NULL
+				}
 			}
 		}
 	},
@@ -156,7 +184,11 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "echo",
 				.args = (char*[]){"cat", NULL},
-				.redir = { NULL, NULL, "END", 0 }
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_HEREDOC, .heredoc = "END"},
+					.next = NULL
+				}
 			}
 		}
 	},
@@ -173,7 +205,7 @@ static t_case ast_cases[] = {
 					.command = &(t_command){
 						.path = "ls",
 						.args = (char*[]){"ls", NULL},
-						.redir = { NULL, NULL, NULL, 0 }
+						.redirs = NULL
 					}
 				},
 				.next = &(t_list){
@@ -183,7 +215,7 @@ static t_case ast_cases[] = {
 						.command = &(t_command){
 							.path = "grep",
 							.args = (char*[]){"grep", ".c", NULL},
-							.redir = { NULL, NULL, NULL, 0 }
+							.redirs = NULL
 						}
 					},
 					.next = NULL
@@ -204,7 +236,7 @@ static t_case ast_cases[] = {
 					.command = &(t_command){
 						.path = "ls",
 						.args = (char*[]){"ls", NULL},
-						.redir = { NULL, NULL, NULL, 0 }
+						.redirs = NULL
 					}
 				},
 				.next = &(t_list){
@@ -214,7 +246,7 @@ static t_case ast_cases[] = {
 						.command = &(t_command){
 							.path = "grep",
 							.args = (char*[]){"grep", ".c", NULL},
-							.redir = { NULL, NULL, NULL, 0 }
+							.redirs = NULL
 						}
 					},
 					.next = &(t_list){
@@ -224,7 +256,7 @@ static t_case ast_cases[] = {
 							.command = &(t_command){
 								.path = "wc",
 								.args = (char*[]){"wc", "-l", NULL},
-								.redir = { NULL, NULL, NULL, 0 }
+								.redirs = NULL
 							}
 						},
 						.next = NULL
@@ -246,7 +278,11 @@ static t_case ast_cases[] = {
 					.command = &(t_command){
 						.path = "cat",
 						.args = (char*[]){"cat", NULL},
-						.redir = { "in.txt", NULL, NULL, 0 }
+						.redirs = &(t_list)
+						{
+							.content = &(t_redir){.type = REDIR_IN, .in = "in.txt"},
+							.next = NULL
+						}
 					}
 				},
 				.next = &(t_list){
@@ -256,7 +292,7 @@ static t_case ast_cases[] = {
 						.command = &(t_command){
 							.path = "grep",
 							.args = (char*[]){"grep", "hello", NULL},
-							.redir = { NULL, NULL, NULL, 0 }
+							.redirs = NULL
 						}
 					},
 					.next = &(t_list){
@@ -266,7 +302,11 @@ static t_case ast_cases[] = {
 							.command = &(t_command){
 								.path = "wc",
 								.args = (char*[]){"wc", "-l", NULL},
-								.redir = { NULL, "out.txt", NULL, 0 }
+								.redirs = &(t_list)
+								{
+									.content = &(t_redir){.type = REDIR_OUT, .out = "out.txt", .append = 0},
+									.next = NULL
+								}
 							}
 						},
 						.next = NULL
@@ -287,7 +327,7 @@ static t_case ast_cases[] = {
 				.command = &(t_command){
 					.path = "make",
 					.args = (char*[]){"make", NULL},
-					.redir = {NULL, NULL, NULL, 0}
+					.redirs = NULL
 				}
 			},
 			.right = &(t_ast){
@@ -296,7 +336,7 @@ static t_case ast_cases[] = {
 				.command = &(t_command){
 					.path = "./program",
 					.args = (char*[]){"./program", NULL},
-					.redir = {NULL, NULL, NULL, 0}
+					.redirs = NULL
 				}
 			}
 		}
@@ -313,7 +353,7 @@ static t_case ast_cases[] = {
 				.command = &(t_command){
 					.path = "make",
 					.args = (char*[]){"make", NULL},
-					.redir = {NULL, NULL, NULL, 0}
+					.redirs = NULL
 				}
 			},
 			.right = &(t_ast){
@@ -322,7 +362,7 @@ static t_case ast_cases[] = {
 				.command = &(t_command){
 					.path = "echo",
 					.args = (char*[]){"echo", "fail", NULL},
-					.redir = {NULL, NULL, NULL, 0}
+					.redirs = NULL
 				}
 			}
 		}
@@ -339,10 +379,10 @@ static t_case ast_cases[] = {
 				.command = &(t_command){
 					.path = "pwd",
 					.args = (char*[]){"pwd", NULL},
-					.redir = {NULL, NULL, NULL, 0}
+					.redirs = NULL
 				}
 			},
-			.redir = {NULL, NULL, NULL, 0}
+			.redirs = NULL
 		}
 	},
 	{
@@ -357,7 +397,11 @@ static t_case ast_cases[] = {
 				.command = &(t_command){
 					.path = "echo",
 					.args = (char*[]){"echo", "success", NULL},
-					.redir = {NULL, "out.txt", NULL, 0}
+					.redirs = &(t_list)
+					{
+						.content = &(t_redir){.type = REDIR_OUT, .out = "out.txt", .append = 0},
+						.next = NULL
+					}
 				}
 			},
 			.right = &(t_ast){
@@ -366,7 +410,11 @@ static t_case ast_cases[] = {
 				.command = &(t_command){
 					.path = "cat",
 					.args = (char*[]){"cat", NULL},
-					.redir = {"in.txt", NULL, NULL, 0}
+					.redirs = &(t_list)
+					{
+						.content = &(t_redir){.type = REDIR_IN, .in = "in.txt"},
+						.next = NULL
+					}
 				}
 			}
 		}
@@ -384,13 +432,17 @@ static t_case ast_cases[] = {
 					.content = &(t_command){
 						.path = "echo",
 						.args = (char*[]){"echo", "hello", NULL},
-						.redir = { "in.txt", NULL, NULL, 0 }
+						.redirs = &(t_list)
+						{
+							.content = &(t_redir){.type = REDIR_IN, .in = "in.txt"},
+							.next = NULL
+						}
 					},
 					.next = &(t_list){
 						.content = &(t_command){
 							.path = "grep",
 							.args = (char*[]){"grep", "world", NULL},
-							.redir = { NULL, NULL, NULL, 0 }
+							.redirs = NULL
 						},
 						.next = NULL
 					}
@@ -403,13 +455,13 @@ static t_case ast_cases[] = {
 					.content = &(t_command){
 						.path = "ls",
 						.args = (char*[]){"ls", NULL},
-						.redir = { NULL, NULL, NULL, 0 }
+						.redirs = NULL
 					},
 					.next = &(t_list){
 						.content = &(t_command){
 							.path = "grep",
 							.args = (char*[]){"grep", ".h", NULL},
-							.redir = { NULL, NULL, NULL, 0 }
+							.redirs = NULL
 						},
 						.next = NULL
 					}
@@ -433,10 +485,10 @@ static t_case ast_cases[] = {
 						.command = &(t_command){
 							.path = "ls",
 							.args = (char*[]){"ls", "-la", NULL},
-							.redir = {NULL, NULL, NULL, 0}
+							.redirs = NULL
 						}
 					},
-					.redir = {NULL, NULL, NULL, 0}
+					.redirs = NULL
 				},
 				.next = &(t_list){
 					.content = &(t_ast){
@@ -445,7 +497,7 @@ static t_case ast_cases[] = {
 						.command = &(t_command){
 							.path = "wc",
 							.args = (char*[]){"wc", "-l", NULL},
-							.redir = { NULL, NULL, NULL, 0 }
+							.redirs = NULL
 						}
 					},
 					.next = NULL
@@ -468,10 +520,14 @@ static t_case ast_cases[] = {
 					.command = &(t_command){
 						.path = "echo",
 						.args = (char*[]){"echo", "hello", NULL},
-						.redir = { NULL, NULL, NULL, 0 }
+						.redirs = NULL
 					}
 				},
-				.redir = {NULL, "out.txt", NULL, 0}
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_OUT, .out = "in.txt", .append = 0},
+					.next = NULL
+				}
 			},
 			.right = &(t_ast){
 				.type = NODE_COMMAND,
@@ -479,7 +535,7 @@ static t_case ast_cases[] = {
 				.command = &(t_command){
 					.path = "echo",
 					.args = (char*[]){"echo", "done", NULL},
-					.redir = { NULL, NULL, NULL, 0 }
+					.redirs = NULL
 				}
 			}
 		}
@@ -496,7 +552,7 @@ static t_case ast_cases[] = {
 				.command = &(t_command){
 					.path = "make",
 					.args = (char*[]){"make", NULL},
-					.redir = { NULL, NULL, NULL, 0 }
+					.redirs = NULL
 				}
 			},
 			.right = &(t_ast){
@@ -511,7 +567,7 @@ static t_case ast_cases[] = {
 						.command = &(t_command){
 							.path = "./run",
 							.args = (char*[]){"run", NULL},
-							.redir = { NULL, NULL, NULL, 0 }
+							.redirs = NULL
 						}
 					},
 					.right = &(t_ast){
@@ -520,11 +576,11 @@ static t_case ast_cases[] = {
 						.command = &(t_command){
 							.path = "echo",
 							.args = (char*[]){"echo", "fallback", NULL},
-							.redir = { NULL, NULL, NULL, 0 }
+							.redirs = NULL
 						}
 					}
 				},
-				.redir = {NULL, "out.txt", NULL, 0}
+				.redirs = NULL
 			}
 		}
 	},
@@ -546,14 +602,14 @@ static t_case ast_cases[] = {
 						.command = &(t_command){
 							.path = "echo",
 							.args = (char*[]){"echo", "ok", NULL},
-							.redir = {NULL, NULL, NULL, 0}
+							.redirs = NULL
 						},
 					},
-					.redir = {NULL, NULL, NULL, 0}
+					.redirs = NULL
 				},
-				.redir = {NULL, NULL, NULL, 0}
+				.redirs = NULL
 			},
-			.redir = {NULL, NULL, NULL, 0}
+			.redirs = NULL
 		}
 	},
 	{
@@ -572,19 +628,19 @@ static t_case ast_cases[] = {
 						.content = &(t_command){
 							.path = "cat",
 							.args = (char*[]){"cat", "file", NULL},
-							.redir = { NULL, NULL, NULL, 0 }
+							.redirs = NULL
 						},
 						.next = &(t_list){
 							.content = &(t_command){
 								.path = "grep",
 								.args = (char*[]){"grep", "error", NULL},
-								.redir = { NULL, NULL, NULL, 0 }
+								.redirs = NULL
 							},
 							.next = NULL
 						}
 					}
 				},
-				.redir = {NULL, NULL, NULL, 0}
+				.redirs = NULL
 			},
 			.right = &(t_ast){
 				.type = NODE_OR,
@@ -595,7 +651,7 @@ static t_case ast_cases[] = {
 					.command = &(t_command){
 						.path = "echo",
 						.args = (char*[]){"echo", "found", NULL},
-						.redir = { NULL, NULL, NULL, 0 }
+						.redirs = NULL
 					}
 				},
 				.right = &(t_ast){
@@ -604,7 +660,7 @@ static t_case ast_cases[] = {
 					.command = &(t_command){
 						.path = "echo",
 						.args = (char*[]){"echo", "none", NULL},
-						.redir = { NULL, NULL, NULL, 0 }
+						.redirs = NULL
 					}
 				}
 			}

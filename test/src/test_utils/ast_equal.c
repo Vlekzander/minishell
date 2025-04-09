@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 12:07:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/04 14:43:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:47:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,28 @@ static int	str_array_equal(char **a, char **b)
 	return (a[i] == b[i]);
 }
 
-static int	redir_equal(t_redir *a, t_redir *b)
+static int	redir_equal(t_list *a, t_list *b)
 {
+	t_redir	*redir_a;
+	t_redir	*redir_b;
 	if (a == NULL || b == NULL)
 		return (a == b);
-	if (a->append != b->append)
-		return (0);
-	if (!str_equal(a->in, b->in))
-		return (0);
-	if (!str_equal(a->out, b->out))
-		return (0);
-	if (!str_equal(a->heredoc, b->heredoc))
-		return (0);
-	return (1);
+	while (a != NULL && b != NULL)
+	{
+		redir_a = a->content;
+		redir_b = b->content;
+		if (redir_a->type != redir_b->type)
+			return (0);
+		if (redir_a->type == REDIR_IN && redir_a->in != redir_b->in)
+			return (0);
+		if (redir_a->type == REDIR_OUT && redir_a->out != redir_b->out && redir_a->append != redir_b->append)
+			return (0);
+		if (redir_a->type == REDIR_HEREDOC && redir_a->heredoc != redir_b->heredoc)
+			return (0);
+		a = a->next;
+		b = b->next;
+	}
+	return (a == b);
 }
 
 static int	command_equal(t_command *a, t_command *b)
@@ -61,7 +70,7 @@ static int	command_equal(t_command *a, t_command *b)
 		return (0);
 	if (!str_array_equal(a->args, b->args))
 		return (0);
-	if (!redir_equal(&a->redir, &b->redir))
+	if (!redir_equal(a->redirs, b->redirs))
 		return (0);
 	return (1);
 }
@@ -93,6 +102,6 @@ int	ast_equal(t_ast *a, t_ast *b)
 	if (a->type == NODE_AND || a->type == NODE_OR)
 		return (ast_equal(a->left, b->left) && ast_equal(a->right, b->right));
 	if (a->type == NODE_SUBSHELL)
-		return (ast_equal(a->child, b->child) && redir_equal(&a->redir, &b->redir));
+		return (ast_equal(a->child, b->child) && redir_equal(a->redirs, b->redirs));
 	return (0);
 }
