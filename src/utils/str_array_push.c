@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:03:58 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/03 16:03:45 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/18 22:57:44 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,28 @@
 #include "libft.h"
 #include "utils.h"
 
-char	**str_array_push(char **array, char *element)
+t_error	str_array_push(char ***array, const char *element)
 {
 	char	**new_array;
 	size_t	size;
 	size_t	i;
 
+	if (array == NULL || element == NULL)
+		return (ERR_IMPLEMENTATION);
 	size = 0;
-	while (array != NULL && array[size] != NULL)
+	while (*array != NULL && (*array)[size] != NULL)
 		size++;
-	new_array = ft_calloc(size +2, sizeof(char *));
+	new_array = ft_calloc(size + 2, sizeof(char *));
 	if (new_array == NULL)
-		return (NULL);
+		return (ERR_ALLOCATION);
 	i = 0;
-	while (array != NULL && i < size)
+	while (*array != NULL && i < size)
 	{
-		new_array[i] = array[i];
+		new_array[i] = (*array)[i];
 		i++;
 	}
-	free(array);
 	new_array[i] = ft_strdup(element);
-	return (new_array);
+	if (new_array[i] == NULL)
+		return (free(new_array), ERR_ALLOCATION);
+	return (free(*array), *array = new_array, ERR_NONE);
 }

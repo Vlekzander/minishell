@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:28:35 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/09 13:43:39 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:35:36 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,19 @@ static t_case ast_cases[] = {
 			.command = &(t_command){
 				.path = "pwd",
 				.args = (char*[]){"pwd", NULL},
+				NULL
+			}
+		}
+	},
+	{
+		.name = "single_command_with_path",
+		.tokens = { "/bin/ls", NULL },
+		.excepted_ast = &(t_ast){
+			.type = NODE_COMMAND,
+			.exit_code = 0,
+			.command = &(t_command){
+				.path = "/bin/ls",
+				.args = (char*[]){"ls", NULL},
 				NULL
 			}
 		}
