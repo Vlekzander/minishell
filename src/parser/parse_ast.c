@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/23 14:33:07 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:22:34 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	precedence(t_token_type type)
 	return (-1);
 }
 
-static t_error	nud(t_ast **ast, t_token *token, t_list *redirs)
+static t_error	nud(t_ast **ast, t_token *token, t_list **redirs)
 {
 	t_ast	*node;
 	char	*exec_name;
@@ -58,8 +58,10 @@ static t_error	nud(t_ast **ast, t_token *token, t_list *redirs)
 		else
 			exec_name = token->value;
 		str_array_push(&node->command->args, exec_name);
-		if (redirs != NULL)
-			ft_lstadd_back(&node->command->redirs, redirs);
+		if (*redirs != NULL)
+			node->command->redirs = *redirs;
+		else
+			*redirs = node->command->redirs;
 	}
 	else
 		return (ERR_SYNTAX);
@@ -105,7 +107,10 @@ static t_error	parse_expression(t_ast **ast, t_list *tk_list, int brp)
 				current_redir = token->type;
 			else
 			{
-				ft_lstadd_back(&redirs, ft_lstnew(create_redir(current_redir, token->value)));
+				if (left != NULL && left->type == NODE_COMMAND)
+					ft_lstadd_back(&left->command->redirs, ft_lstnew(create_redir(current_redir, token->value)));
+				else
+					ft_lstadd_back(&redirs, ft_lstnew(create_redir(current_redir, token->value)));
 				current_redir = TK_NONE;
 			}
 
@@ -114,7 +119,7 @@ static t_error	parse_expression(t_ast **ast, t_list *tk_list, int brp)
 		}
 		if (left == NULL)
 		{
-			error = nud(&left, token, redirs);
+			error = nud(&left, token, &redirs);
 			if (error != ERR_NONE)
 				return (free_ast(left), error);
 		}
