@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:28:35 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/23 15:06:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:28:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,60 @@ static t_case ast_cases[] = {
 				{
 					.content = &(t_redir){.type = REDIR_HEREDOC, .heredoc = "END"},
 					.next = NULL
+				}
+			}
+		}
+	},
+	{
+		.name = "multiple_redirs_out",
+		.tokens = { "echo", "hello", ">", "out1.txt", ">", "out2.txt", ">", "out3.txt", NULL },
+		.excepted_ast = &(t_ast){
+			.type = NODE_COMMAND,
+			.exit_code = 0,
+			.command = &(t_command){
+				.path = "echo",
+				.args = (char*[]){"echo", "hello", NULL},
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_OUT, .out = "out1.txt", .append = 0},
+					.next = &(t_list)
+					{
+						.content = &(t_redir){.type = REDIR_OUT, .out = "out2.txt", .append = 0},
+						.next = &(t_list)
+						{
+							.content = &(t_redir){.type = REDIR_OUT, .out = "out3.txt", .append = 0},
+							.next = NULL
+						}
+				}
+				}
+			}
+		}
+	},
+	{
+		.name = "multiple_redirs_out_both_positions",
+		.tokens = { ">", "out1.txt", ">", "out2.txt", "echo", "hello", ">", "out3.txt", ">", "out4.txt", NULL },
+		.excepted_ast = &(t_ast){
+			.type = NODE_COMMAND,
+			.exit_code = 0,
+			.command = &(t_command){
+				.path = "echo",
+				.args = (char*[]){"echo", "hello", NULL},
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_OUT, .out = "out1.txt", .append = 0},
+					.next = &(t_list)
+					{
+						.content = &(t_redir){.type = REDIR_OUT, .out = "out2.txt", .append = 0},
+						.next = &(t_list)
+						{
+							.content = &(t_redir){.type = REDIR_OUT, .out = "out3.txt", .append = 0},
+							.next = &(t_list)
+							{
+								.content = &(t_redir){.type = REDIR_OUT, .out = "out4.txt", .append = 0},
+								.next = NULL
+							}
+						}
+					}
 				}
 			}
 		}
