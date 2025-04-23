@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 16:34:22 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/04 14:12:01 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:34:04 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static t_case token_cases[] = {
 	{ "pipes_and_redir", { { "cat < in.txt | grep hello | wc -l > out.txt", { "cat", "<", "in.txt", "|", "grep", "hello", "|", "wc", "-l", ">", "out.txt", NULL } } } },
 	{ "quoted_arg", { { "echo \"hello world\"", { "echo", "hello world", NULL } } } },
 	{ "mixed_quotes", { { "echo \"it's fine\"", { "echo", "it's fine", NULL } } } },
+	{ "complex_quotes_redir", { { "ech\"o\" Hello > ne\"w\".txt\"\"", { "echo", "Hello", ">", "new.txt", NULL } } } },
 	{ "command_and", { { "make && ./program", { "make", "&&", "./program", NULL } } } },
 	{ "command_or", { { "./build || echo fail", { "./build", "||", "echo", "fail", NULL } } } },
 	{ "subshell", { { "(pwd)", { "(", "pwd", ")", NULL } } } },

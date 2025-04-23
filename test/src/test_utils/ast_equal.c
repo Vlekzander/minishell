@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 12:07:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/18 16:20:21 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:05:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,16 @@ static int	redir_equal(t_list *a, t_list *b)
 		redir_b = b->content;
 		if (redir_a->type != redir_b->type)
 			return (0);
-		if (redir_a->type == REDIR_IN && redir_a->in != redir_b->in)
+		if (redir_a->type == REDIR_IN && !str_equal(redir_a->in, redir_b->in))
 			return (0);
-		if (redir_a->type == REDIR_OUT && redir_a->out != redir_b->out && redir_a->append != redir_b->append)
+		if (redir_a->type == REDIR_OUT && !str_equal(redir_a->out, redir_b->out) && redir_a->append != redir_b->append)
 			return (0);
-		if (redir_a->type == REDIR_HEREDOC && redir_a->heredoc != redir_b->heredoc)
+		if (redir_a->type == REDIR_HEREDOC && !str_equal(redir_a->heredoc, redir_b->heredoc))
 			return (0);
 		a = a->next;
 		b = b->next;
 	}
+
 	return (a == b);
 }
 

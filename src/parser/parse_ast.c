@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/18 22:58:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:33:07 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,29 @@
 #include "parser.h"
 #include "utils.h"
 
+static t_token	*advance(t_list **tk_list)
+{
+	t_token	*token;
+
+	if (tk_list == NULL || *tk_list == NULL || (*tk_list)->content == NULL)
+		return (NULL);
+	token = (t_token *)(*tk_list)->content;
+	*tk_list = (*tk_list)->next;
+	return (token);
+}
+
 static int	precedence(t_token_type type)
 {
 	if (type == TK_WORD)
 		return (100);
 	if (type == TK_AND || type == TK_OR)
-		return (20);
+		return (1);
 	if (type == TK_PIPE)
-		return (30);
-	if (type == TK_OUT || type == TK_APPEND || type == TK_IN)
-		return (40);
-	if (type == TK_HEREDOC)
-		return (50);
+		return (2);
 	return (-1);
 }
 
-static t_error	nud(t_ast **ast, t_token *token)
+static t_error	nud(t_ast **ast, t_token *token, t_list *redirs)
 {
 	t_ast	*node;
 	char	*exec_name;
@@ -51,49 +58,91 @@ static t_error	nud(t_ast **ast, t_token *token)
 		else
 			exec_name = token->value;
 		str_array_push(&node->command->args, exec_name);
+		if (redirs != NULL)
+			ft_lstadd_back(&node->command->redirs, redirs);
 	}
 	else
-		return (ERR_ALLOCATION);
+		return (ERR_SYNTAX);
 	return (*ast = node, ERR_NONE);
 }
 
-static t_error	led(t_ast **ast, t_token *token, t_ast *left)
+static t_error	led(t_ast **ast, t_token *token)
 {
 	t_error	ret;
 
-	if (ast == NULL || token == NULL || left == NULL)
+	if (ast == NULL || token == NULL)
 		return (ERR_IMPLEMENTATION);
-	if (left->type != NODE_COMMAND)
+	if ((*ast)->type == NODE_COMMAND)
+	{
+		ret = str_array_push(&(*ast)->command->args, token->value);
+		if (ret != ERR_NONE)
+			return (ret);
+	}
+	else
 		return (ERR_SYNTAX);
-	ret = str_array_push(&left->command->args, token->value);
-	if (ret != ERR_NONE)
-		return (ret);
-	*ast = left;
 	return (ERR_NONE);
 }
 
-static t_error	parse_expr(t_ast **ast, t_list *tokens, int min_prec)
+static t_error	parse_expression(t_ast **ast, t_list *tk_list, int brp)
 {
-	t_token	*token;
-	t_ast	*left;
-	t_error	error;
+	t_token			*token;
+	t_ast			*left;
+	t_error			error;
+	t_list			*redirs;
+	t_token_type	current_redir;
 
-	if (ast == NULL || tokens == NULL)
+	if (ast == NULL || tk_list == NULL)
 		return (ERR_IMPLEMENTATION);
-	token = (t_token *) tokens->content;
-	tokens = tokens->next;
-	error = nud(&left, token);
-	if (error != ERR_NONE)
-		return (error);
-	while (tokens != NULL)
+	left = NULL;
+	redirs = NULL;
+	current_redir = TK_NONE;
+	token = advance(&tk_list);
+	while (token != NULL)
 	{
-		token = (t_token *) tokens->content;
-		if (precedence(token->type) < min_prec)
-			break ;
-		tokens = tokens->next;
-		error = led(&left, token, left);
-		if (error != ERR_NONE)
-			return (error);
+		if (token->type == TK_IN || token->type == TK_OUT || token->type == TK_APPEND || token->type == TK_HEREDOC || (token->type == TK_WORD && current_redir != TK_NONE))
+		{
+			if (current_redir == TK_NONE)
+				current_redir = token->type;
+			else
+			{
+				ft_lstadd_back(&redirs, ft_lstnew(create_redir(current_redir, token->value)));
+				current_redir = TK_NONE;
+			}
+
+			token = advance(&tk_list);
+			continue ;
+		}
+		if (left == NULL)
+		{
+			error = nud(&left, token, redirs);
+			if (error != ERR_NONE)
+				return (free_ast(left), error);
+		}
+		else
+		{
+			if (precedence(token->type) <= brp)
+			{
+				if (left == NULL && redirs != NULL)
+				{
+					left = create_ast(NODE_COMMAND);
+					if (!left)
+						return (ERR_ALLOCATION);
+					left->command->redirs = redirs;
+				}
+				break ;
+			}
+			error = led(&left, token);
+			if (error != ERR_NONE)
+				return (free_ast(left), error);
+		}
+		token = advance(&tk_list);
+	}
+	if (left == NULL && redirs != NULL)
+	{
+		left = create_ast(NODE_COMMAND);
+		if (!left)
+			return (ERR_ALLOCATION);
+		left->command->redirs = redirs;
 	}
 	*ast = left;
 	return (ERR_NONE);
@@ -103,5 +152,5 @@ t_error	parse_ast(t_ast **ast, t_list *tokens)
 {
 	if (ast == NULL || tokens == NULL)
 		return (ERR_IMPLEMENTATION);
-	return (parse_expr(ast, tokens, 0));
+	return (parse_expression(ast, tokens, 0));
 }

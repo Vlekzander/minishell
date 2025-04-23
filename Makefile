@@ -17,7 +17,7 @@ NAME_TEST = minishell_tests
 all: $(NAME) $(NAME_TEST)
 
 $(NAME): $(OBJECTS)
-	@echo "$(BLUE)✦ Building libraries...$(RESET)\r"
+	@echo "$(BLUE)✦ Buildin g libraries...$(RESET)\r"
 	@make -C $(LIBFT_DIR) --no-print-directory
 	@printf "$(YELLOW)◈ Linking $@...$(RESET)\r"
 	@$(CC) $^ $(LDFLAGS) -o $@
