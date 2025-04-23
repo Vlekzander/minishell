@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:28:35 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/23 15:28:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:00:07 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ static t_case ast_cases[] = {
 		}
 	},
 	{
-		.name = "multiple_redirs_out",
+		.name = "mult_redir_out",
 		.tokens = { "echo", "hello", ">", "out1.txt", ">", "out2.txt", ">", "out3.txt", NULL },
 		.excepted_ast = &(t_ast){
 			.type = NODE_COMMAND,
@@ -231,7 +231,32 @@ static t_case ast_cases[] = {
 		}
 	},
 	{
-		.name = "multiple_redirs_out_both_positions",
+		.name = "mult_redir_in",
+		.tokens = { "echo", "hello", "<", "in1.txt", "<", "in2.txt", "<", "in3.txt", NULL },
+		.excepted_ast = &(t_ast){
+			.type = NODE_COMMAND,
+			.exit_code = 0,
+			.command = &(t_command){
+				.path = "echo",
+				.args = (char*[]){"echo", "hello", NULL},
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_IN, .out = "in1.txt", .append = 0},
+					.next = &(t_list)
+					{
+						.content = &(t_redir){.type = REDIR_IN, .out = "in2.txt", .append = 0},
+						.next = &(t_list)
+						{
+							.content = &(t_redir){.type = REDIR_IN, .out = "in3.txt", .append = 0},
+							.next = NULL
+						}
+					}
+				}
+			}
+		}
+	},
+	{
+		.name = "mult_redir_out_both_way",
 		.tokens = { ">", "out1.txt", ">", "out2.txt", "echo", "hello", ">", "out3.txt", ">", "out4.txt", NULL },
 		.excepted_ast = &(t_ast){
 			.type = NODE_COMMAND,
@@ -251,6 +276,64 @@ static t_case ast_cases[] = {
 							.next = &(t_list)
 							{
 								.content = &(t_redir){.type = REDIR_OUT, .out = "out4.txt", .append = 0},
+								.next = NULL
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	{
+		.name = "mult_redir_in_both_way",
+		.tokens = { "<", "in1.txt", "<", "in2.txt", "echo", "hello", "<", "in3.txt", "<", "in4.txt", NULL },
+		.excepted_ast = &(t_ast){
+			.type = NODE_COMMAND,
+			.exit_code = 0,
+			.command = &(t_command){
+				.path = "echo",
+				.args = (char*[]){"echo", "hello", NULL},
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_IN, .out = "in1.txt", .append = 0},
+					.next = &(t_list)
+					{
+						.content = &(t_redir){.type = REDIR_IN, .out = "in2.txt", .append = 0},
+						.next = &(t_list)
+						{
+							.content = &(t_redir){.type = REDIR_IN, .out = "in3.txt", .append = 0},
+							.next = &(t_list)
+							{
+								.content = &(t_redir){.type = REDIR_IN, .out = "in4.txt", .append = 0},
+								.next = NULL
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	{
+		.name = "mult_redirs_both_way",
+		.tokens = { "<", "in1.txt", "<", "in2.txt", "echo", "hello", ">", "out1.txt", ">", "out2.txt", NULL },
+		.excepted_ast = &(t_ast){
+			.type = NODE_COMMAND,
+			.exit_code = 0,
+			.command = &(t_command){
+				.path = "echo",
+				.args = (char*[]){"echo", "hello", NULL},
+				.redirs = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_IN, .out = "in1.txt", .append = 0},
+					.next = &(t_list)
+					{
+						.content = &(t_redir){.type = REDIR_IN, .out = "in2.txt", .append = 0},
+						.next = &(t_list)
+						{
+							.content = &(t_redir){.type = REDIR_OUT, .out = "out1.txt", .append = 0},
+							.next = &(t_list)
+							{
+								.content = &(t_redir){.type = REDIR_OUT, .out = "out2.txt", .append = 0},
 								.next = NULL
 							}
 						}

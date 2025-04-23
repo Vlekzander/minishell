@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 16:22:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/23 15:28:44 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:00:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static MunitParameterEnum tokenize_basic_params[] = {
 };
 
 static MunitParameterEnum parse_ast_basic_params[] = {
-	{ "case", (char*[]) { "single_command", "single_command_with_path", "one_arg", "multiple_args", "redir_out", "redir_append", "redir_in", "redir_heredoc", "redir_out_inverted", "redir_append_inverted", "redir_in_inverted", "redir_heredoc_inverted", "multiple_redirs_out", "multiple_redirs_out_both_positions", "single_pipe", "multiple_pipes", "pipes_and_redir", "command_and", "command_or", "subshell", "and_with_redir", "or_with_pipe", "subshell_with_pipe", "subshell_and_redir", "nested_logic", "deep_nested_group", "multi_op_complex", NULL } },
+	{ "case", (char*[]) { "single_command", "single_command_with_path", "one_arg", "multiple_args", "redir_out", "redir_append", "redir_in", "redir_heredoc", "redir_out_inverted", "redir_append_inverted", "redir_in_inverted", "redir_heredoc_inverted", "mult_redir_out", "mult_redir_in", "mult_redir_out_both_way", "mult_redir_in_both_way", "mult_redirs_both_way", "single_pipe", "multiple_pipes", "pipes_and_redir", "command_and", "command_or", "subshell", "and_with_redir", "or_with_pipe", "subshell_with_pipe", "subshell_and_redir", "nested_logic", "deep_nested_group", "multi_op_complex", NULL } },
 	{ NULL, NULL }
 };
 
