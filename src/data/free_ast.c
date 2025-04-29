@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 14:51:20 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/03 15:04:56 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:23:34 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	free_ast(t_ast *ast)
 	if (ast->type == NODE_COMMAND)
 		free_command(ast->command);
 	else if (ast->type == NODE_PIPELINE)
-		ft_lstclear(&ast->pipeline, (void (*)(void *)) free_command);
+		ft_lstclear(&ast->pipeline, (void (*)(void *)) free_ast);
 	else if (ast->type == NODE_OR || ast->type == NODE_AND)
 	{
 		free_ast(ast->left);
