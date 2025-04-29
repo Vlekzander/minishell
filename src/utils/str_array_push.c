@@ -6,12 +6,12 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:03:58 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/18 22:57:44 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:15:35 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
+#include "stdlib.h"
 #include "utils.h"
 
 t_error	str_array_push(char ***array, const char *element)

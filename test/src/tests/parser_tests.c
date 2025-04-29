@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:28:35 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/23 16:00:07 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/29 12:32:47 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -824,6 +824,7 @@ MunitResult	parse_ast_basic_tests(const MunitParameter params[], void* data)
 	t_case	*tc;
 	t_list	*tokens;
 	t_ast	*tested;
+	t_error	error;
 	int		equal;
 
 	(void) data;
@@ -833,7 +834,8 @@ MunitResult	parse_ast_basic_tests(const MunitParameter params[], void* data)
 	if (tc == NULL)
 		return (munit_log(MUNIT_LOG_ERROR, "Test case not found"), MUNIT_ERROR);
 	tokens = create_token_list(tc->tokens);
-	parse_ast(&tested, tokens);
+	error = parse_ast(&tested, tokens);
+	munit_logf(MUNIT_LOG_WARNING, "ERROR: %d", error);
 	equal = ast_equal(tc->excepted_ast, tested);
 	free_ast(tested);
 	ft_lstclear(&tokens, (void (*)(void *)) free_token);

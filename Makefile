@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -Iinclude -I$(LIBFT_DIR)/include -Itest/include
+CFLAGS = -Wall -Wextra -Werror -Iinclude -I$(LIBFT_DIR)/include -Itest/include -g
 LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 LIBFT_DIR=libft
 LIBFT_LIB=$(LIBFT_DIR)/libft.a
@@ -17,7 +17,7 @@ NAME_TEST = minishell_tests
 all: $(NAME) $(NAME_TEST)
 
 $(NAME): $(OBJECTS)
-	@echo "$(BLUE)✦ Buildin g libraries...$(RESET)\r"
+	@echo "$(BLUE)✦ Building libraries...$(RESET)\r"
 	@make -C $(LIBFT_DIR) --no-print-directory
 	@printf "$(YELLOW)◈ Linking $@...$(RESET)\r"
 	@$(CC) $^ $(LDFLAGS) -o $@

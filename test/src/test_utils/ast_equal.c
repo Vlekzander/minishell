@@ -6,13 +6,12 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 12:07:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/23 15:05:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:07:56 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <munit.h>
 #include <string.h>
-
 #include "test_utils.h"
 
 static int str_equal(char *a, char *b)
