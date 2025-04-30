@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/29 15:07:36 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:37:32 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 t_error	led_word(t_ast **ast, t_token *token);
 t_error	led_pipe(t_ast **ast, t_list **tk_list);
+t_error	led_logic(t_ast **ast, t_list **tk_list, t_token_type tk_type);
 
 static t_token	*pop_front(t_list **tk_list)
 {
@@ -95,6 +96,12 @@ static t_error led(t_ast **ast, t_list **tk_list, t_token *token)
 	else if (token->type == TK_PIPE)
 	{
 		error = led_pipe(ast, tk_list);
+		if (error != ERR_NONE)
+			return (error);
+	}
+	else if (token->type == TK_AND || token->type == TK_OR)
+	{
+		error = led_logic(ast, tk_list, token->type);
 		if (error != ERR_NONE)
 			return (error);
 	}

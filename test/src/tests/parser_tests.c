@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:28:35 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/29 12:32:47 by apierret         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:01:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -485,7 +485,7 @@ static t_case ast_cases[] = {
 				.exit_code = 0,
 				.command = &(t_command){
 					.path = "./program",
-					.args = (char*[]){"./program", NULL},
+					.args = (char*[]){"program", NULL},
 					.redirs = NULL
 				}
 			}
@@ -493,7 +493,7 @@ static t_case ast_cases[] = {
 	},
 	{
 		.name = "command_or",
-		.tokens = { "./build", "||", "echo", "fail", NULL },
+		.tokens = { "mkdir", "folder", "||", "echo", "fail", NULL },
 		.excepted_ast = &(t_ast){
 			.type = NODE_OR,
 			.exit_code = 0,
@@ -501,8 +501,8 @@ static t_case ast_cases[] = {
 				.type = NODE_COMMAND,
 				.exit_code = 0,
 				.command = &(t_command){
-					.path = "make",
-					.args = (char*[]){"make", NULL},
+					.path = "mkdir",
+					.args = (char*[]){"mkdir", "folder", NULL},
 					.redirs = NULL
 				}
 			},
@@ -579,20 +579,25 @@ static t_case ast_cases[] = {
 				.type = NODE_PIPELINE,
 				.exit_code = 0,
 				.pipeline = &(t_list){
-					.content = &(t_command){
-						.path = "echo",
-						.args = (char*[]){"echo", "hello", NULL},
-						.redirs = &(t_list)
-						{
-							.content = &(t_redir){.type = REDIR_IN, .in = "in.txt"},
-							.next = NULL
+					.content = &(t_ast){
+						.type = NODE_COMMAND,
+						.exit_code = 0,
+						.command = &(t_command){
+							.path = "echo",
+							.args = (char*[]){"echo", "hello", NULL},
+							.redirs = NULL
 						}
 					},
-					.next = &(t_list){
-						.content = &(t_command){
-							.path = "grep",
-							.args = (char*[]){"grep", "world", NULL},
-							.redirs = NULL
+					.next = &(t_list)
+					{
+						.content = &(t_ast){
+							.type = NODE_COMMAND,
+							.exit_code = 0,
+							.command = &(t_command){
+								.path = "grep",
+								.args = (char*[]){"grep", "world", NULL},
+								.redirs = NULL
+							}
 						},
 						.next = NULL
 					}
@@ -602,16 +607,25 @@ static t_case ast_cases[] = {
 				.type = NODE_PIPELINE,
 				.exit_code = 0,
 				.pipeline = &(t_list){
-					.content = &(t_command){
-						.path = "ls",
-						.args = (char*[]){"ls", NULL},
-						.redirs = NULL
-					},
-					.next = &(t_list){
-						.content = &(t_command){
-							.path = "grep",
-							.args = (char*[]){"grep", ".h", NULL},
+					.content = &(t_ast){
+						.type = NODE_COMMAND,
+						.exit_code = 0,
+						.command = &(t_command){
+							.path = "ls",
+							.args = (char*[]){"ls", NULL},
 							.redirs = NULL
+						}
+					},
+					.next = &(t_list)
+					{
+						.content = &(t_ast){
+							.type = NODE_COMMAND,
+							.exit_code = 0,
+							.command = &(t_command){
+								.path = "grep",
+								.args = (char*[]){"grep", ".h", NULL},
+								.redirs = NULL
+							}
 						},
 						.next = NULL
 					}
