@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:41:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/30 14:37:39 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/01 22:31:08 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_error	led_pipe(t_ast **ast, t_list **tk_list)
 
 	if (ast == NULL || tk_list == NULL)
 		return (ERR_IMPLEMENTATION);
-	if ((*ast)->type == NODE_COMMAND)
+	if ((*ast)->type == NODE_COMMAND || (*ast)->type == NODE_SUBSHELL)
 	{
 		old_node = *ast;
 		node = create_ast(NODE_PIPELINE);

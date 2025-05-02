@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/24 23:15:22 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/01 22:51:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,6 @@ t_redir			*create_redir(t_token_type type, char *value);
 void			free_token(t_token *token);
 void			free_ast(t_ast *ast);
 void			free_command(t_command *command);
+void			free_redir(t_redir *redir);
 
 #endif

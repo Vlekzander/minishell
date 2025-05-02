@@ -6,13 +6,16 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/30 14:37:32 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:13:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <munit.h>
 
 #include "parser.h"
 #include "utils.h"
 
+t_error	parse_expression(t_ast **ast, t_list **tk_list, int precedence);
 t_error	led_word(t_ast **ast, t_token *token);
 t_error	led_pipe(t_ast **ast, t_list **tk_list);
 t_error	led_logic(t_ast **ast, t_list **tk_list, t_token_type tk_type);
@@ -49,10 +52,11 @@ int	get_precedence(t_token_type type)
 	return (0);
 }
 
-static t_error nud(t_ast **ast, t_token *token, t_list	**redirs)
+static t_error nud(t_ast **ast, t_list **tk_list, t_token *token, t_list **redirs)
 {
 	t_ast	*node;
 	char	*basename;
+	t_error	error;
 
 	if (ast == NULL || token == NULL)
 		return (ERR_IMPLEMENTATION);
@@ -74,6 +78,20 @@ static t_error nud(t_ast **ast, t_token *token, t_list	**redirs)
 			node->command->redirs = *redirs;
 		else
 			*redirs = node->command->redirs;
+	}
+	else if (token->type == TK_P_OPEN)
+	{
+		if (*redirs != NULL)
+		{
+			ft_lstclear(redirs, (void (*)(void *)) free_redir);
+			return (ERR_SYNTAX);
+		}
+		node = create_ast(NODE_SUBSHELL);
+		if (node == NULL)
+			return (ERR_ALLOCATION);
+		error = parse_expression(&node->child, tk_list, 0);
+		if (error != ERR_NONE)
+			return (free_ast(node), error);
 	}
 	else
 		return (ERR_SYNTAX);
@@ -129,9 +147,13 @@ t_error	parse_expression(t_ast **ast, t_list **tk_list, int precedence)
 		next = peek_front(*tk_list);
 		if (next == NULL)
 			break;
-		if (next->type != TK_IN && next->type != TK_OUT && next->type != TK_APPEND && next->type != TK_HEREDOC && get_precedence(next->type) <= precedence)
+		if (next->type != TK_IN && next->type != TK_OUT && next->type != TK_APPEND && next->type != TK_HEREDOC && next->type != TK_P_OPEN && next->type != TK_P_CLOSE && get_precedence(next->type) <= precedence)
+			break;
+		if (next->type == TK_P_CLOSE && precedence != 0)
 			break;
 		token = pop_front(tk_list);
+		if (token->type == TK_P_CLOSE)
+			break;
 		if (token->type == TK_IN || token->type == TK_OUT || token->type == TK_APPEND || token->type == TK_HEREDOC || (token->type == TK_WORD && current_redir != TK_NONE))
 		{
 			if (current_redir == TK_NONE)
@@ -140,6 +162,8 @@ t_error	parse_expression(t_ast **ast, t_list **tk_list, int precedence)
 			{
 				if (node != NULL && node->type == NODE_COMMAND)
 					ft_lstadd_back(&node->command->redirs, ft_lstnew(create_redir(current_redir, token->value)));
+				else if (node != NULL && node->type == NODE_SUBSHELL)
+					ft_lstadd_back(&node->redirs, ft_lstnew(create_redir(current_redir, token->value)));
 				else
 					ft_lstadd_back(&redirs, ft_lstnew(create_redir(current_redir, token->value)));
 				current_redir = TK_NONE;
@@ -148,7 +172,7 @@ t_error	parse_expression(t_ast **ast, t_list **tk_list, int precedence)
 		}
 		if (node == NULL)
 		{
-			error = nud(&node, token, &redirs);
+			error = nud(&node, tk_list, token, &redirs);
 			if (error != ERR_NONE)
 				return (error);
 		}

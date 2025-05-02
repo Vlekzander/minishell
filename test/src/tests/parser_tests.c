@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:28:35 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/30 15:01:16 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:25:47 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -689,7 +689,7 @@ static t_case ast_cases[] = {
 				},
 				.redirs = &(t_list)
 				{
-					.content = &(t_redir){.type = REDIR_OUT, .out = "in.txt", .append = 0},
+					.content = &(t_redir){.type = REDIR_OUT, .out = "out.txt", .append = 0},
 					.next = NULL
 				}
 			},
@@ -749,6 +749,36 @@ static t_case ast_cases[] = {
 		}
 	},
 	{
+		.name = "nested_logic_two",
+		.tokens = { "(", "make", ")", "&&", "./run", NULL },
+		.excepted_ast = &(t_ast){
+			.type = NODE_AND,
+			.exit_code = 0,
+			.left = &(t_ast){
+				.type = NODE_SUBSHELL,
+				.exit_code = 0,
+				.child = &(t_ast){
+					.type = NODE_COMMAND,
+					.exit_code = 0,
+					.command = &(t_command){
+						.path = "make",
+						.args = (char*[]){"make", NULL},
+						.redirs = NULL
+					}
+				}
+			},
+			.right = &(t_ast){
+				.type = NODE_COMMAND,
+				.exit_code = 0,
+				.command = &(t_command){
+					.path = "./run",
+					.args = (char*[]){"run", NULL},
+					.redirs = NULL
+				}
+			}
+		}
+	},
+	{
 		.name = "deep_nested_group",
 		.tokens = { "(", "(", "(", "echo", "ok", ")", ")", ")", NULL },
 		.excepted_ast = &(t_ast){
@@ -780,36 +810,45 @@ static t_case ast_cases[] = {
 		.name = "multi_op_complex",
 		.tokens = { "(", "cat", "file", "|", "grep", "error", ")", "&&", "echo", "found", "||", "echo", "none", NULL },
 		.excepted_ast = &(t_ast){
-			.type = NODE_AND,
+			.type = NODE_OR,
 			.exit_code = 0,
 			.left = &(t_ast){
-				.type = NODE_SUBSHELL,
-				.exit_code = 0,
-				.child = &(t_ast){
-					.type = NODE_PIPELINE,
-					.exit_code = 0,
-					.pipeline = &(t_list){
-						.content = &(t_command){
-							.path = "cat",
-							.args = (char*[]){"cat", "file", NULL},
-							.redirs = NULL
-						},
-						.next = &(t_list){
-							.content = &(t_command){
-								.path = "grep",
-								.args = (char*[]){"grep", "error", NULL},
-								.redirs = NULL
-							},
-							.next = NULL
-						}
-					}
-				},
-				.redirs = NULL
-			},
-			.right = &(t_ast){
-				.type = NODE_OR,
+				.type = NODE_AND,
 				.exit_code = 0,
 				.left = &(t_ast){
+					.type = NODE_SUBSHELL,
+					.exit_code = 0,
+					.child = &(t_ast){
+						.type = NODE_PIPELINE,
+						.exit_code = 0,
+						.pipeline = &(t_list){
+							.content = &(t_ast){
+								.type = NODE_COMMAND,
+								.exit_code = 0,
+								.command = &(t_command){
+									.path = "cat",
+									.args = (char*[]){"cat", "file", NULL},
+									.redirs = NULL
+								}
+							},
+							.next = &(t_list)
+							{
+								.content = &(t_ast){
+									.type = NODE_COMMAND,
+									.exit_code = 0,
+									.command = &(t_command){
+										.path = "grep",
+										.args = (char*[]){"grep", "error", NULL},
+										.redirs = NULL
+									}
+								},
+								.next = NULL
+							}
+						}
+					},
+					.redirs = NULL
+				},
+				.right = &(t_ast){
 					.type = NODE_COMMAND,
 					.exit_code = 0,
 					.command = &(t_command){
@@ -817,15 +856,15 @@ static t_case ast_cases[] = {
 						.args = (char*[]){"echo", "found", NULL},
 						.redirs = NULL
 					}
-				},
-				.right = &(t_ast){
-					.type = NODE_COMMAND,
-					.exit_code = 0,
-					.command = &(t_command){
-						.path = "echo",
-						.args = (char*[]){"echo", "none", NULL},
-						.redirs = NULL
-					}
+				}
+			},
+			.right = &(t_ast){
+				.type = NODE_COMMAND,
+				.exit_code = 0,
+				.command = &(t_command){
+					.path = "echo",
+					.args = (char*[]){"echo", "none", NULL},
+					.redirs = NULL
 				}
 			}
 		}
