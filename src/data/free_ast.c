@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 14:51:20 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/29 17:23:34 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/04 15:06:14 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ void	free_ast(t_ast *ast)
 		free_ast(ast->right);
 	}
 	else if (ast->type == NODE_SUBSHELL)
+	{
 		free_ast(ast->child);
+		ft_lstclear(&ast->redirs, (void (*)(void *)) free_redir);
+	}
 	free(ast);
 }

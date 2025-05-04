@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:22:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/23 14:14:17 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/03 12:20:42 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ t_redir	*create_redir(t_token_type type, char *value)
 {
 	t_redir	*redir;
 
-	if (value == NULL || (type != TK_IN && type != TK_OUT && type != TK_APPEND && type != TK_HEREDOC))
+	if (value == NULL || (type != TK_IN && type != TK_OUT
+			&& type != TK_APPEND && type != TK_HEREDOC))
 		return (NULL);
 	redir = ft_calloc(1, sizeof(t_redir));
 	if (redir == NULL)
