@@ -6,15 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:41:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/04 15:12:56 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/04 15:57:33 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "data.h"
+#include "error.h"
+#include "parser_internal.h"
 #include "utils.h"
-
-extern t_error	parse_expression(t_ast **ast, t_list **tk_lst, int precedence);
-extern int		get_precedence(t_token_type type);
 
 t_error	led_word(t_ast **ast, t_token *token)
 {

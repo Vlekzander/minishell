@@ -6,11 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 15:08:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/04 15:09:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/04 15:58:04 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "data.h"
+#include "parser_internal.h"
 
 t_token	*pop_front(t_list **tk_lst)
 {

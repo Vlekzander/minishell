@@ -6,24 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/04 15:13:04 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/04 15:58:30 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include "utils.h"
-
-extern t_token	*pop_front(t_list **tk_lst);
-extern t_token	*peek_front(t_list *tk_lst);
-extern int		get_precedence(t_token_type type);
-extern int		is_redirection(t_token *token);
-extern t_error	nud(t_ast **ast, t_list **tk_lst, t_token *token, t_list **rds);
-extern t_error	nud_word(t_ast **ast, t_token *token, t_list **redirs);
-extern t_error	nud_subshell(t_ast **ast, t_list **tk_lst, t_list **redirs);
-extern t_error	led(t_ast **ast, t_list **tk_lst, t_token *token);
-extern t_error	led_word(t_ast **ast, t_token *token);
-extern t_error	led_pipe(t_ast **ast, t_list **tk_lst);
-extern t_error	led_logic(t_ast **ast, t_list **tk_lst, t_token_type tk_type);
+#include "parser_internal.h"
 
 t_error	process_redir(t_ast *node, t_token *token, t_list **redirs,
 	t_token_type *current_redir)
