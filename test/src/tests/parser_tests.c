@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:28:35 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/05 13:27:52 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:54:53 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1004,7 +1004,7 @@ static t_case ast_cases[] = {
 		}
 	},
 	{
-		.name = "redir_out",
+		.name = "redir_out_alone",
 		.tokens = { ">", "out.txt", NULL },
 		.excepted_ast = &(t_ast)
 		{
@@ -1018,7 +1018,7 @@ static t_case ast_cases[] = {
 		}
 	},
 {
-	.name = "redir_in",
+	.name = "redir_in_alone",
 	.tokens = { "<", "in.txt", NULL },
 	.excepted_ast = &(t_ast)
 	{

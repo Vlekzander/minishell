@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 14:51:20 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/05 13:04:30 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:54:06 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	free_ast(t_ast *ast)
 	}
 	else if (ast->type == NODE_SUBSHELL)
 		free_ast(ast->child);
-	if (ast->type == NODE_COMMAND || ast->type == NODE_SUBSHELL)
+	if (ast->type == NODE_COMMAND || ast->type == NODE_SUBSHELL
+		|| ast->type == NODE_REDIR)
 		ft_lstclear(&ast->redirs, (void (*)(void *)) free_redir);
 	free(ast);
 }

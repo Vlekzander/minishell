@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 15:08:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/04 15:58:04 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:47:01 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,11 @@ int	is_redirection(t_token *token)
 {
 	return (token->type == TK_IN || token->type == TK_OUT
 		|| token->type == TK_APPEND || token->type == TK_HEREDOC);
+}
+
+void	clear_redirs(t_list	**redirs)
+{
+	if (redirs == NULL)
+		return ;
+	ft_lstclear(redirs, (void (*)(void *)) free_redir);
 }
