@@ -6,9 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:24:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/04 15:56:38 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:04:52 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <munit.h>
 
 #include "data.h"
 #include "error.h"
@@ -35,9 +37,9 @@ t_error	nud_word(t_ast **ast, t_token *token, t_list **redirs)
 		basename = token->value;
 	str_array_push(&node->command->args, basename);
 	if (*redirs != NULL)
-		node->command->redirs = *redirs;
+		node->redirs = *redirs;
 	else
-		*redirs = node->command->redirs;
+		*redirs = node->redirs;
 	return (*ast = node, ERR_NONE);
 }
 
@@ -45,6 +47,7 @@ t_error	nud_subshell(t_ast **ast, t_list **tk_lst, t_list **redirs)
 {
 	t_ast	*node;
 	t_error	error;
+	t_token	*next;
 
 	if (*redirs != NULL)
 	{
@@ -54,7 +57,12 @@ t_error	nud_subshell(t_ast **ast, t_list **tk_lst, t_list **redirs)
 	node = create_ast(NODE_SUBSHELL);
 	if (node == NULL)
 		return (ERR_ALLOCATION);
-	error = parse_expression(&node->child, tk_lst, 0);
+	error = parse_expression(&node->child, tk_lst, -1);
+	next = peek_front(*tk_lst);
+	if (node->child != NULL && next != NULL && next->type == TK_P_CLOSE)
+		pop_front(tk_lst);
+	else
+		error = ERR_SYNTAX;
 	if (error != ERR_NONE)
 		return (free_ast(node), error);
 	return (*ast = node, ERR_NONE);

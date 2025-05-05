@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/01 22:51:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:25:08 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ typedef enum e_node_type
 	NODE_PIPELINE,
 	NODE_AND,
 	NODE_OR,
-	NODE_SUBSHELL
+	NODE_SUBSHELL,
+	NODE_REDIR
 }	t_node_type;
 
 typedef enum e_redir_type
@@ -70,7 +71,6 @@ typedef struct s_command
 {
 	char		*path;
 	char		**args;
-	t_list		*redirs;
 }	t_command;
 
 typedef struct s_ast
@@ -79,12 +79,15 @@ typedef struct s_ast
 	int			exit_code;
 	union
 	{
-		t_command	*command;
-		t_list		*pipeline;
+		t_list	*pipeline;
 		struct
 		{
 			t_list			*redirs;
-			struct s_ast	*child;
+			union
+			{
+				t_command		*command;
+				struct s_ast	*child;
+			};
 		};
 		struct
 		{

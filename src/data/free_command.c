@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 15:04:41 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/01 22:51:26 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:03:59 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,5 @@ void	free_command(t_command *command)
 			free(command->args[i++]);
 		free(command->args);
 	}
-	ft_lstclear(&command->redirs, (void (*)(void *)) free_redir);
 	free(command);
 }

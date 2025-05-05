@@ -6,14 +6,16 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:34:27 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/04 12:14:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/04 18:56:52 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "munit.h"
+
 
 #ifndef TESTS_H
 # define TESTS_H
+# include "error.h"
+# include "munit.h"
 
 typedef struct s_case
 {
@@ -28,7 +30,11 @@ typedef struct s_case
 		struct
 		{
 			char	*tokens[100];
-			void	*excepted_ast;
+			union
+			{
+				void	*excepted_ast;
+				t_error	excepted_error;
+			};
 		};
 	};
 } t_case;
@@ -36,5 +42,6 @@ typedef struct s_case
 t_case	*find_case(t_case cases[], const char *name);
 MunitResult	tokenize_basic_tests(const MunitParameter params[], void* data);
 MunitResult	parse_ast_basic_tests(const MunitParameter params[], void* data);
+MunitResult	parse_ast_error_tests(const MunitParameter params[], void* data);
 
 #endif

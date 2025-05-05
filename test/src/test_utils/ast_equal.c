@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 12:07:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/29 15:07:56 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:26:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ static int	command_equal(t_command *a, t_command *b)
 		return (0);
 	if (!str_array_equal(a->args, b->args))
 		return (0);
-	if (!redir_equal(a->redirs, b->redirs))
-		return (0);
 	return (1);
 }
 
@@ -96,12 +94,14 @@ int	ast_equal(t_ast *a, t_ast *b)
 	if (a->type != b->type)
 		return (0);
 	if (a->type == NODE_COMMAND)
-		return (command_equal(a->command, b->command));
+		return (command_equal(a->command, b->command) && redir_equal(a->redirs, b->redirs));
 	if (a->type == NODE_PIPELINE)
 		return (pipeline_equal(a->pipeline, b->pipeline));
 	if (a->type == NODE_AND || a->type == NODE_OR)
 		return (ast_equal(a->left, b->left) && ast_equal(a->right, b->right));
 	if (a->type == NODE_SUBSHELL)
 		return (ast_equal(a->child, b->child) && redir_equal(a->redirs, b->redirs));
+	if (a->type == NODE_REDIR)
+		return (redir_equal(a->redirs, b->redirs));
 	return (0);
 }

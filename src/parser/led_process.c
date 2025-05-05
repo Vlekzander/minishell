@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:41:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/04 15:57:33 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/04 22:54:41 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ t_error	led_pipe(t_ast **ast, t_list **tk_lst)
 		*ast = node;
 	}
 	right = NULL;
-	error = parse_expression(&right, tk_lst, get_precedence(TK_PIPE));
+	if (peek_front(*tk_lst) == NULL || peek_front(*tk_lst)->type == TK_PIPE || peek_front(*tk_lst)->type == TK_AND || peek_front(*tk_lst)->type == TK_OR)
+		error = ERR_SYNTAX;
+	else
+		error = parse_expression(&right, tk_lst, get_precedence(TK_PIPE));
 	if (error != ERR_NONE)
 		return (error);
 	ft_lstadd_back(&(*ast)->pipeline, ft_lstnew(right));
@@ -85,6 +88,8 @@ t_error	led_logic(t_ast **ast, t_list **tk_lst, t_token_type tk_type)
 	error = parse_expression(&right, tk_lst, get_precedence(tk_type));
 	if (error != ERR_NONE)
 		return (error);
+	if (right == NULL)
+		return (ERR_SYNTAX);
 	node->right = right;
 	return (ERR_NONE);
 }
