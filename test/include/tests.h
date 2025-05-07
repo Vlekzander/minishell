@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:34:27 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/06 23:34:58 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/07 21:34:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ typedef struct s_case
 		};
 		struct
 		{
-			char	*in_files[100];
+			t_list	*in_files;
 			void	*patterns;
-			char	*excepted_out_files[100];
+			t_list	*excepted_out_files;
 		};
 		struct
 		{

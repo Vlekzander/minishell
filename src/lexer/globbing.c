@@ -6,14 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:41:52 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/07 17:20:44 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/07 22:31:14 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <munit.h>
-#include <stdlib.h>
 #include "data.h"
 #include "lexer.h"
+#include "utils.h"
 
 static char	*ft_strstr(char *str, char *to_find)
 {
@@ -37,84 +36,98 @@ static char	*ft_strstr(char *str, char *to_find)
 	return (NULL);
 }
 
-static t_error	lst_to_array(char ***out, t_list *in)
+void	check_pattern(t_list *node, t_glob *patterns)
 {
-	size_t	i;
-	t_list	*cursor;
+	t_list	*infixe;
+	char	*ptr;
 
-	if (out == NULL)
-		return (ERR_IMPLEMENTATION);
-	i = 0;
-	cursor = in;
-	while (cursor != NULL)
+	if (node == NULL || patterns == NULL)
+		return ;
+	ptr = node->content;
+	if (patterns->prefix != NULL)
+		ptr = ft_strstr(ptr, patterns->prefix);
+	if (patterns->infixes != NULL && ptr != NULL)
 	{
-		if (cursor->content != NULL)
-			i++;
-		cursor = cursor->next;
+		infixe = patterns->infixes;
+		while (infixe != NULL && ptr != NULL)
+		{
+			ptr = ft_strstr(ptr, infixe->content);
+			infixe = infixe->next;
+		}
 	}
-	*out = ft_calloc(i +1, sizeof(char *));
-	i = 0;
-	while (in != NULL)
+	if (patterns->suffix != NULL && ptr != NULL)
+		ptr = ft_strstr(ptr, patterns->suffix);
+	if (ptr == NULL)
+		node->content = NULL;
+}
+
+static t_error	lst_copy(t_list **dest, t_list *base)
+{
+	t_list	*node;
+
+	if (dest == NULL)
+		return (ERR_IMPLEMENTATION);
+	while (base != NULL)
 	{
-		if (in->content != NULL)
-			(*out)[i++] = ft_strdup(in->content);
-		in = in->next;
+		node = ft_lstnew(base->content);
+		if (node == NULL)
+			return (ft_lstclear(dest, NULL), ERR_ALLOCATION);
+		ft_lstadd_back(dest, node);
+		base = base->next;
 	}
 	return (ERR_NONE);
 }
 
-t_error	globbing(char ***out_files, char **in_files, t_glob *patterns)
+static void	lst_remove_null(t_list **lst)
 {
-	t_list	*files;
+	t_list	*prev;
 	t_list	*node;
-	t_list	*infixe;
-	t_error	error;
-	char	*ptr;
+	t_list	*temp;
 
-	if (out_files == NULL || in_files == NULL || patterns == NULL)
-		return (ERR_IMPLEMENTATION);
-	*out_files = NULL;
-	files = NULL;
-	while (*in_files != NULL)
-	{
-		node = ft_lstnew(*in_files);
-		if (node == NULL)
-			return (ft_lstclear(&files, NULL), ERR_ALLOCATION);
-		ft_lstadd_back(&files, node);
-		in_files++;
-	}
-	node = files;
+	if (lst == NULL)
+		return ;
+	prev = NULL;
+	node = *lst;
 	while (node != NULL)
 	{
-		ptr = node->content;
-		if (patterns->prefix != NULL)
+		if (node->content == NULL)
 		{
-			ptr = ft_strstr(ptr, patterns->prefix);
-			if (ptr != node->content)
-				node->content = NULL;
-		}
-		if (patterns->infixes != NULL && node->content != NULL)
-		{
-			infixe = patterns->infixes;
-			while (infixe != NULL)
+			temp = node;
+			if (prev == NULL)
 			{
-				ptr = ft_strstr(ptr, infixe->content);
-				if (ptr == NULL)
-				{
-					node->content = NULL;
-					break ;
-				}
-				infixe = infixe->next;
+				*lst = node->next;
+				node = *lst;
 			}
+			else
+			{
+				prev->next = node->next;
+				node = prev->next;
+			}
+			ft_lstdelone(temp, NULL);
+			continue ;
 		}
-		if (patterns->suffix != NULL && node->content != NULL)
-		{
-			ptr = ft_strstr(ptr, patterns->suffix);
-			if (ft_strlen(ptr) != ft_strlen(patterns->suffix))
-				node->content = NULL;
-		}
+		prev = node;
 		node = node->next;
 	}
-	error = lst_to_array(out_files, files);
-	return (ft_lstclear(&files, NULL), error);
+}
+
+t_error	globbing(t_list **out_files, t_list *in_files, t_glob *patterns)
+{
+	t_list	*node;
+	t_error	error;
+
+	if (out_files == NULL || patterns == NULL)
+		return (ERR_IMPLEMENTATION);
+	*out_files = NULL;
+	error = lst_copy(out_files, in_files);
+	if (error != ERR_NONE)
+		return (error);
+	node = *out_files;
+	while (node != NULL)
+	{
+		check_pattern(node, patterns);
+		node = node->next;
+	}
+	lst_remove_null(out_files);
+	return (ERR_NONE);
 }
