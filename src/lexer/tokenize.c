@@ -6,12 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:23:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/04 15:59:35 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/06 22:21:28 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "data.h"
 #include "lexer.h"
 #include "lexer_internal.h"
 

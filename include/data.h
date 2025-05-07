@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/05 13:25:08 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/06 22:13:01 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,13 @@ typedef struct s_ast
 		};
 	};
 }	t_ast;
+
+typedef struct s_glob
+{
+	char	*prefix;
+	char	*suffix;
+	t_list	*infixes;
+}	t_glob;
 
 t_token_type	get_token_type(char *token);
 t_token			*create_token(t_token_type type, char *value);

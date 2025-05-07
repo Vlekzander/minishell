@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 16:22:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/05 14:52:31 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/06 22:20:34 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 static MunitParameterEnum tokenize_basic_params[] = {
 	{ "case", (char *[]) { "single_command", "one_arg", "multiple_args", "redir_out", "redir_append", "redir_in", "redir_heredoc", "redir_out_inverted", "redir_append_inverted", "redir_in_inverted", "redir_heredoc_inverted", "single_pipe", "multiple_pipes", "pipes_and_redir", "quoted_arg", "mixed_quotes", "complex_quotes_redir", "command_and", "command_or", "subshell", "and_with_redir", "or_with_pipe", "subshell_with_pipe", "subshell_and_redir", "nested_logic", "deep_nested_group", "multi_op_complex", NULL } },
+	{ NULL, NULL }
+};
+
+static MunitParameterEnum globbing_basic_params[] = {
+	{"case", (char *[]) {  "no_file_no_pattern", "file_no_pattern", "mult_files_no_pattern", "no_file_prefix", "file_prefix", "file_full_prefix", "mult_files_prefix", "file_prefix_bad", "mult_files_prefix_bad", "no_file_suffix", "file_suffix", "file_full_suffix", "mult_files_suffix", "file_suffix_bad", "mult_files_suffix_bad", "no_file_prefix_suffix", "file_prefix_suffix", "file_full_prefix_suffix", "mult_files_prefix_suffix", "file_prefix_suffix_bad", "mult_files_prefix_suffix_bad", "no_file_infixe", "file_infixe",  "file_full_infixe", "mult_files_infixe", "file_infixe_bad",  "mult_files_infixe_bad", NULL } },
 	{ NULL, NULL }
 };
 
@@ -29,6 +34,7 @@ static MunitParameterEnum parse_ast_error_params[] = {
 
 static MunitTest tests[] = {
 	{"/lexer/tokenize/basic_tests", tokenize_basic_tests, NULL, NULL, MUNIT_TEST_OPTION_NONE, tokenize_basic_params },
+	{"/lexer/globbing/basic_tests", globbing_basic_tests, NULL, NULL, MUNIT_TEST_OPTION_NONE, globbing_basic_params },
 	{"/parser/parse_ast/basic_tests", parse_ast_basic_tests, NULL, NULL, MUNIT_TEST_OPTION_NONE, parse_ast_basic_params },
 	{"/parser/parse_ast/error_tests", parse_ast_error_tests, NULL, NULL, MUNIT_TEST_OPTION_NONE, parse_ast_error_params },
 	{ NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }

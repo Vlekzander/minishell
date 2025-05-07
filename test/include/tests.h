@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:34:27 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/04 18:56:52 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/06 23:34:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #ifndef TESTS_H
 # define TESTS_H
+# include "data.h"
 # include "error.h"
 # include "munit.h"
 
@@ -29,6 +30,12 @@ typedef struct s_case
 		};
 		struct
 		{
+			char	*in_files[100];
+			void	*patterns;
+			char	*excepted_out_files[100];
+		};
+		struct
+		{
 			char	*tokens[100];
 			union
 			{
@@ -41,6 +48,7 @@ typedef struct s_case
 
 t_case	*find_case(t_case cases[], const char *name);
 MunitResult	tokenize_basic_tests(const MunitParameter params[], void* data);
+MunitResult	globbing_basic_tests(const MunitParameter params[], void* data);
 MunitResult	parse_ast_basic_tests(const MunitParameter params[], void* data);
 MunitResult	parse_ast_error_tests(const MunitParameter params[], void* data);
 
