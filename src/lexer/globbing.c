@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:41:52 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/07 22:31:14 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:41:52 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,7 @@
 #include "lexer.h"
 #include "utils.h"
 
-static char	*ft_strstr(char *str, char *to_find)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	if (to_find[0] == '\0')
-		return (str);
-	while (str[i] != '\0')
-	{
-		j = 0;
-		while (str[i + j] != '\0' && str[i + j] == to_find[j])
-		{
-			if (to_find[j +1] == '\0')
-				return (str + i);
-			j++;
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-void	check_pattern(t_list *node, t_glob *patterns)
+static void	check_pattern(t_list *node, t_glob *patterns)
 {
 	t_list	*infixe;
 	char	*ptr;
@@ -78,11 +56,28 @@ static t_error	lst_copy(t_list **dest, t_list *base)
 	return (ERR_NONE);
 }
 
+static void	remove_node(t_list **lst, t_list **prev, t_list **node)
+{
+	t_list	*temp;
+
+	temp = *node;
+	if (*prev == NULL)
+	{
+		*lst = (*node)->next;
+		*node = *lst;
+	}
+	else
+	{
+		(*prev)->next = (*node)->next;
+		*node = (*prev)->next;
+	}
+	ft_lstdelone(temp, NULL);
+}
+
 static void	lst_remove_null(t_list **lst)
 {
 	t_list	*prev;
 	t_list	*node;
-	t_list	*temp;
 
 	if (lst == NULL)
 		return ;
@@ -92,18 +87,7 @@ static void	lst_remove_null(t_list **lst)
 	{
 		if (node->content == NULL)
 		{
-			temp = node;
-			if (prev == NULL)
-			{
-				*lst = node->next;
-				node = *lst;
-			}
-			else
-			{
-				prev->next = node->next;
-				node = prev->next;
-			}
-			ft_lstdelone(temp, NULL);
+			remove_node(lst, &prev, &node);
 			continue ;
 		}
 		prev = node;
