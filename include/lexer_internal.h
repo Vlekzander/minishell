@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 15:58:59 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/08 16:35:44 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:18:18 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "error.h"
 
 t_error	add_token(t_list **list, t_token_type type, char *value);
+t_error	process_input(t_list **tokens, char *input);
 t_error	process_operator(t_list **tokens, char **input, char *buf);
 t_error	process_separator(t_list **tokens, char *buf);
 char	handle_quote(char c, char current);
