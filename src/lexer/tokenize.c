@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:23:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/08 16:16:46 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:15:42 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,18 @@
 #include "lexer.h"
 #include "lexer_internal.h"
 
-static void	process_input(t_list **tokens, char *input, char *buf)
+static t_error	process_input(t_list **tokens, char *input)
 {
+	char	*buf;
 	char	quote;
+	t_error	error;
 	size_t	i;
 
+	if (tokens == NULL || input == NULL)
+		return (ERR_IMPLEMENTATION);
+	buf = ft_calloc(ft_strlen(input) +1, sizeof(char));
+	if (buf == NULL)
+		return (ERR_ALLOCATION);
 	quote = 0;
 	i = 0;
 	while (*input != '\0')
@@ -28,10 +35,14 @@ static void	process_input(t_list **tokens, char *input, char *buf)
 			i = 0;
 			if (is_operator(input))
 			{
-				process_operator(tokens, &input, buf);
+				error = process_operator(tokens, &input, buf);
+				if (error != ERR_NONE)
+					return (free(buf), ft_lstclear(tokens, (void *) free_token), error);
 				continue ;
 			}
-			process_separator(tokens, buf);
+			error = process_separator(tokens, buf);
+			if (error != ERR_NONE)
+				return (free(buf), ft_lstclear(tokens, (void *) free_token), error);
 			input++;
 			continue ;
 		}
@@ -40,7 +51,8 @@ static void	process_input(t_list **tokens, char *input, char *buf)
 		buf[i++] = *input;
 		input++;
 	}
-	add_token(tokens, TK_WORD, buf);
+	error = add_token(tokens, TK_WORD, buf);
+	return (free(buf), error);
 }
 
 static void	remove_tokens_quotes(t_list *tokens)
@@ -60,14 +72,13 @@ static void	remove_tokens_quotes(t_list *tokens)
 
 t_error	tokenize(t_list **tokens, char *input)
 {
-	char	*buf;
+	t_error	error;
 
 	if (tokens == NULL || input == NULL)
 		return (ERR_IMPLEMENTATION);
-	buf = ft_calloc(ft_strlen(input) +1, sizeof(char));
-	if (buf == NULL)
-		return (ERR_ALLOCATION);
-	process_input(tokens, input, buf);
+	error = process_input(tokens, input);
+	if (error != ERR_NONE)
+		return (error);
 	remove_tokens_quotes(*tokens);
-	return (free(buf), ERR_NONE);
+	return (ERR_NONE);
 }
