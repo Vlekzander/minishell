@@ -6,48 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:23:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/06 22:21:28 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:16:46 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "lexer.h"
 #include "lexer_internal.h"
-
-static int	is_quote(char c)
-{
-	return (c == '"' || c == '\'');
-}
-
-static int	is_operator(char *str)
-{
-	if (!str)
-		return (0);
-	if (str[0] == '<' && str[1] == '<')
-		return (1);
-	if (str[0] == '>' && str[1] == '>')
-		return (1);
-	if (str[0] == '|' && str[1] == '|')
-		return (1);
-	if (str[0] == '&' && str[1] == '&')
-		return (1);
-	if (str[0] == '<')
-		return (1);
-	if (str[0] == '>')
-		return (1);
-	if (str[0] == '|')
-		return (1);
-	if (str[0] == '(')
-		return (1);
-	if (str[0] == ')')
-		return (1);
-	return (0);
-}
-
-static int	is_separator(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n');
-}
 
 static void	process_input(t_list **tokens, char *input, char *buf)
 {
@@ -58,24 +23,39 @@ static void	process_input(t_list **tokens, char *input, char *buf)
 	i = 0;
 	while (*input != '\0')
 	{
-		if (is_quote(*input) && (quote == 0 || quote == *input))
-			quote = handle_quote(*input, quote);
-		else if (quote == 0 && is_operator(input))
+		if (quote == 0 && (is_operator(input) || is_separator(*input)))
 		{
-			process_operator(tokens, &input, buf);
 			i = 0;
+			if (is_operator(input))
+			{
+				process_operator(tokens, &input, buf);
+				continue ;
+			}
+			process_separator(tokens, buf);
+			input++;
 			continue ;
 		}
-		else if (quote == 0 && is_separator(*input))
-		{
-			process_separator(tokens, buf);
-			i = 0;
-		}
-		else
-			buf[i++] = *input;
+		if (is_quote(*input) && (quote == 0 || quote == *input))
+			quote = handle_quote(*input, quote);
+		buf[i++] = *input;
 		input++;
 	}
 	add_token(tokens, TK_WORD, buf);
+}
+
+static void	remove_tokens_quotes(t_list *tokens)
+{
+	t_token	*token;
+
+	if (tokens == NULL)
+		return ;
+	while (tokens != NULL)
+	{
+		token = (t_token *) tokens->content;
+		if (token != NULL)
+			remove_str_quotes(token->value);
+		tokens = tokens->next;
+	}
 }
 
 t_error	tokenize(t_list **tokens, char *input)
@@ -88,5 +68,6 @@ t_error	tokenize(t_list **tokens, char *input)
 	if (buf == NULL)
 		return (ERR_ALLOCATION);
 	process_input(tokens, input, buf);
+	remove_tokens_quotes(*tokens);
 	return (free(buf), ERR_NONE);
 }
