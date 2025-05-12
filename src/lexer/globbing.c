@@ -14,27 +14,27 @@
 #include "lexer.h"
 #include "utils.h"
 
-static void	check_pattern(t_list *node, t_glob *patterns)
+static void	check_pattern(t_list *node, t_glob_pattern *pattern)
 {
 	t_list	*infixe;
 	char	*ptr;
 
-	if (node == NULL || patterns == NULL)
+	if (node == NULL || pattern == NULL)
 		return ;
 	ptr = node->content;
-	if (patterns->prefix != NULL)
-		ptr = ft_strstr(ptr, patterns->prefix);
-	if (patterns->infixes != NULL && ptr != NULL)
+	if (pattern->prefix != NULL)
+		ptr = ft_strstr(ptr, pattern->prefix);
+	if (pattern->infixes != NULL && ptr != NULL)
 	{
-		infixe = patterns->infixes;
+		infixe = pattern->infixes;
 		while (infixe != NULL && ptr != NULL)
 		{
 			ptr = ft_strstr(ptr, infixe->content);
 			infixe = infixe->next;
 		}
 	}
-	if (patterns->suffix != NULL && ptr != NULL)
-		ptr = ft_strstr(ptr, patterns->suffix);
+	if (pattern->suffix != NULL && ptr != NULL)
+		ptr = ft_strstr(ptr, pattern->suffix);
 	if (ptr == NULL)
 		node->content = NULL;
 }
@@ -95,12 +95,12 @@ static void	lst_remove_null(t_list **lst)
 	}
 }
 
-t_error	globbing(t_list **out_files, t_list *in_files, t_glob *patterns)
+t_error	globbing(t_list **out_files, t_list *in_files, t_glob_pattern *pattern)
 {
 	t_list	*node;
 	t_error	error;
 
-	if (out_files == NULL || patterns == NULL)
+	if (out_files == NULL || pattern == NULL)
 		return (ERR_IMPLEMENTATION);
 	*out_files = NULL;
 	error = lst_copy(out_files, in_files);
@@ -109,7 +109,7 @@ t_error	globbing(t_list **out_files, t_list *in_files, t_glob *patterns)
 	node = *out_files;
 	while (node != NULL)
 	{
-		check_pattern(node, patterns);
+		check_pattern(node, pattern);
 		node = node->next;
 	}
 	lst_remove_null(out_files);

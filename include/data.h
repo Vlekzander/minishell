@@ -97,12 +97,12 @@ typedef struct s_ast
 	};
 }	t_ast;
 
-typedef struct s_glob
+typedef struct s_glob_pattern
 {
 	char	*prefix;
 	char	*suffix;
 	t_list	*infixes;
-}	t_glob;
+}	t_glob_pattern;
 
 t_token_type	get_token_type(char *token);
 t_token			*create_token(t_token_type type, char *value);

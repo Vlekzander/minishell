@@ -6,20 +6,11 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 12:07:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/06 17:52:39 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:12:15 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <munit.h>
-#include <string.h>
 #include "test_utils.h"
-
-static int str_equal(char *a, char *b)
-{
-	if (a == NULL || b == NULL)
-		return (a == b);
-	return (strcmp(a, b) == 0);
-}
 
 static int	redir_equal(t_list *a, t_list *b)
 {
