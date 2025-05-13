@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 22:32:05 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 23:08:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdarg.h>
 # include <stddef.h>
 # include <cmocka.h>
+# include "error.h"
 # include "libft.h"
 # define SUCCESS_MSG "\t[  \x1b[32mOK\x1b[0m  ] %s\n"
 # define FAIL_MSG "\t[ \x1b[31mFAIL\x1b[0m ] %s\n"
@@ -39,6 +40,15 @@ typedef struct s_test_case {
 			void	*patterns;
 			t_list	*excepted_out_files;
 		};
+		struct
+		{
+			char	*tokens[100];
+			union
+			{
+				void	*excepted_ast;
+				t_error	excepted_error;
+			};
+		};
 	};
 }	t_test_case;
 
@@ -51,5 +61,6 @@ typedef struct s_test_result
 
 t_test_result	tokenize_tests(void);
 t_test_result	globbing_tests(void);
+t_test_result	parse_ast_tests(void);
 
 #endif

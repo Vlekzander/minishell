@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:25:42 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 22:28:52 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 23:19:56 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@ static void	add_results(t_test_result *dest, t_test_result src)
 	dest->failed += src.failed;
 }
 int main(void) {
-	t_test_result	global;
+	t_test_result	global = {0};
 
 	cmocka_set_message_output(-1);
 	add_results(&global, tokenize_tests());
 	add_results(&global, globbing_tests());
+	add_results(&global, parse_ast_tests());
 	printf(GLOBAL_RESULt, global.successful, global.total);
 	return (global.failed);
 }

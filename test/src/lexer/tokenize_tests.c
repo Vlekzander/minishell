@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:37:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 22:22:54 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 23:29:09 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,26 +54,21 @@ static void	tokenize_basic_tests(void **case_name)
 	int		equal;
 	t_error	error;
 
+	if (case_name == NULL)
+		return (printf("Implementation error.\n"), assert_true(0));
 	tc = find_case(token_cases, *case_name);
 	excepted = NULL;
 	tested = NULL;
 	if (tc == NULL)
-		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), (void) NULL);
+		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	excepted = create_token_list(tc->expected_tokens);
 	error = tokenize(&tested, tc->input_tokenize);
 	equal = lst_equal(excepted, tested, (void *) token_equal);
 	ft_lstclear(&tested, (void *) free_token);
 	ft_lstclear(&excepted, (void *) free_token);
-	if (error == ERR_NONE && equal)
-	{
-		printf(SUCCESS_MSG, (char *) *case_name);
-		assert_true(1);
-	}
-	else
-	{
-		printf(FAIL_MSG, (char *) *case_name);
-		assert_true(0);
-	}
+	if (!equal || error != ERR_NONE)
+		return(printf(FAIL_MSG, (char *) *case_name), assert_true(0));
+	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));
 }
 
 t_test_result	tokenize_tests(void)

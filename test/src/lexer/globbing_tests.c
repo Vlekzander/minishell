@@ -6,12 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 22:10:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 22:22:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 23:29:05 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "error.h"
 #include "lexer.h"
 #include "test.h"
 #include "test_utils.h"
@@ -708,23 +707,18 @@ static void	globbing_basic_tests(void **case_name)
 	t_error	error;
 	int		equal;
 
-	tc = find_case(globbing_cases, *case_name);
+	if (case_name == NULL)
+		return (printf("Implementation error.\n"), assert_true(0));
 	tested = NULL;
+	tc = find_case(globbing_cases, *case_name);
 	if (tc == NULL)
-		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), (void) NULL);
+		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	error = globbing(&tested, tc->in_files, tc->patterns);
 	equal = lst_equal(tested, tc->excepted_out_files, (void *) str_equal);
 	ft_lstclear(&tested, NULL);
-	if (error == ERR_NONE && equal)
-	{
-		printf(SUCCESS_MSG, (char *) *case_name);
-		assert_true(1);
-	}
-	else
-	{
-		printf(FAIL_MSG, (char *) *case_name);
-		assert_true(0);
-	}
+	if (!equal || error != ERR_NONE)
+		return(printf(FAIL_MSG, (char *) *case_name), assert_true(0));
+	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));
 }
 
 t_test_result	globbing_tests(void)
