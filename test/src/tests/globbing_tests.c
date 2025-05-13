@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:43:50 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/12 11:13:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/12 12:22:09 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -593,6 +593,7 @@ static t_case globbing_cases[] =
 		},
 		.excepted_out_files = NULL
 	},
+	{ NULL }
 };
 
 MunitResult	globbing_basic_tests(const MunitParameter params[], void* data)

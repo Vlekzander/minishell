@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 12:07:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/12 11:12:15 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:23:07 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static int	redir_equal(t_list *a, t_list *b)
 {
 	t_redir	*redir_a;
 	t_redir	*redir_b;
+
 	if (a == NULL || b == NULL)
 		return (a == b);
 	while (a != NULL && b != NULL)

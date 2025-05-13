@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 16:34:22 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/23 13:34:04 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/12 12:30:09 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ MunitResult	tokenize_basic_tests(const MunitParameter params[], void* data)
 	if (tc == NULL)
 		return (munit_log(MUNIT_LOG_ERROR, "Test case not found"), MUNIT_ERROR);
 	excepted = create_token_list(tc->expected_tokens);
-	tokenize(&tested, tc->input);
-	equal = lst_equal(excepted, tested, token_equal);
+	tokenize(&tested, tc->input_token);
+	equal = lst_equal(excepted, tested, (void *) token_equal);
 	ft_lstclear(&tested, (void (*)(void *)) free_token);
 	ft_lstclear(&excepted, (void (*)(void *)) free_token);
 	if (!equal)

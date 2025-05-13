@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 16:22:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/06 22:20:34 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:29:41 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ static MunitParameterEnum tokenize_basic_params[] = {
 
 static MunitParameterEnum globbing_basic_params[] = {
 	{"case", (char *[]) {  "no_file_no_pattern", "file_no_pattern", "mult_files_no_pattern", "no_file_prefix", "file_prefix", "file_full_prefix", "mult_files_prefix", "file_prefix_bad", "mult_files_prefix_bad", "no_file_suffix", "file_suffix", "file_full_suffix", "mult_files_suffix", "file_suffix_bad", "mult_files_suffix_bad", "no_file_prefix_suffix", "file_prefix_suffix", "file_full_prefix_suffix", "mult_files_prefix_suffix", "file_prefix_suffix_bad", "mult_files_prefix_suffix_bad", "no_file_infixe", "file_infixe",  "file_full_infixe", "mult_files_infixe", "file_infixe_bad",  "mult_files_infixe_bad", NULL } },
+	{ NULL, NULL }
+};
+
+static MunitParameterEnum extract_pattern_basic_params[] = {
+	{ "case", (char *[]) {"no_valid_pattern", "any_pattern", "prefix_file_pattern", "suffix_file_pattern", "infix_file_pattern", "infixes_file_pattern", "prefix_suffix_pattern", "prefix_infix_pattern", "infix_suffix_pattern", "prefix_infix_suffix_pattern", "prefix_infixes_suffix_pattern", "empty_pattern", "consecutive_stars", "prefix_consecutive_stars", "infix_consecutive_stars", "infixes_consecutive_stars", "suffix_consecutive_stars", "trapped_pattern", "trapped_prefix", "trapped_infix", "trapped_suffix", NULL} },
 	{ NULL, NULL }
 };
 
@@ -35,6 +40,7 @@ static MunitParameterEnum parse_ast_error_params[] = {
 static MunitTest tests[] = {
 	{"/lexer/tokenize/basic_tests", tokenize_basic_tests, NULL, NULL, MUNIT_TEST_OPTION_NONE, tokenize_basic_params },
 	{"/lexer/globbing/basic_tests", globbing_basic_tests, NULL, NULL, MUNIT_TEST_OPTION_NONE, globbing_basic_params },
+	{"/lexer/extract_pattern/basic_tests", extract_pattern_basic_tests, NULL, NULL, MUNIT_TEST_OPTION_NONE, extract_pattern_basic_params },
 	{"/parser/parse_ast/basic_tests", parse_ast_basic_tests, NULL, NULL, MUNIT_TEST_OPTION_NONE, parse_ast_basic_params },
 	{"/parser/parse_ast/error_tests", parse_ast_error_tests, NULL, NULL, MUNIT_TEST_OPTION_NONE, parse_ast_error_params },
 	{ NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
