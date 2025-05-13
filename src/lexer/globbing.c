@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:41:52 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/08 11:41:52 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:10:54 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ static void	check_pattern(t_list *node, t_pattern *pattern)
 	ptr = node->content;
 	if (pattern->prefix != NULL)
 		ptr = ft_strstr(ptr, pattern->prefix);
+	if ((pattern->prefix != NULL && ptr != node->content)
+		|| (pattern->prefix == NULL && ptr[0] == '.'))
+		node->content = NULL;
 	if (pattern->infixes != NULL && ptr != NULL)
 	{
 		infixe = pattern->infixes;

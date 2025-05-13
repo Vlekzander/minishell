@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:43:50 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/12 12:22:09 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:03:32 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -593,6 +593,71 @@ static t_case globbing_cases[] =
 		},
 		.excepted_out_files = NULL
 	},
+	{
+		.name = "any_with_hidden_files",
+		.in_files = &(t_list) {
+			.content = "file1.txt",
+			.next = &(t_list) {
+				.content = "file2.txt",
+				.next = &(t_list) {
+					.content = "file3.txt",
+					.next = &(t_list) {
+						.content = ".hidden1.txt",
+						.next = &(t_list) {
+							.content = ".hidden2.txt",
+							.next = NULL
+						},
+					},
+				},
+			},
+		},
+		.patterns = &(t_pattern){
+			.prefix = NULL,
+			.suffix = NULL,
+			.infixes = NULL
+		},
+		.excepted_out_files = &(t_list) {
+			.content = "file1.txt",
+			.next = &(t_list) {
+				.content = "file2.txt",
+				.next = &(t_list) {
+					.content = "file3.txt",
+					.next = NULL
+				},
+			},
+		},
+	},
+	{
+		.name = "prefix_hidden_files",
+		.in_files = &(t_list) {
+			.content = "file1.txt",
+			.next = &(t_list) {
+				.content = "file2.txt",
+				.next = &(t_list) {
+					.content = "file3.txt",
+					.next = &(t_list) {
+						.content = ".hidden1.txt",
+						.next = &(t_list) {
+							.content = ".hidden2.txt",
+							.next = NULL
+						},
+					},
+				},
+			},
+		},
+		.patterns = &(t_pattern){
+			.prefix = ".",
+			.suffix = NULL,
+			.infixes = NULL
+		},
+		.excepted_out_files = &(t_list) {
+			.content = ".hidden1.txt",
+			.next = &(t_list) {
+				.content = ".hidden2.txt",
+				.next = NULL
+			},
+		},
+	},
 	{ NULL }
 };
 
@@ -609,6 +674,8 @@ MunitResult	globbing_basic_tests(const MunitParameter params[], void* data)
 	if (tc == NULL)
 		return (munit_log(MUNIT_LOG_ERROR, "Test case not found"), MUNIT_ERROR);
 	error = globbing(&tested, tc->in_files, tc->patterns);
+	if (tested != NULL)
+		munit_logf(MUNIT_LOG_WARNING, "%s", (char *) tested->content);
 	equal = lst_equal(tested, tc->excepted_out_files, (void *) str_equal);
 	ft_lstclear(&tested, NULL);
 	if (!equal || error != ERR_NONE)
