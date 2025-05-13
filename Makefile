@@ -4,7 +4,7 @@ LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 LIBFT_DIR=libft
 LIBFT_LIB=$(LIBFT_DIR)/libft.a
 SOURCES_DIRS = src src/data src/error src/lexer src/parser src/utils
-SOURCES_DIRS_TEST = $(wordlist 2,$(words $(SOURCES_DIRS)),$(SOURCES_DIRS)) test/src test/src/tests test/src/test_utils
+SOURCES_DIRS_TEST = $(wordlist 2,$(words $(SOURCES_DIRS)),$(SOURCES_DIRS)) test/src test/src/lexer test/src/utils
 SOURCES = $(foreach dir, $(SOURCES_DIRS), $(wildcard $(dir)/*.c))
 SOURCES_TEST = $(foreach dir, $(SOURCES_DIRS_TEST), $(wildcard $(dir)/*.c))
 OBJECTS = $(SOURCES:.c=.o)
@@ -31,7 +31,7 @@ $(NAME_TEST): $(OBJECTS_TEST)
 	@echo "$(BLUE)✦ Building libraries...$(RESET)\r"
 	@make -C $(LIBFT_DIR) --no-print-directory
 	@printf "$(YELLOW)◈ Linking $@...$(RESET)\r"
-	@$(CC) $^ $(LDFLAGS) -o $@
+	@$(CC) $^ $(LDFLAGS) -lcmocka -o $@
 	@printf "$(GREEN)➤ Executable $(NAME_TEST) successfully built!$(RESET)\n"
 
 %.o: %.c

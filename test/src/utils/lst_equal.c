@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   str_equal.c                                        :+:      :+:    :+:   */
+/*   lst_equal.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 11:12:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/12 11:13:32 by apierret         ###   ########.fr       */
+/*   Created: 2025/05/13 18:58:12 by apierret          #+#    #+#             */
+/*   Updated: 2025/05/13 19:01:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
 #include "test_utils.h"
 
-int str_equal(char *a, char *b)
+int	lst_equal(t_list *a, t_list *b, int (*equ)(void *, void *))
 {
-	if (a == NULL || b == NULL)
-		return (a == b);
-	return (strcmp(a, b) == 0);
+	while (a != NULL && b != NULL)
+	{
+		if (!equ(a->content, b->content))
+			return (0);
+		a = a->next;
+		b = b->next;
+	}
+	return (a == b);
 }

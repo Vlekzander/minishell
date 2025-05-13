@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:43:29 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 14:03:05 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:56:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,5 @@ typedef enum e_error_code
 	ERR_OPEN,
 	ERR_CLOSE
 }	t_error;
-
-void	print_error(char *source, t_error error);
 
 #endif
