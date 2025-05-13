@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 16:22:45 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 15:00:18 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:22:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static MunitParameterEnum tokenize_basic_params[] = {
 };
 
 static MunitParameterEnum globbing_basic_params[] = {
-	{"case", (char *[]) {  "no_file_no_pattern", "file_no_pattern", "mult_files_no_pattern", "no_file_prefix", "file_prefix", "file_full_prefix", "mult_files_prefix", "file_prefix_bad", "mult_files_prefix_bad", "no_file_suffix", "file_suffix", "file_full_suffix", "mult_files_suffix", "file_suffix_bad", "mult_files_suffix_bad", "no_file_prefix_suffix", "file_prefix_suffix", "file_full_prefix_suffix", "mult_files_prefix_suffix", "file_prefix_suffix_bad", "mult_files_prefix_suffix_bad", "no_file_infixe", "file_infixe",  "file_full_infixe", "mult_files_infixe", "file_infixe_bad",  "mult_files_infixe_bad", "any_with_hidden_files", "prefix_hidden_files", NULL } },
+	{"case", (char *[]) {  "no_file_no_pattern", "file_no_pattern", "mult_files_no_pattern", "no_file_prefix", "file_prefix", "file_full_prefix", "mult_files_prefix", "file_prefix_bad", "mult_files_prefix_bad", "no_file_suffix", "file_suffix", "file_full_suffix", "mult_files_suffix", "file_suffix_bad", "mult_files_suffix_bad", "no_file_prefix_suffix", "file_prefix_suffix", "file_full_prefix_suffix", "mult_files_prefix_suffix", "file_prefix_suffix_bad", "mult_files_prefix_suffix_bad", "no_file_infixe", "file_infixe",  "file_full_infixe", "mult_files_infixe", "file_infixe_bad",  "mult_files_infixe_bad", "any_with_hidden_files", "prefix_hidden_files", "prefix_not_prefix", "suffix_not_suffix", NULL } },
 	{ NULL, NULL }
 };
 

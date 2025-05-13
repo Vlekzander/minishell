@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:43:50 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 15:03:32 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:23:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -657,6 +657,44 @@ static t_case globbing_cases[] =
 				.next = NULL
 			},
 		},
+	},
+	{
+		.name = "prefix_not_prefix",
+		.in_files = &(t_list) {
+			.content = "file1.txt",
+			.next = &(t_list) {
+				.content = "file2.txt",
+				.next = &(t_list) {
+					.content = "file3.txt",
+					.next = NULL
+				},
+			},
+		},
+		.patterns = &(t_pattern){
+			.prefix = "txt",
+			.suffix = NULL,
+			.infixes = NULL
+		},
+		.excepted_out_files = NULL
+	},
+	{
+		.name = "suffix_not_suffix",
+		.in_files = &(t_list) {
+			.content = "file1.txtfile",
+			.next = &(t_list) {
+				.content = "file2.txtfile",
+				.next = &(t_list) {
+					.content = "file3.txtfile",
+					.next = NULL
+				},
+			},
+		},
+		.patterns = &(t_pattern){
+			.prefix = NULL,
+			.suffix = "txt",
+			.infixes = NULL
+		},
+		.excepted_out_files = NULL
 	},
 	{ NULL }
 };
