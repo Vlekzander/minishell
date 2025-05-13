@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 23:08:03 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 23:39:23 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ typedef struct s_test_case {
 		};
 		struct
 		{
+			char	*input_pattern;
+			void	*excepted_pattern;
+		};
+		struct
+		{
 			char	*tokens[100];
 			union
 			{
@@ -61,6 +66,7 @@ typedef struct s_test_result
 
 t_test_result	tokenize_tests(void);
 t_test_result	globbing_tests(void);
+t_test_result	extract_pattern_tests(void);
 t_test_result	parse_ast_tests(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 22:10:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 23:29:05 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 23:38:45 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -703,9 +703,9 @@ static t_test_case globbing_cases[] =
 static void	globbing_basic_tests(void **case_name)
 {
 	t_test_case	*tc;
-	t_list	*tested;
-	t_error	error;
-	int		equal;
+	t_list		*tested;
+	t_error		error;
+	int			equal;
 
 	if (case_name == NULL)
 		return (printf("Implementation error.\n"), assert_true(0));

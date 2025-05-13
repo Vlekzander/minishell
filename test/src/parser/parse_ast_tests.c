@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:04:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 23:31:44 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 23:38:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "test.h"
 #include "test_utils.h"
 
-static t_test_case ast_cases[] = {
+static t_test_case parse_ast_cases[] = {
 	{
 		.name = "single_command",
 		.tokens = { "pwd", NULL },
@@ -1033,7 +1033,7 @@ static t_test_case ast_cases[] = {
 	{ NULL }
 };
 
-static t_test_case	error_cases[] = {
+static t_test_case	parse_ast_error_cases[] = {
 	{ .name = "pipe_start", .tokens = {"|"}, .excepted_error = ERR_SYNTAX },
 	{ .name = "pipe_end", .tokens = {"cmd", "|"}, .excepted_error = ERR_SYNTAX },
 	{ .name = "double_pipe", .tokens = {"cmd", "|", "|", "cmd"}, .excepted_error = ERR_SYNTAX },
@@ -1062,16 +1062,16 @@ static t_test_case	error_cases[] = {
 static void	parse_ast_basic_tests(void **case_name)
 {
 	t_test_case	*tc;
-	t_list	*tokens;
-	t_ast	*tested;
-	t_error	error;
-	int		equal;
+	t_list		*tokens;
+	t_ast		*tested;
+	t_error		error;
+	int			equal;
 
 	if (case_name == NULL)
 		return (printf("Implementation error.\n"), assert_true(0));
 	tokens = NULL;
 	tested = NULL;
-	tc = find_case(ast_cases, *case_name);
+	tc = find_case(parse_ast_cases, *case_name);
 	if (tc == NULL)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	tokens = create_token_list(tc->tokens);
@@ -1087,16 +1087,16 @@ static void	parse_ast_basic_tests(void **case_name)
 static void	parse_ast_error_tests(void **case_name)
 {
 	t_test_case	*tc;
-	t_list	*tokens;
-	t_ast	*tested;
-	t_error	error;
-	int		equal;
+	t_list		*tokens;
+	t_ast		*tested;
+	t_error		error;
+	int			equal;
 
 	if (case_name == NULL)
 		return (printf("Implementation error.\n"), assert_true(0));
 	tokens = NULL;
 	tested = NULL;
-	tc = find_case(error_cases, *case_name);
+	tc = find_case(parse_ast_error_cases, *case_name);
 	if (tc == NULL)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	tokens = create_token_list(tc->tokens);
@@ -1112,63 +1112,62 @@ static void	parse_ast_error_tests(void **case_name)
 t_test_result	parse_ast_tests(void)
 {
 	const struct CMUnitTest test_cases[] = {
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[0].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[1].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[2].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[3].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[4].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[5].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[6].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[7].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[8].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[9].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[10].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[11].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[12].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[13].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[14].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[15].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[16].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[17].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[18].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[19].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[20].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[21].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[22].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[23].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[24].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[25].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[26].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[27].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[28].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[29].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[30].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[31].name),
-		cmocka_unit_test_prestate(parse_ast_basic_tests, ast_cases[32].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[0].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[1].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[2].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[3].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[4].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[5].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[6].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[7].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[8].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[9].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[10].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[11].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[12].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[13].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[14].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[15].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[16].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[17].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[18].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[19].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[20].name),
-		cmocka_unit_test_prestate(parse_ast_error_tests, error_cases[21].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[0].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[1].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[2].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[3].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[4].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[5].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[6].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[7].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[8].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[9].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[10].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[11].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[12].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[13].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[14].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[15].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[16].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[17].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[18].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[19].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[20].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[21].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[22].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[23].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[24].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[25].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[26].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[27].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[28].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[29].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[30].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[31].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[32].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[0].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[1].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[2].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[3].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[4].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[5].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[6].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[7].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[8].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[9].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[10].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[11].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[12].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[13].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[14].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[15].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[16].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[17].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[18].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[19].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[20].name),
+		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[21].name),
 	};
-	(void) error_cases;
 	char	name[] = "parser/parse_ast";
 	t_test_result	result;
 

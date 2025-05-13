@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:37:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 23:29:09 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 23:38:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ static t_test_case token_cases[] = {
 static void	tokenize_basic_tests(void **case_name)
 {
 	t_test_case	*tc;
-	t_list	*excepted;
-	t_list	*tested;
-	int		equal;
-	t_error	error;
+	t_list		*excepted;
+	t_list		*tested;
+	int			equal;
+	t_error		error;
 
 	if (case_name == NULL)
 		return (printf("Implementation error.\n"), assert_true(0));

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:48:19 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 23:14:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 23:35:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ int		lst_equal(t_list *a, t_list *b, int (*equ)(void *, void *));
 int		str_equal(char *a, char *b);
 int		str_array_equal(char **a, char **b);
 int		token_equal(t_token *a, t_token *b);
-
+int		pattern_equal(t_pattern *a, t_pattern *b);
 
 #endif

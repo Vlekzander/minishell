@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:25:42 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 23:19:56 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 23:39:26 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int main(void) {
 	cmocka_set_message_output(-1);
 	add_results(&global, tokenize_tests());
 	add_results(&global, globbing_tests());
+	add_results(&global, extract_pattern_tests());
 	add_results(&global, parse_ast_tests());
 	printf(GLOBAL_RESULt, global.successful, global.total);
 	return (global.failed);
