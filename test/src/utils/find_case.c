@@ -13,7 +13,7 @@
 #include <string.h>
 #include "test_utils.h"
 
-static size_t	cases_len(t_case *cases)
+static size_t	cases_len(t_test_case *cases)
 {
 	size_t	size;
 
@@ -23,7 +23,7 @@ static size_t	cases_len(t_case *cases)
 	return (size);
 }
 
-t_case	*find_case(t_case *cases, const char *name)
+t_test_case	*find_case(t_test_case *cases, const char *name)
 {
 	size_t	size;
 	size_t	i;

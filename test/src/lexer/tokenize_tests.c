@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:37:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 22:16:02 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 22:22:54 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "test.h"
 #include "test_utils.h"
 
-static t_case token_cases[] = {
+static t_test_case token_cases[] = {
 	{ "single_command",  { { "pwd", { "pwd", NULL } } } },
 	{ "one_arg",     { { "echo hello", { "echo", "hello", NULL } } } },
 	{ "multiple_args", { { "echo hello world", { "echo", "hello", "world", NULL } } } },
@@ -48,7 +48,7 @@ static t_case token_cases[] = {
 
 static void	tokenize_basic_tests(void **case_name)
 {
-	t_case	*tc;
+	t_test_case	*tc;
 	t_list	*excepted;
 	t_list	*tested;
 	int		equal;
@@ -76,7 +76,7 @@ static void	tokenize_basic_tests(void **case_name)
 	}
 }
 
-int	tokenize_tests(void)
+t_test_result	tokenize_tests(void)
 {
 	const struct CMUnitTest test_cases[] = {
 		cmocka_unit_test_prestate(tokenize_basic_tests, token_cases[0].name),
@@ -108,14 +108,12 @@ int	tokenize_tests(void)
 		cmocka_unit_test_prestate(tokenize_basic_tests, token_cases[26].name),
 	};
 	char	name[] = "lexer/tokenize";
-	int		count;
-	int		failed;
-	int		successful;
+	t_test_result	result;
 
 	printf(GROUP_HEADER, name);
-	count = sizeof(test_cases)/sizeof(struct CMUnitTest);
-	failed = cmocka_run_group_tests_name(name, test_cases, NULL, NULL);
-	successful = count - failed;
-	printf(GROUP_RESULT, name, successful, count);
-	return (failed);
+	result.total = sizeof(test_cases)/sizeof(struct CMUnitTest);
+	result.failed = cmocka_run_group_tests_name(name, test_cases, NULL, NULL);
+	result.successful = result.total - result.failed;
+	printf(GROUP_RESULT, name, result.successful, result.total);
+	return (result);
 }

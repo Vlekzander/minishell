@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 22:13:43 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 22:32:05 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@
 # define CASE_NOT_FOUND_MSG "\t[ \x1b[31mFAIL\x1b[0m ] case \"%s\" not found\n"
 # define GROUP_HEADER "[  START  ] %s\n"
 # define GROUP_RESULT "[   END   ] %s - %d/%d tests passed\n"
+# define GLOBAL_RESULt "\n[ \x1b[33mRESULTS\x1b[0m ] %d/%d tests passed\n"
 
-typedef struct s_case {
+typedef struct s_test_case {
 	char	*name;
 	union
 	{
@@ -39,9 +40,16 @@ typedef struct s_case {
 			t_list	*excepted_out_files;
 		};
 	};
-}	t_case;
+}	t_test_case;
 
-int	tokenize_tests(void);
-int	globbing_tests(void);
+typedef struct s_test_result
+{
+	int	total;
+	int	failed;
+	int successful;
+} t_test_result;
+
+t_test_result	tokenize_tests(void);
+t_test_result	globbing_tests(void);
 
 #endif

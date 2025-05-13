@@ -16,7 +16,7 @@
 # include "libft.h"
 # include "test.h"
 
-t_case	*find_case(t_case *cases, const char *name);
+t_test_case	*find_case(t_test_case *cases, const char *name);
 t_list	*create_token_list(char **strings);
 int		lst_equal(t_list *a, t_list *b, int (*equ)(void *, void *));
 int		str_equal(char *a, char *b);

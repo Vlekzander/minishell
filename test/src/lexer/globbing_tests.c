@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 22:10:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 22:19:09 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 22:22:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "test.h"
 #include "test_utils.h"
 
-static t_case globbing_cases[] =
+static t_test_case globbing_cases[] =
 {
 	{
 		.name = "no_file_no_pattern",
@@ -703,7 +703,7 @@ static t_case globbing_cases[] =
 
 static void	globbing_basic_tests(void **case_name)
 {
-	t_case	*tc;
+	t_test_case	*tc;
 	t_list	*tested;
 	t_error	error;
 	int		equal;
@@ -727,7 +727,7 @@ static void	globbing_basic_tests(void **case_name)
 	}
 }
 
-int	globbing_tests(void)
+t_test_result	globbing_tests(void)
 {
 	const struct CMUnitTest test_cases[] = {
 		cmocka_unit_test_prestate(globbing_basic_tests, globbing_cases[0].name),
@@ -762,15 +762,13 @@ int	globbing_tests(void)
 		cmocka_unit_test_prestate(globbing_basic_tests, globbing_cases[29].name),
 		cmocka_unit_test_prestate(globbing_basic_tests, globbing_cases[30].name),
 	};
-	char	name[] = "lexer/globbing";
-	int		count;
-	int		failed;
-	int		successful;
+	char			name[] = "lexer/globbing";
+	t_test_result	result;
 
 	printf(GROUP_HEADER, name);
-	count = sizeof(test_cases)/sizeof(struct CMUnitTest);
-	failed = cmocka_run_group_tests_name(name, test_cases, NULL, NULL);
-	successful = count - failed;
-	printf(GROUP_RESULT, name, successful, count);
-	return (failed);
+	result.total = sizeof(test_cases)/sizeof(struct CMUnitTest);
+	result.failed = cmocka_run_group_tests_name(name, test_cases, NULL, NULL);
+	result.successful = result.total - result.failed;
+	printf(GROUP_RESULT, name, result.successful, result.total);
+	return (result);
 }
