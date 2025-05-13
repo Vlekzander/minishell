@@ -13,7 +13,7 @@
 #include "data.h"
 #include "test_utils.h"
 
-int		glob_pattern_equal(t_glob_pattern *a, t_glob_pattern *b)
+int		glob_pattern_equal(t_pattern *a, t_pattern *b)
 {
 	if (a == NULL || b == NULL)
 		return (a == b);

@@ -17,7 +17,7 @@
 # include "libft.h"
 
 t_error	tokenize(t_list **tokens, char *input);
-t_error	globbing(t_list **out_files, t_list *in_files, t_glob_pattern *pattern);
-t_error	extract_pattern(t_glob_pattern **pattern, char *str);
+t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern);
+t_error	extract_pattern(t_pattern **pattern, char *str);
 
 #endif

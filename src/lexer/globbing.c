@@ -14,7 +14,7 @@
 #include "lexer.h"
 #include "utils.h"
 
-static void	check_pattern(t_list *node, t_glob_pattern *pattern)
+static void	check_pattern(t_list *node, t_pattern *pattern)
 {
 	t_list	*infixe;
 	char	*ptr;
@@ -95,7 +95,7 @@ static void	lst_remove_null(t_list **lst)
 	}
 }
 
-t_error	globbing(t_list **out_files, t_list *in_files, t_glob_pattern *pattern)
+t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern)
 {
 	t_list	*node;
 	t_error	error;

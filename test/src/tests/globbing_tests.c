@@ -19,7 +19,7 @@ static t_case globbing_cases[] =
 	{
 		.name = "no_file_no_pattern",
 		.in_files = NULL,
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
 			.infixes = NULL
@@ -32,7 +32,7 @@ static t_case globbing_cases[] =
 			.content = "file.txt",
 			.next = NULL
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
 			.infixes = NULL
@@ -54,7 +54,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
 			.infixes = NULL
@@ -73,7 +73,7 @@ static t_case globbing_cases[] =
 	{
 		.name = "no_file_prefix",
 		.in_files = NULL,
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "file",
 			.suffix = NULL,
 			.infixes = NULL
@@ -92,7 +92,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "file",
 			.suffix = NULL,
 			.infixes = NULL
@@ -114,7 +114,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "file.txt",
 			.suffix = NULL,
 			.infixes = NULL
@@ -142,7 +142,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "file",
 			.suffix = NULL,
 			.infixes = NULL
@@ -164,7 +164,7 @@ static t_case globbing_cases[] =
 			.content = "file.txt",
 			.next = NULL
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "app",
 			.suffix = NULL,
 			.infixes = NULL
@@ -183,7 +183,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "app",
 			.suffix = NULL,
 			.infixes = NULL
@@ -193,7 +193,7 @@ static t_case globbing_cases[] =
 	{
 		.name = "no_file_suffix",
 		.in_files = NULL,
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = ".txt",
 			.infixes = NULL
@@ -212,7 +212,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = ".txt",
 			.infixes = NULL
@@ -234,7 +234,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = "file.txt",
 			.infixes = NULL
@@ -262,7 +262,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = ".txt",
 			.infixes = NULL
@@ -284,7 +284,7 @@ static t_case globbing_cases[] =
 			.content = "file.txt",
 			.next = NULL
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = ".md",
 			.infixes = NULL
@@ -303,7 +303,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = ".md",
 			.infixes = NULL
@@ -313,7 +313,7 @@ static t_case globbing_cases[] =
 	{
 		.name = "no_file_prefix_suffix",
 		.in_files = NULL,
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "fi",
 			.suffix = ".txt",
 			.infixes = NULL
@@ -335,7 +335,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "fi",
 			.suffix = ".txt",
 			.infixes = NULL
@@ -357,7 +357,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "file",
 			.suffix = ".txt",
 			.infixes = NULL
@@ -385,7 +385,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "file",
 			.suffix = ".txt",
 			.infixes = NULL
@@ -407,7 +407,7 @@ static t_case globbing_cases[] =
 			.content = "file.txt",
 			.next = NULL
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "doc",
 			.suffix = ".md",
 			.infixes = NULL
@@ -426,7 +426,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = "doc",
 			.suffix = ".md",
 			.infixes = NULL
@@ -436,7 +436,7 @@ static t_case globbing_cases[] =
 	{
 		.name = "no_file_infixe",
 		.in_files = NULL,
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
 			.infixes = &(t_list)
@@ -459,7 +459,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
 			.infixes = &(t_list)
@@ -485,7 +485,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
 			.infixes = &(t_list)
@@ -521,7 +521,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
 			.infixes = &(t_list)
@@ -551,7 +551,7 @@ static t_case globbing_cases[] =
 			.content = "file.txt",
 			.next = NULL
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
 			.infixes = &(t_list)
@@ -578,7 +578,7 @@ static t_case globbing_cases[] =
 				},
 			},
 		},
-		.patterns = &(t_glob_pattern){
+		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
 			.infixes = &(t_list)

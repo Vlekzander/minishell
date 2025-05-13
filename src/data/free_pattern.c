@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_glob_pattern.c                              :+:      :+:    :+:   */
+/*   free_pattern.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 15:00:18 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/12 15:02:55 by apierret         ###   ########.fr       */
+/*   Created: 2025/05/12 12:12:50 by apierret          #+#    #+#             */
+/*   Updated: 2025/05/13 12:38:10 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "data.h"
 
-t_glob_pattern	*create_glob_pattern(void)
+void	free_pattern(t_pattern *pattern)
 {
-	t_glob_pattern	*pattern;
-
-	pattern = ft_calloc(1, sizeof(t_glob_pattern));
-	return (pattern);
+	if (pattern == NULL)
+		return ;
+	ft_lstclear(&pattern->infixes, free);
+	free(pattern->prefix);
+	free(pattern->suffix);
+	free(pattern);
 }
