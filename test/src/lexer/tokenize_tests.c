@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:37:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 20:58:59 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 22:16:02 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	tokenize_basic_tests(void **case_name)
 	excepted = NULL;
 	tested = NULL;
 	if (tc == NULL)
-		return (printf("[ERROR] Test case not found\n"), (void) NULL);
+		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), (void) NULL);
 	excepted = create_token_list(tc->expected_tokens);
 	error = tokenize(&tested, tc->input_tokenize);
 	equal = lst_equal(excepted, tested, (void *) token_equal);
@@ -76,7 +76,7 @@ static void	tokenize_basic_tests(void **case_name)
 	}
 }
 
-int	tokenize_tests(char *name)
+int	tokenize_tests(void)
 {
 	const struct CMUnitTest test_cases[] = {
 		cmocka_unit_test_prestate(tokenize_basic_tests, token_cases[0].name),
@@ -107,9 +107,10 @@ int	tokenize_tests(char *name)
 		cmocka_unit_test_prestate(tokenize_basic_tests, token_cases[25].name),
 		cmocka_unit_test_prestate(tokenize_basic_tests, token_cases[26].name),
 	};
-	int	count;
-	int	failed;
-	int	successful;
+	char	name[] = "lexer/tokenize";
+	int		count;
+	int		failed;
+	int		successful;
 
 	printf(GROUP_HEADER, name);
 	count = sizeof(test_cases)/sizeof(struct CMUnitTest);

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:25:42 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 21:00:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 22:17:15 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int main(void) {
 
 	cmocka_set_message_output(-1);
 	failed = 0;
-	failed += tokenize_tests("lexer/tokenize");
+	failed += tokenize_tests();
+	failed += globbing_tests();
 	return failed;
 }

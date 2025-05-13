@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 20:58:08 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/13 22:13:43 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdarg.h>
 # include <stddef.h>
 # include <cmocka.h>
+# include "libft.h"
 # define SUCCESS_MSG "\t[  \x1b[32mOK\x1b[0m  ] %s\n"
 # define FAIL_MSG "\t[ \x1b[31mFAIL\x1b[0m ] %s\n"
 # define CASE_NOT_FOUND_MSG "\t[ \x1b[31mFAIL\x1b[0m ] case \"%s\" not found\n"
@@ -31,9 +32,16 @@ typedef struct s_case {
 			char	*input_tokenize;
 			char	*expected_tokens[100];
 		};
+		struct
+		{
+			t_list	*in_files;
+			void	*patterns;
+			t_list	*excepted_out_files;
+		};
 	};
 }	t_case;
 
-int	tokenize_tests(char *name);
+int	tokenize_tests(void);
+int	globbing_tests(void);
 
 #endif
