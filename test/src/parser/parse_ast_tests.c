@@ -19,7 +19,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "single_command",
 		.tokens = { "pwd", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -34,7 +34,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "single_command_with_path",
 		.tokens = { "/bin/ls", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -49,7 +49,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "one_arg",
 		.tokens = { "echo", "hello", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -64,7 +64,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "multiple_args",
 		.tokens = { "echo", "hello", "world", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -79,7 +79,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "redir_out",
 		.tokens = { "echo", "hello", ">", "out.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -98,7 +98,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "redir_append",
 		.tokens = { "echo", "world", ">>", "out.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -117,7 +117,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "redir_in",
 		.tokens = { "cat", "<", "in.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -136,7 +136,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "redir_heredoc",
 		.tokens = { "cat", "<<", "END", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -155,7 +155,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "redir_out_inverted",
 		.tokens = { ">", "out.txt", "echo", "hello", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -174,7 +174,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "redir_append_inverted",
 		.tokens = { ">>", "out.txt", "echo", "world", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -193,7 +193,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "redir_in_inverted",
 		.tokens = { "<", "in.txt", "cat", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -212,7 +212,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "redir_heredoc_inverted",
 		.tokens = { "<<", "END", "cat", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -231,7 +231,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "mult_redir_out",
 		.tokens = { "echo", "hello", ">", "out1.txt", ">", "out2.txt", ">", "out3.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -258,7 +258,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "mult_redir_in",
 		.tokens = { "echo", "hello", "<", "in1.txt", "<", "in2.txt", "<", "in3.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -285,7 +285,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "mult_redir_out_both_way",
 		.tokens = { ">", "out1.txt", ">", "out2.txt", "echo", "hello", ">", "out3.txt", ">", "out4.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -316,7 +316,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "mult_redir_in_both_way",
 		.tokens = { "<", "in1.txt", "<", "in2.txt", "echo", "hello", "<", "in3.txt", "<", "in4.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -347,7 +347,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "mult_redirs_both_way",
 		.tokens = { "<", "in1.txt", "<", "in2.txt", "echo", "hello", ">", "out1.txt", ">", "out2.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_COMMAND,
 			.exit_code = 0,
@@ -378,7 +378,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "single_pipe",
 		.tokens = { "ls", "|", "grep", ".c", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_PIPELINE,
 			.exit_code = 0,
@@ -416,7 +416,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "multiple_pipes",
 		.tokens = { "ls", "|", "grep", ".c", "|", "wc", "-l", NULL },
-		.excepted_ast = &(t_ast){
+		.expected_ast = &(t_ast){
 			.type = NODE_PIPELINE,
 			.exit_code = 0,
 			.pipeline = &(t_list)
@@ -467,7 +467,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "pipes_and_redir",
 		.tokens = { "cat", "<", "in.txt", "|", "grep", "hello", "|", "wc", "-l", ">", "out.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_PIPELINE,
 			.exit_code = 0,
@@ -527,7 +527,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "command_and",
 		.tokens = { "make", "&&", "./program", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_AND,
 			.exit_code = 0,
@@ -558,7 +558,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "command_or",
 		.tokens = { "mkdir", "folder", "||", "echo", "fail", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_OR,
 			.exit_code = 0,
@@ -589,7 +589,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "subshell",
 		.tokens = { "(", "pwd", ")", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_SUBSHELL,
 			.exit_code = 0,
@@ -610,7 +610,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "and_with_redir",
 		.tokens = { "echo", "success", ">", "out.txt", "&&", "cat", "<", "in.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_AND,
 			.exit_code = 0,
@@ -649,7 +649,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "or_with_pipe",
 		.tokens = { "echo", "hello", "|", "grep", "world", "||", "ls", "|", "grep", ".h", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_OR,
 			.exit_code = 0,
@@ -726,7 +726,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "subshell_with_pipe",
 		.tokens = { "(", "ls", "-la", ")", "|", "wc", "-l", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_PIPELINE,
 			.exit_code = 0,
@@ -770,7 +770,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "subshell_and_redir",
 		.tokens = { "(", "echo", "hello", ")", ">", "out.txt", "&&", "echo", "done", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_AND,
 			.exit_code = 0,
@@ -811,7 +811,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "nested_logic",
 		.tokens = { "make", "&&", "(", "./run", "||", "echo", "fallback", ")", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_AND,
 			.exit_code = 0,
@@ -862,7 +862,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "nested_logic_two",
 		.tokens = { "(", "make", ")", "&&", "./run", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_AND,
 			.exit_code = 0,
@@ -898,7 +898,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "deep_nested_group",
 		.tokens = { "(", "(", "(", "echo", "ok", ")", ")", ")", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_SUBSHELL,
 			.exit_code = 0,
@@ -931,7 +931,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "multi_op_complex",
 		.tokens = { "(", "cat", "file", "|", "grep", "error", ")", "&&", "echo", "found", "||", "echo", "none", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_OR,
 			.exit_code = 0,
@@ -1005,7 +1005,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "redir_out_alone",
 		.tokens = { ">", "out.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_REDIR,
 			.exit_code = 0,
@@ -1019,7 +1019,7 @@ static t_test_case parse_ast_cases[] = {
 	{
 		.name = "redir_in_alone",
 		.tokens = { "<", "in.txt", NULL },
-		.excepted_ast = &(t_ast)
+		.expected_ast = &(t_ast)
 		{
 			.type = NODE_REDIR,
 			.exit_code = 0,
@@ -1034,28 +1034,28 @@ static t_test_case parse_ast_cases[] = {
 };
 
 static t_test_case	parse_ast_error_cases[] = {
-	{ .name = "pipe_start", .tokens = {"|"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "pipe_end", .tokens = {"cmd", "|"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "double_pipe", .tokens = {"cmd", "|", "|", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "logic_start", .tokens = {"&&"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "logic_end", .tokens = {"cmd", "||"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "logic_double_and", .tokens = {"cmd", "&&", "&&", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "logic_double_or", .tokens = {"cmd", "||", "||", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "logic_mixed_pipe", .tokens = {"cmd", "&&", "|", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "pipe_between_ands", .tokens = {"cmd", "&&", "|", "&&", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "redir_without_target", .tokens = {"cmd", ">"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "redir_chain", .tokens = {"cmd", ">", ">", "file"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "redir_pipe_combo", .tokens = {"cmd", ">", "|", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "paren_empty", .tokens = {"(", ")"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "open_paren_alone", .tokens = {"("}, .excepted_error = ERR_SYNTAX },
-	{ .name = "close_paren_alone", .tokens = {")"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "unbalanced_parens", .tokens = {"(", "cmd", "|", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "nested_unbalanced_parens", .tokens = {"(", "(", "cmd", ")", "|"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "bad_paren_combo", .tokens = {"cmd", ")", "&&", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "mixed_logic_op", .tokens = {"cmd", "&&", "||", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "consecutive_operators", .tokens = {"cmd", "|", "&&", "|", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "pipe_and_or_mix", .tokens = {"cmd", "|", "||", "cmd"}, .excepted_error = ERR_SYNTAX },
-	{ .name = "and_or_chain", .tokens = {"cmd", "&&", "||", "&&", "cmd"}, .excepted_error = ERR_SYNTAX },
+	{ .name = "pipe_start", .tokens = {"|"}, .expected_error = ERR_SYNTAX },
+	{ .name = "pipe_end", .tokens = {"cmd", "|"}, .expected_error = ERR_SYNTAX },
+	{ .name = "double_pipe", .tokens = {"cmd", "|", "|", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "logic_start", .tokens = {"&&"}, .expected_error = ERR_SYNTAX },
+	{ .name = "logic_end", .tokens = {"cmd", "||"}, .expected_error = ERR_SYNTAX },
+	{ .name = "logic_double_and", .tokens = {"cmd", "&&", "&&", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "logic_double_or", .tokens = {"cmd", "||", "||", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "logic_mixed_pipe", .tokens = {"cmd", "&&", "|", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "pipe_between_ands", .tokens = {"cmd", "&&", "|", "&&", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "redir_without_target", .tokens = {"cmd", ">"}, .expected_error = ERR_SYNTAX },
+	{ .name = "redir_chain", .tokens = {"cmd", ">", ">", "file"}, .expected_error = ERR_SYNTAX },
+	{ .name = "redir_pipe_combo", .tokens = {"cmd", ">", "|", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "paren_empty", .tokens = {"(", ")"}, .expected_error = ERR_SYNTAX },
+	{ .name = "open_paren_alone", .tokens = {"("}, .expected_error = ERR_SYNTAX },
+	{ .name = "close_paren_alone", .tokens = {")"}, .expected_error = ERR_SYNTAX },
+	{ .name = "unbalanced_parens", .tokens = {"(", "cmd", "|", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "nested_unbalanced_parens", .tokens = {"(", "(", "cmd", ")", "|"}, .expected_error = ERR_SYNTAX },
+	{ .name = "bad_paren_combo", .tokens = {"cmd", ")", "&&", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "mixed_logic_op", .tokens = {"cmd", "&&", "||", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "consecutive_operators", .tokens = {"cmd", "|", "&&", "|", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "pipe_and_or_mix", .tokens = {"cmd", "|", "||", "cmd"}, .expected_error = ERR_SYNTAX },
+	{ .name = "and_or_chain", .tokens = {"cmd", "&&", "||", "&&", "cmd"}, .expected_error = ERR_SYNTAX },
 	{ NULL }
 };
 
@@ -1076,7 +1076,7 @@ static void	parse_ast_basic_tests(void **case_name)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	tokens = create_token_list(tc->tokens);
 	error = parse_ast(&tested, tokens);
-	equal = ast_equal(tc->excepted_ast, tested);
+	equal = ast_equal(tc->expected_ast, tested);
 	free_ast(tested);
 	ft_lstclear(&tokens, (void *) free_token);
 	if (!equal || error != ERR_NONE)
@@ -1104,7 +1104,7 @@ static void	parse_ast_error_tests(void **case_name)
 	equal = tested == NULL;;
 	free_ast(tested);
 	ft_lstclear(&tokens, (void *) free_token);
-	if (!equal || error != tc->excepted_error)
+	if (!equal || error != tc->expected_error)
 		return(printf(FAIL_MSG, (char *) *case_name), assert_true(0));
 	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));
 }

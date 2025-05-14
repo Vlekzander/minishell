@@ -20,12 +20,12 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "no_valid_pattern",
 		.input_pattern = "blabliblou",
-		.excepted_pattern = NULL
+		.expected_pattern = NULL
 	},
 	{
 		.name = "any_pattern",
 		.input_pattern = "*",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = NULL,
@@ -35,7 +35,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "prefix_file_pattern",
 		.input_pattern = "*.txt",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = NULL,
@@ -45,7 +45,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "suffix_file_pattern",
 		.input_pattern = ".*",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = ".",
 			.infixes = NULL,
@@ -55,7 +55,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "infix_file_pattern",
 		.input_pattern = "*bla*",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = &(t_list)
@@ -69,7 +69,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "infixes_file_pattern",
 		.input_pattern = "*bla*bli*",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = &(t_list)
@@ -87,7 +87,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "prefix_suffix_pattern",
 		.input_pattern = "log*.txt",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = "log",
 			.infixes = NULL,
@@ -97,7 +97,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "prefix_infix_pattern",
 		.input_pattern = "foo*bar*",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = "foo",
 			.infixes = &(t_list)
@@ -111,7 +111,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "infix_suffix_pattern",
 		.input_pattern = "*foo*bar",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = &(t_list)
@@ -125,7 +125,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "prefix_infix_suffix_pattern",
 		.input_pattern = "the*foo*bar",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = "the",
 			.infixes = &(t_list)
@@ -139,7 +139,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "prefix_infixes_suffix_pattern",
 		.input_pattern = "foo*bla*bli*blou*bar",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = "foo",
 			.infixes = &(t_list)
@@ -161,12 +161,12 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "empty_pattern",
 		.input_pattern = "",
-		.excepted_pattern = NULL
+		.expected_pattern = NULL
 	},
 	{
 		.name = "consecutive_stars",
 		.input_pattern = "*****",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = NULL,
@@ -176,7 +176,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "prefix_consecutive_stars",
 		.input_pattern = "bla*****",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = "bla",
 			.infixes = NULL,
@@ -186,7 +186,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "infix_consecutive_stars",
 		.input_pattern = "**bli**",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = &(t_list)
@@ -200,7 +200,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "infixes_consecutive_stars",
 		.input_pattern = "**bla**bli**blou**",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = &(t_list)
@@ -222,7 +222,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "suffix_consecutive_stars",
 		.input_pattern = "*****blou",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = NULL,
@@ -232,12 +232,12 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "trapped_pattern",
 		.input_pattern = "bla\"*\"bli\"*\"blou",
-		.excepted_pattern = NULL
+		.expected_pattern = NULL
 	},
 	{
 		.name = "trapped_prefix",
 		.input_pattern = "\"\"*",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = NULL,
@@ -247,7 +247,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "trapped_infix",
 		.input_pattern = "*\"\"*",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = NULL,
@@ -257,7 +257,7 @@ static t_test_case extract_pattern_cases[] =
 	{
 		.name = "trapped_suffix",
 		.input_pattern = "*\"\"",
-		.excepted_pattern = &(t_pattern)
+		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
 			.infixes = NULL,
@@ -281,7 +281,7 @@ static void	extract_pattern_basic_tests(void **case_name)
 	if (tc == NULL)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	error = extract_pattern(&tested, tc->input_pattern);
-	equal = pattern_equal(tested, tc->excepted_pattern);
+	equal = pattern_equal(tested, tc->expected_pattern);
 	free_pattern(tested);
 	if (!equal || error != ERR_NONE)
 		return(printf(FAIL_MSG, (char *) *case_name), assert_true(0));

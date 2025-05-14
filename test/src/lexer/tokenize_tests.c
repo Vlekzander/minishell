@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:37:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 23:38:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:23:54 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,23 +49,23 @@ static t_test_case token_cases[] = {
 static void	tokenize_basic_tests(void **case_name)
 {
 	t_test_case	*tc;
-	t_list		*excepted;
+	t_list		*expected;
 	t_list		*tested;
 	int			equal;
 	t_error		error;
 
 	if (case_name == NULL)
 		return (printf("Implementation error.\n"), assert_true(0));
-	tc = find_case(token_cases, *case_name);
-	excepted = NULL;
+	expected = NULL;
 	tested = NULL;
+	tc = find_case(token_cases, *case_name);
 	if (tc == NULL)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
-	excepted = create_token_list(tc->expected_tokens);
+	expected = create_token_list(tc->expected_tokens_tokenize);
 	error = tokenize(&tested, tc->input_tokenize);
-	equal = lst_equal(excepted, tested, (void *) token_equal);
+	equal = lst_equal(expected, tested, (void *) token_equal);
 	ft_lstclear(&tested, (void *) free_token);
-	ft_lstclear(&excepted, (void *) free_token);
+	ft_lstclear(&expected, (void *) free_token);
 	if (!equal || error != ERR_NONE)
 		return(printf(FAIL_MSG, (char *) *case_name), assert_true(0));
 	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));

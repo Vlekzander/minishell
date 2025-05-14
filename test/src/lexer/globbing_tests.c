@@ -25,7 +25,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "file_no_pattern",
@@ -38,7 +38,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -60,7 +60,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -79,7 +79,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "file_prefix",
@@ -98,7 +98,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -120,7 +120,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -148,7 +148,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -170,7 +170,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "mult_files_prefix_bad",
@@ -189,7 +189,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "no_file_suffix",
@@ -199,7 +199,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".txt",
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "file_suffix",
@@ -218,7 +218,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".txt",
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -240,7 +240,7 @@ static t_test_case globbing_cases[] =
 			.suffix = "file.txt",
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -268,7 +268,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".txt",
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -290,7 +290,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".md",
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "mult_files_suffix_bad",
@@ -309,7 +309,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".md",
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "no_file_prefix_suffix",
@@ -319,7 +319,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".txt",
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "file_prefix_suffix",
@@ -341,7 +341,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".txt",
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -363,7 +363,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".txt",
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -391,7 +391,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".txt",
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -413,7 +413,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".md",
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "mult_files_prefix_suffix_bad",
@@ -432,7 +432,7 @@ static t_test_case globbing_cases[] =
 			.suffix = ".md",
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "no_file_infixe",
@@ -446,7 +446,7 @@ static t_test_case globbing_cases[] =
 				.next = NULL
 			}
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "file_infixe",
@@ -469,7 +469,7 @@ static t_test_case globbing_cases[] =
 				.next = NULL
 			}
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -499,7 +499,7 @@ static t_test_case globbing_cases[] =
 				}
 			}
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -535,7 +535,7 @@ static t_test_case globbing_cases[] =
 				}
 			}
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -565,7 +565,7 @@ static t_test_case globbing_cases[] =
 				}
 			}
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "mult_files_infixe_bad",
@@ -592,7 +592,7 @@ static t_test_case globbing_cases[] =
 				}
 			}
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "any_with_hidden_files",
@@ -617,7 +617,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -651,7 +651,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = &(t_list) {
+		.expected_out_files = &(t_list) {
 			.content = ".hidden1.txt",
 			.next = &(t_list) {
 				.content = ".hidden2.txt",
@@ -676,7 +676,7 @@ static t_test_case globbing_cases[] =
 			.suffix = NULL,
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{
 		.name = "suffix_not_suffix",
@@ -695,7 +695,7 @@ static t_test_case globbing_cases[] =
 			.suffix = "txt",
 			.infixes = NULL
 		},
-		.excepted_out_files = NULL
+		.expected_out_files = NULL
 	},
 	{ NULL }
 };
@@ -714,7 +714,7 @@ static void	globbing_basic_tests(void **case_name)
 	if (tc == NULL)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	error = globbing(&tested, tc->in_files, tc->patterns);
-	equal = lst_equal(tested, tc->excepted_out_files, (void *) str_equal);
+	equal = lst_equal(tested, tc->expected_out_files, (void *) str_equal);
 	ft_lstclear(&tested, NULL);
 	if (!equal || error != ERR_NONE)
 		return(printf(FAIL_MSG, (char *) *case_name), assert_true(0));

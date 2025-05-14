@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 23:39:23 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:25:51 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,26 @@ typedef struct s_test_case {
 		struct
 		{
 			char	*input_tokenize;
-			char	*expected_tokens[100];
+			char	*expected_tokens_tokenize[100];
 		};
 		struct
 		{
 			t_list	*in_files;
 			void	*patterns;
-			t_list	*excepted_out_files;
+			t_list	*expected_out_files;
 		};
 		struct
 		{
 			char	*input_pattern;
-			void	*excepted_pattern;
+			void	*expected_pattern;
 		};
 		struct
 		{
 			char	*tokens[100];
 			union
 			{
-				void	*excepted_ast;
-				t_error	excepted_error;
+				void	*expected_ast;
+				t_error	expected_error;
 			};
 		};
 	};
