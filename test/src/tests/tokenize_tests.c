@@ -6,14 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:37:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/14 12:23:54 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:31:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "lexer.h"
-#include "test.h"
-#include "test_utils.h"
+#include "../../../include/lexer.h"
+#include "../../include/test.h"
+#include "../../include/test_utils.h"
 
 static t_test_case token_cases[] = {
 	{ "single_command",  { { "pwd", { "pwd", NULL } } } },
@@ -71,7 +71,7 @@ static void	tokenize_basic_tests(void **case_name)
 	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));
 }
 
-t_test_result	tokenize_tests(void)
+t_test_result	execute_tests(void)
 {
 	const struct CMUnitTest test_cases[] = {
 		cmocka_unit_test_prestate(tokenize_basic_tests, token_cases[0].name),

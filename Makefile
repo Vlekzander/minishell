@@ -4,17 +4,20 @@ LDFLAGS = -L$(LIBFT_DIR) -lft -lreadline
 LIBFT_DIR=libft
 LIBFT_LIB=$(LIBFT_DIR)/libft.a
 SOURCES_DIRS = src src/data src/error src/lexer src/parser src/utils
-SOURCES_DIRS_TEST = $(wordlist 2,$(words $(SOURCES_DIRS)),$(SOURCES_DIRS)) test/src test/src/lexer test/src/parser test/src/test_utils
 SOURCES = $(foreach dir, $(SOURCES_DIRS), $(wildcard $(dir)/*.c))
-SOURCES_TEST = $(foreach dir, $(SOURCES_DIRS_TEST), $(wildcard $(dir)/*.c))
 OBJECTS = $(SOURCES:.c=.o)
-OBJECTS_TEST = $(SOURCES_TEST:.c=.o)
 DEPS = $(SOURCES:.c=.d)
-DEPS_TEST = $(SOURCES_TEST:.c=.d)
 NAME = minishell
-NAME_TEST = minishell_tests
+SOURCES_DIRS_TEST = $(wordlist 2,$(words $(SOURCES_DIRS)),$(SOURCES_DIRS)) test/src test/src/test_utils
+SOURCES_TEST = $(foreach dir, $(SOURCES_DIRS_TEST), $(wildcard $(dir)/*.c))
+OBJECTS_TEST = $(SOURCES_TEST:.c=.o)
+TEST_VARIANTS_DIR = test/src/tests
+TEST_VARIANTS = $(wildcard $(TEST_VARIANTS_DIR)/*.c)
+TEST_VARIANT_OBJECTS = $(TEST_VARIANTS:.c=.o)
+TEST_BINS = $(patsubst $(TEST_VARIANTS_DIR)/%.c, bin_test/test_%, $(TEST_VARIANTS))
+DEPS_TEST = $(SOURCES_TEST:.c=.d) $(TEST_VARIANTS:.c=.d)
 
-all: $(NAME) $(NAME_TEST)
+all: $(NAME) $(TEST_BINS)
 
 $(NAME): $(OBJECTS)
 	@echo "$(BLUE)✦ Building libraries...$(RESET)\r"
@@ -23,16 +26,30 @@ $(NAME): $(OBJECTS)
 	@$(CC) $^ $(LDFLAGS) -o $@
 	@printf "$(GREEN)➤ Executable $(NAME) successfully built!$(RESET)\n"
 
-test: $(NAME_TEST)
-	@echo "$(BLUE)✦ Running unit tests...$(RESET)"
-	@./$(NAME_TEST)
+test: $(TEST_BINS)
+	@printf "[ $(GREEN)TESTS$(RESET) ] Running...\n"
+	@fails=0; \
+	for exe in $(TEST_BINS); do \
+		./$$exe || fails=$$((fails + $$?)); \
+	done; \
+	printf "[ $(YELLOW)RESULTS$(RESET) ] Tests failed: $$fails\n";
 
-$(NAME_TEST): $(OBJECTS_TEST)
+bin_test/test_%: $(TEST_VARIANTS_DIR)/%.o $(OBJECTS_TEST)
+	@mkdir -p bin_test
 	@echo "$(BLUE)✦ Building libraries...$(RESET)\r"
 	@make -C $(LIBFT_DIR) --no-print-directory
 	@printf "$(YELLOW)◈ Linking $@...$(RESET)\r"
-	@$(CC) $^ $(LDFLAGS) -lcmocka -o $@
-	@printf "$(GREEN)➤ Executable $(NAME_TEST) successfully built!$(RESET)\n"
+	@others="$(filter-out $(TEST_VARIANTS_DIR)/$*.c, $(TEST_VARIANTS))"; \
+	wraps=""; \
+	sep=""; \
+	for f in $$others; do \
+		name=$$(basename $$f); \
+		name=$${name%_tests.c}; \
+		wraps="$$wraps$$sep--wrap=$$name"; \
+		sep=","; \
+	done; \
+	$(CC) $^ $(LDFLAGS) -lcmocka -Wl,$$wraps -o $@
+	@printf "$(GREEN)➤ Executable $@ successfully built!$(RESET)\n"
 
 %.o: %.c
 	@printf "$(YELLOW)◈ Compiling %s...$(RESET)\r" $<
@@ -46,12 +63,13 @@ norm:
 clean:
 	@echo "$(BLUE)✦ Cleaning object files...$(RESET)"
 	@make -C $(LIBFT_DIR) clean --no-print-directory
-	@rm -f $(OBJECTS) $(DEPS) $(OBJECTS_TEST) $(DEPS_TEST) && echo "$(GREEN)➤ Object files and dependencies removed.$(RESET)"
+	@rm -f $(OBJECTS) $(OBJECTS_TEST) $(TEST_VARIANT_OBJECTS) $(DEPS) $(DEPS_TEST) && echo "$(GREEN)➤ Object files and dependencies removed.$(RESET)"
 
 fclean: clean
 	@echo "$(BLUE)✦ Cleaning executable...$(RESET)"
 	@make -C $(LIBFT_DIR) fclean --no-print-directory
-	@rm -f $(NAME) $(NAME_TEST) && echo "$(GREEN)➤ $(NAME) removed.$(RESET)"
+	@rm -f $(NAME) && echo "$(GREEN)➤ $(NAME) removed.$(RESET)"
+	@rm -rf bin_test && echo "$(GREEN)➤ $(TEST_BINS) removed.$(RESET)"
 
 re: fclean all
 
@@ -67,7 +85,7 @@ help:
 	@echo "  $(GREEN)re$(RESET)         : $(YELLOW)Rebuild the project (clean + all)$(RESET)"
 	@echo "  $(GREEN)help$(RESET)       : $(YELLOW)Display this help message$(RESET)"
 
--include $(DEPS)
+-include $(DEPS) $(DEPS_TEST)
 
 .PHONY: all norm clean fclean re help test
 
