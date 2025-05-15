@@ -6,14 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:33:25 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/14 19:44:31 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:18:54 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "../../../include/lexer.h"
-#include "../../include/test.h"
-#include "../../include/test_utils.h"
+#include "lexer.h"
+#include "test.h"
+#include "test_utils.h"
 
 static t_test_case extract_pattern_cases[] =
 {

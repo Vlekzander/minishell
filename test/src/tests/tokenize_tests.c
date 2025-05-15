@@ -6,14 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:37:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/14 15:31:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:19:46 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "../../../include/lexer.h"
-#include "../../include/test.h"
-#include "../../include/test_utils.h"
+#include "lexer.h"
+#include "test.h"
+#include "test_utils.h"
 
 static t_test_case token_cases[] = {
 	{ "single_command",  { { "pwd", { "pwd", NULL } } } },
