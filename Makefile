@@ -14,7 +14,7 @@ OBJECTS_TEST = $(SOURCES_TEST:.c=.o)
 TEST_VARIANTS_DIR = test/src/tests
 TEST_VARIANTS = $(wildcard $(TEST_VARIANTS_DIR)/*.c)
 TEST_VARIANT_OBJECTS = $(TEST_VARIANTS:.c=.o)
-TEST_BINS = $(patsubst $(TEST_VARIANTS_DIR)/%.c, bin_test/test_%, $(TEST_VARIANTS))
+TEST_BINS = $(patsubst $(TEST_VARIANTS_DIR)/%.c, bin_test/%, $(TEST_VARIANTS))
 DEPS_TEST = $(SOURCES_TEST:.c=.d) $(TEST_VARIANTS:.c=.d)
 
 all: $(NAME) $(TEST_BINS)
@@ -34,7 +34,7 @@ test: $(TEST_BINS)
 	done; \
 	printf "[ $(YELLOW)RESULTS$(RESET) ] Tests failed: $$fails\n";
 
-bin_test/test_%: $(TEST_VARIANTS_DIR)/%.o $(OBJECTS_TEST)
+bin_test/%: $(TEST_VARIANTS_DIR)/%.o $(OBJECTS_TEST)
 	@mkdir -p bin_test
 	@echo "$(BLUE)✦ Building libraries...$(RESET)\r"
 	@make -C $(LIBFT_DIR) --no-print-directory
@@ -69,7 +69,7 @@ fclean: clean
 	@echo "$(BLUE)✦ Cleaning executable...$(RESET)"
 	@make -C $(LIBFT_DIR) fclean --no-print-directory
 	@rm -f $(NAME) && echo "$(GREEN)➤ $(NAME) removed.$(RESET)"
-	@rm -rf bin_test && echo "$(GREEN)➤ $(TEST_BINS) removed.$(RESET)"
+	@rm -rf bin_test && echo "$(GREEN)➤ test binaries removed.$(RESET)"
 
 re: fclean all
 

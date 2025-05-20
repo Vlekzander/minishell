@@ -19,7 +19,7 @@ static t_test_case globbing_cases[] =
 {
 	{
 		.name = "no_file_no_pattern",
-		.in_files = NULL,
+		.in_files_globbing = NULL,
 		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
@@ -29,7 +29,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_no_pattern",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -45,7 +45,7 @@ static t_test_case globbing_cases[] =
 	},
 {
 	.name = "mult_files_no_pattern",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -73,7 +73,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "no_file_prefix",
-		.in_files = NULL,
+		.in_files_globbing = NULL,
 		.patterns = &(t_pattern){
 			.prefix = "file",
 			.suffix = NULL,
@@ -83,7 +83,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_prefix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = &(t_list) {
 				.content = "another.md",
@@ -105,7 +105,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_full_prefix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = &(t_list) {
 				.content = "another.md",
@@ -127,7 +127,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "mult_files_prefix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -161,7 +161,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_prefix_bad",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -174,7 +174,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "mult_files_prefix_bad",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -193,7 +193,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "no_file_suffix",
-		.in_files = NULL,
+		.in_files_globbing = NULL,
 		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = ".txt",
@@ -203,7 +203,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_suffix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = &(t_list) {
 				.content = "another.md",
@@ -225,7 +225,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_full_suffix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = &(t_list) {
 				.content = "another.md",
@@ -247,7 +247,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "mult_files_suffix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -281,7 +281,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_suffix_bad",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -294,7 +294,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "mult_files_suffix_bad",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -313,7 +313,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "no_file_prefix_suffix",
-		.in_files = NULL,
+		.in_files_globbing = NULL,
 		.patterns = &(t_pattern){
 			.prefix = "fi",
 			.suffix = ".txt",
@@ -323,7 +323,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_prefix_suffix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = &(t_list) {
 				.content = "another.md",
@@ -348,7 +348,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_full_prefix_suffix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = &(t_list) {
 				.content = "another.md",
@@ -370,7 +370,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "mult_files_prefix_suffix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -404,7 +404,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_prefix_suffix_bad",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -417,7 +417,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "mult_files_prefix_suffix_bad",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -436,7 +436,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "no_file_infixe",
-		.in_files = NULL,
+		.in_files_globbing = NULL,
 		.patterns = &(t_pattern){
 			.prefix = NULL,
 			.suffix = NULL,
@@ -450,7 +450,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_infixe",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = &(t_list) {
 				.content = "another.md",
@@ -476,7 +476,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_full_infixe",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = &(t_list) {
 				.content = "another.md",
@@ -506,7 +506,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "mult_files_infixe",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -548,7 +548,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "file_infixe_bad",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file.txt",
 			.next = NULL
 		},
@@ -569,7 +569,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "mult_files_infixe_bad",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -596,7 +596,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "any_with_hidden_files",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -630,7 +630,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "prefix_hidden_files",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -661,7 +661,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "prefix_not_prefix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txt",
 			.next = &(t_list) {
 				.content = "file2.txt",
@@ -680,7 +680,7 @@ static t_test_case globbing_cases[] =
 	},
 	{
 		.name = "suffix_not_suffix",
-		.in_files = &(t_list) {
+		.in_files_globbing = &(t_list) {
 			.content = "file1.txtfile",
 			.next = &(t_list) {
 				.content = "file2.txtfile",
@@ -713,7 +713,7 @@ static void	globbing_basic_tests(void **case_name)
 	tc = find_case(globbing_cases, *case_name);
 	if (tc == NULL)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
-	error = globbing(&tested, tc->in_files, tc->patterns);
+	error = globbing(&tested, tc->in_files_globbing, tc->patterns);
 	equal = lst_equal(tested, tc->expected_out_files, (void *) str_equal);
 	ft_lstclear(&tested, NULL);
 	if (!equal || error != ERR_NONE)

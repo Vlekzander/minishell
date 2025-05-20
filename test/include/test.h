@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/14 15:31:13 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/15 18:55:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <cmocka.h>
 # include "error.h"
 # include "libft.h"
+# define CASE_ARRAY_MAX 100
 # define SUCCESS_MSG "\t[  \x1b[32mOK\x1b[0m  ] %s\n"
 # define FAIL_MSG "\t[ \x1b[31mFAIL\x1b[0m ] %s\n"
 # define CASE_NOT_FOUND_MSG "\t[ \x1b[31mFAIL\x1b[0m ] case \"%s\" not found\n"
@@ -32,11 +33,11 @@ typedef struct s_test_case {
 		struct
 		{
 			char	*input_tokenize;
-			char	*expected_tokens_tokenize[100];
+			char	*expected_tokens_tokenize[CASE_ARRAY_MAX];
 		};
 		struct
 		{
-			t_list	*in_files;
+			t_list	*in_files_globbing;
 			void	*patterns;
 			t_list	*expected_out_files;
 		};
@@ -47,15 +48,16 @@ typedef struct s_test_case {
 		};
 		struct
 		{
-			char	*input_tokens[100];
+			char	*input_tokens[CASE_ARRAY_MAX];
 			union
 			{
 				void	*expected_ast;
 				t_error	expected_error;
 				struct
 				{
-					char	*expected_tokens_expand[100];
-					t_list	*files_expand;
+					void	*extracted_pattern_expand[CASE_ARRAY_MAX];
+					t_list	*filtered_files_expand[CASE_ARRAY_MAX];
+					char	*expected_tokens_expand[CASE_ARRAY_MAX];
 				};
 			};
 		};
