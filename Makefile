@@ -34,13 +34,15 @@ test: $(TEST_BINS)
 	done; \
 	printf "[ $(YELLOW)RESULTS$(RESET) ] Tests failed: $$fails\n";
 
+wraps_expand_tests = --wrap=ft_lstclear,--wrap=free_pattern,--wrap=scan_dir,
+
 bin_test/%: $(TEST_VARIANTS_DIR)/%.o $(OBJECTS_TEST)
 	@mkdir -p bin_test
 	@echo "$(BLUE)✦ Building libraries...$(RESET)\r"
 	@make -C $(LIBFT_DIR) --no-print-directory
 	@printf "$(YELLOW)◈ Linking $@...$(RESET)\r"
 	@others="$(filter-out $(TEST_VARIANTS_DIR)/$*.c, $(TEST_VARIANTS))"; \
-	wraps=""; \
+	wraps="$(value wraps_$*)"; \
 	sep=""; \
 	for f in $$others; do \
 		name=$$(basename $$f); \

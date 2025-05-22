@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:14:40 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/20 11:44:21 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:14:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static t_test_case expand_cases[] =
 		.name = "no_expand",
 		.input_tokens = { "echo", "hello", "world", NULL },
 		.extracted_pattern_expand = { NULL, NULL, NULL },
-		.filtered_files_expand = { NULL, NULL, NULL },
+		.filtered_files_expand = { NULL },
 		.expected_tokens_expand = { "echo", "hello", "world", NULL },
 	},
 	{
@@ -35,7 +35,7 @@ static t_test_case expand_cases[] =
 				.suffix = ".md"
 			}
 		},
-		.filtered_files_expand = { NULL, NULL },
+		.filtered_files_expand = { NULL },
 		.expected_tokens_expand = { "cat", "*.md", NULL },
 	},
 	{
@@ -50,7 +50,6 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
-			NULL,
 			&(t_list){
 				.content = "a.txt",
 				.next = &(t_list){
@@ -73,7 +72,6 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
-			NULL,
 			&(t_list){
 				.content = "test1.log",
 				.next = &(t_list){
@@ -102,7 +100,6 @@ static t_test_case expand_cases[] =
 			NULL,
 		},
 		.filtered_files_expand = {
-			NULL,
 			&(t_list){
 				.content = "main.c",
 				.next = &(t_list){
@@ -113,8 +110,7 @@ static t_test_case expand_cases[] =
 			&(t_list){
 				.content = "utils.h",
 				.next = NULL
-			},
-			NULL,
+			}
 		},
 		.expected_tokens_expand = { "cp", "main.c", "utils.c", "utils.h", "backup/", NULL },
 	},
@@ -130,7 +126,6 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
-			NULL,
 			&(t_list){
 				.content = "a.txt",
 				.next = &(t_list){
@@ -160,7 +155,6 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
-			NULL,
 			&(t_list){
 				.content = "main.c",
 				.next = &(t_list){
@@ -183,7 +177,6 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
-			NULL,
 			&(t_list){
 				.content = ".bash_history",
 				.next = &(t_list){
@@ -209,7 +202,6 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
-			NULL,
 			NULL
 		},
 		.expected_tokens_expand = { "echo", "*", NULL },
@@ -226,7 +218,6 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
-			NULL,
 			&(t_list){
 				.content = "main.c",
 				.next = &(t_list){
@@ -252,7 +243,6 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
-			NULL,
 			&(t_list){
 				.content = "main.c",
 				.next = &(t_list){
@@ -278,7 +268,6 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
-			NULL,
 			&(t_list){
 				.content = "file*.txt",
 				.next = &(t_list){
@@ -304,7 +293,6 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
-			NULL,
 			&(t_list){
 				.content = "file 1.txt",
 				.next = &(t_list){
@@ -336,6 +324,38 @@ t_error	__wrap_globbing(t_list **out_files, t_list *in_files, t_pattern *pattern
 	return (mock_type(t_error));
 }
 
+void	__wrap_free_pattern(t_pattern *pattern)
+{
+	(void) pattern;
+}
+
+t_error	__wrap_scan_dir(t_list **content, char *path)
+{
+	(void) path;
+	*content = mock_type(t_list *);
+	return (mock_type(t_error));
+}
+
+void	__wrap_ft_lstclear(t_list **lst, void (*del)(void *))
+{
+	(void) lst;
+	(void) del;
+}
+
+static void	lstclear(t_list **lst, void (*del)(void *))
+{
+	t_list	*elem;
+
+	if (lst == NULL)
+		return ;
+	while (*lst != NULL)
+	{
+		elem = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		*lst = elem;
+	}
+}
+
 static void expand_basic_tests(void **case_name)
 {
 	t_test_case	*tc;
@@ -344,6 +364,8 @@ static void expand_basic_tests(void **case_name)
 	t_list		*expected;
 	t_error		error;
 	int			equal;
+	size_t		i;
+	size_t		j;
 
 	if (case_name == NULL)
 		return (printf("Implementation error.\n"), assert_true(0));
@@ -355,26 +377,38 @@ static void expand_basic_tests(void **case_name)
 	tested = create_token_list(tc->input_tokens);
 	expected = create_token_list(tc->expected_tokens_expand);
 	size = ft_lstsize(tested);
-	for (size_t i = 0; i < size; i++)
+	j = 0;
+	i = 0;
+	while (i < size)
 	{
+		will_return(__wrap_extract_pattern, tc->extracted_pattern_expand[i]);
+		will_return(__wrap_extract_pattern, ERR_NONE);
 		if (tc->extracted_pattern_expand[i] != NULL)
 		{
-			will_return(__wrap_extract_pattern, tc->extracted_pattern_expand[i]);
-			will_return(__wrap_extract_pattern, ERR_NONE);
-		}
-		if (tc->filtered_files_expand[i] != NULL)
-		{
-			will_return(__wrap_globbing, tc->filtered_files_expand[i]);
+			will_return(__wrap_scan_dir, NULL);
+			will_return(__wrap_scan_dir, ERR_NONE);
+			will_return(__wrap_globbing, tc->filtered_files_expand[j++]);
 			will_return(__wrap_globbing, ERR_NONE);
 		}
+		i++;
 	}
 	error = expand(&tested);
 	equal = lst_equal(expected, tested, (void *) token_equal);
-	ft_lstclear(&tested, (void *) free_token);
-	ft_lstclear(&expected, (void *) free_token);
 	if (!equal || error != ERR_NONE)
-		return(printf(FAIL_MSG, (char *) *case_name), assert_true(0));
-	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));
+	{
+		printf(FAIL_MSG, (char *) *case_name);
+		printf("Expected:\t");
+		print_token_list(expected);
+		printf("Tested:\t\t");
+		print_token_list(tested);
+		lstclear(&tested, (void *) free_token);
+		lstclear(&expected, (void *) free_token);
+		assert_true(0);
+	}
+	lstclear(&tested, (void *) free_token);
+	lstclear(&expected, (void *) free_token);
+	printf(SUCCESS_MSG, (char *) *case_name);
+	return(assert_true(1));
 }
 
 t_test_result	execute_tests(void)

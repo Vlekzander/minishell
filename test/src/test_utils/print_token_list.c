@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_test.c                                        :+:      :+:    :+:   */
+/*   print_token_list.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 18:25:42 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/22 14:09:22 by apierret         ###   ########.fr       */
+/*   Created: 2025/05/22 13:01:41 by apierret          #+#    #+#             */
+/*   Updated: 2025/05/22 14:12:59 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "test.h"
+#include "test_utils.h"
 
-int main(void) {
-	t_test_result	results;
+void		print_token_list(t_list *tokens)
+{
+	t_token *token;
 
-	cmocka_set_message_output(-1);
-	results = execute_tests();
-	return (results.failed);
+	printf("[ ");
+	while (tokens != NULL)
+	{
+		token = tokens->content;
+		printf("(%d) %s, ", token->type, token->value);
+		tokens = tokens->next;
+	}
+	printf("(null) ]\n");
 }
