@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:03:58 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/04 16:00:07 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:16:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include "utils.h"
 
-t_error	str_array_push(char ***array, const char *element)
+t_error	str_array_push(char ***array, char *element)
 {
 	char	**new_array;
 	size_t	size;

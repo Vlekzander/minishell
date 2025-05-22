@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:00:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 14:12:32 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:14:44 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "error.h"
 # include "libft.h"
 
-t_error	str_array_push(char ***array, const char *element);
+t_error	str_array_push(char ***array, char *element);
 t_error	scan_dir(t_list **content, char *path);
 void	free_ddarray(void **array);
 char	*ft_strstr(char *str, char *to_find);

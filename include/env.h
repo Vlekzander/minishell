@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_test.c                                        :+:      :+:    :+:   */
+/*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 18:25:42 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/22 19:16:00 by apierret         ###   ########.fr       */
+/*   Created: 2025/05/22 15:11:49 by apierret          #+#    #+#             */
+/*   Updated: 2025/05/22 15:15:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "test.h"
+#ifndef ENV_H
+# define ENV_H
+# include "error.h"
 
-int main(void) {
-	t_test_result	results;
+t_error	load_env(char ***env, char **envp);
+t_error	get_env(char **str, char **env);
+t_error	get_var(char **str, char **env, char *key);
+t_error	add_var(char ***env, char *key, char *value);
+t_error	remove_var(char ***env, char *key);
 
-	cmocka_set_message_output(-1);
-	results = execute_tests();
-	return (results.failed);
-}
+#endif
