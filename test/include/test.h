@@ -63,7 +63,7 @@ typedef struct s_test_case {
 		};
 		struct
 		{
-			char	*expected_env[CASE_ARRAY_MAX];
+			char	*content_env[CASE_ARRAY_MAX];
 			union
 			{
 				struct
@@ -71,7 +71,7 @@ typedef struct s_test_case {
 					char	*key_env;
 					char	*value_env;
 				};
-				char	*content_env;
+				char	*str_env;
 			};
 
 		};

@@ -3,4 +3,4 @@
 *.o
 *.a
 minishell
-minishell_tests
+bin_test
