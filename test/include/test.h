@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/26 11:14:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:27:19 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,11 @@ typedef struct s_test_case {
 				struct
 				{
 					char	*key_env;
-					union
-					{
-						char	*value_env;
-						char	*edited_env[CASE_ARRAY_MAX];
-					};
-
+					char	*value_env;
 				};
 				char	*str_env;
 			};
-
+			char	*edited_env[CASE_ARRAY_MAX];
 		};
 	};
 }	t_test_case;

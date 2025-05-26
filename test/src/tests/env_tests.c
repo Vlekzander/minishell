@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:53:22 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/26 11:54:28 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:36:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,20 @@ static t_test_case env_cases[] =
 		.value_env = NULL
 	},
 	{
+		.name = "get_var_empty",
+		.base_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			"DDD=444",
+			"EEE=555",
+			"ZZZ=",
+			NULL
+		},
+		.key_env = "ZZZ",
+		.value_env = ""
+	},
+	{
 		.name = "remove_var_first",
 		.base_env = {
 			"AAA=111",
@@ -224,6 +238,83 @@ static t_test_case env_cases[] =
 		},
 		.key_env = "ZZZ",
 		.edited_env = {
+			NULL
+		}
+	},
+	{
+		.name = "set_var_new",
+		.base_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			NULL
+		},
+		.key_env = "DDD",
+		.value_env = "444",
+		.edited_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			"DDD=444",
+			NULL
+		}
+	},
+	{
+		.name = "set_var_exist",
+		.base_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			NULL
+		},
+		.key_env = "CCC",
+		.value_env = "___",
+		.edited_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=___",
+			NULL
+		}
+	},
+	{
+		.name = "set_var_empty_value",
+		.base_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			NULL
+		},
+		.key_env = "CCC",
+		.value_env = "",
+		.edited_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=",
+			NULL
+		}
+	},
+	{
+		.name = "set_var_new_empty_env",
+		.base_env = {
+			NULL
+		},
+		.key_env = "kwa",
+		.value_env = "feur",
+		.edited_env = {
+			"kwa=feur",
+			NULL
+		}
+	},
+	{
+		.name = "set_var_exist_alone",
+		.base_env = {
+			"kwa=feur",
+			NULL
+		},
+		.key_env = "kwa",
+		.value_env = "kou",
+		.edited_env = {
+			"kwa=kou",
 			NULL
 		}
 	},
@@ -324,6 +415,32 @@ static void	remove_var_basic_tests(void **case_name)
 	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));
 }
 
+static void	set_var_basic_tests(void **case_name)
+{
+	t_test_case	*tc;
+	char		**expected;
+	char		**tested;
+	t_error		error;
+	int			equal;
+
+	if (case_name == NULL)
+		return (printf("Implementation error.\n"), assert_true(0));
+	tc = find_case(env_cases, *case_name);
+	if (tc == NULL)
+		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
+	tested = NULL;
+	expected = tc->edited_env;
+	error = load_env(&tested, tc->base_env);
+	if (error != ERR_NONE)
+		return (printf("[ ERROR ] %s - load_env failed", (char *) *case_name), assert_true(0));
+	error = set_var(&tested, tc->key_env, tc->value_env);
+	equal = str_array_equal(expected, tested);
+	free_ddarray((void *) tested);
+	if (!equal || error != ERR_NONE)
+		return (printf(FAIL_MSG, (char *) *case_name), assert_true(0));
+	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));
+}
+
 t_test_result	execute_tests(void)
 {
 	const struct CMUnitTest test_cases[] = {
@@ -337,11 +454,17 @@ t_test_result	execute_tests(void)
 		cmocka_unit_test_prestate(get_var_basic_tests, env_cases[7].name),
 		cmocka_unit_test_prestate(get_var_basic_tests, env_cases[8].name),
 		cmocka_unit_test_prestate(get_var_basic_tests, env_cases[9].name),
-		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[10].name),
+		cmocka_unit_test_prestate(get_var_basic_tests, env_cases[10].name),
 		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[11].name),
 		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[12].name),
 		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[13].name),
 		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[14].name),
+		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[15].name),
+		cmocka_unit_test_prestate(set_var_basic_tests, env_cases[16].name),
+		cmocka_unit_test_prestate(set_var_basic_tests, env_cases[17].name),
+		cmocka_unit_test_prestate(set_var_basic_tests, env_cases[18].name),
+		cmocka_unit_test_prestate(set_var_basic_tests, env_cases[19].name),
+		cmocka_unit_test_prestate(set_var_basic_tests, env_cases[20].name),
 	};
 	char			name[] = "env/CRUD";
 	t_test_result	result;

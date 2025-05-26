@@ -17,17 +17,17 @@
 t_error	get_var(char **str, char **env, char *key)
 {
 	char	*ptr;
-	size_t	size;
+	size_t	key_len;
 
 	if (str == NULL || env == NULL || key == NULL)
 		return (ERR_IMPLEMENTATION);
 	ptr = NULL;
-	size = ft_strlen(key);
+	key_len = ft_strlen(key);
 	while (*env != NULL)
 	{
 		ptr = ft_strstr(*env, key);
-		if (ptr != NULL && ptr[size] == '=')
-			return (*str = ptr + size + 1, ERR_NONE);
+		if (ptr != NULL && ptr[key_len] == '=')
+			return (*str = ptr + key_len + 1, ERR_NONE);
 		env++;
 	}
 	return (*str = NULL, ERR_NONE);
