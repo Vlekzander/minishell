@@ -6,13 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:53:22 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/24 23:27:24 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/26 11:54:28 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "env.h"
 #include "test.h"
 #include "test_utils.h"
@@ -22,7 +21,7 @@ static t_test_case env_cases[] =
 {
 	{
 		.name = "load_simple_env",
-		.content_env = {
+		.base_env = {
 			"KEY1=VALUE1",
 			"KEY2=VALUE2",
 			"KEY3=VALUE3",
@@ -31,7 +30,7 @@ static t_test_case env_cases[] =
 	 },
 	{
 		.name = "load_another_simple_env",
-		.content_env = {
+		.base_env = {
 			"AAA=111",
 			"BBB=222",
 			"CCC=333",
@@ -43,13 +42,13 @@ static t_test_case env_cases[] =
 	},
 	{
 		.name = "load_empty_env",
-		.content_env = {
+		.base_env = {
 			NULL
 		},
 	},
 	 {
 		.name = "get_simple_env",
-		.content_env = {
+		.base_env = {
 			"KEY1=VALUE1",
 			"KEY2=VALUE2",
 			"KEY3=VALUE3",
@@ -59,7 +58,7 @@ static t_test_case env_cases[] =
 	 },
 	{
 		.name = "get_another_simple_env",
-		.content_env = {
+		.base_env = {
 			"AAA=111",
 			"BBB=222",
 			"CCC=333",
@@ -72,14 +71,14 @@ static t_test_case env_cases[] =
 	},
 	{
 		.name = "get_empty_env",
-		.content_env = {
+		.base_env = {
 			NULL
 		},
 		.str_env = ""
 	},
 	{
 		.name = "get_var_first",
-		.content_env = {
+		.base_env = {
 			"AAA=111",
 			"BBB=222",
 			"CCC=333",
@@ -93,7 +92,7 @@ static t_test_case env_cases[] =
 	},
 	{
 		.name = "get_var_last",
-		.content_env = {
+		.base_env = {
 			"AAA=111",
 			"BBB=222",
 			"CCC=333",
@@ -107,7 +106,7 @@ static t_test_case env_cases[] =
 	},
 	{
 		.name = "get_var_middle",
-		.content_env = {
+		.base_env = {
 			"AAA=111",
 			"BBB=222",
 			"CCC=333",
@@ -121,7 +120,7 @@ static t_test_case env_cases[] =
 	},
 	{
 		.name = "get_var_invalid",
-		.content_env = {
+		.base_env = {
 			"AAA=111",
 			"BBB=222",
 			"CCC=333",
@@ -132,6 +131,101 @@ static t_test_case env_cases[] =
 		},
 		.key_env = "ZZZ",
 		.value_env = NULL
+	},
+	{
+		.name = "remove_var_first",
+		.base_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			"DDD=444",
+			"EEE=555",
+			"kwa=feur",
+			NULL
+		},
+		.key_env = "AAA",
+		.edited_env = {
+			"BBB=222",
+			"CCC=333",
+			"DDD=444",
+			"EEE=555",
+			"kwa=feur",
+			NULL
+		}
+	},
+	{
+		.name = "remove_var_last",
+		.base_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			"DDD=444",
+			"EEE=555",
+			"kwa=feur",
+			NULL
+		},
+		.key_env = "kwa",
+		.edited_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			"DDD=444",
+			"EEE=555",
+			NULL
+		}
+	},
+	{
+		.name = "remove_var_middle",
+		.base_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			"DDD=444",
+			"EEE=555",
+			"kwa=feur",
+			NULL
+		},
+		.key_env = "CCC",
+		.edited_env = {
+			"AAA=111",
+			"BBB=222",
+			"DDD=444",
+			"EEE=555",
+			"kwa=feur",
+			NULL
+		}
+	},
+	{
+		.name = "remove_var_invalid",
+		.base_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			"DDD=444",
+			"EEE=555",
+			"kwa=feur",
+			NULL
+		},
+		.key_env = "ZZZ",
+		.edited_env = {
+			"AAA=111",
+			"BBB=222",
+			"CCC=333",
+			"DDD=444",
+			"EEE=555",
+			"kwa=feur",
+			NULL
+		}
+	},
+	{
+		.name = "remove_var_empty",
+		.base_env = {
+			NULL
+		},
+		.key_env = "ZZZ",
+		.edited_env = {
+			NULL
+		}
 	},
 	{ NULL }
 };
@@ -150,8 +244,8 @@ static void load_env_basic_tests(void **case_name)
 	if (tc == NULL)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	tested = NULL;
-	expected = tc->content_env;
-	error = load_env(&tested, tc->content_env);
+	expected = tc->base_env;
+	error = load_env(&tested, tc->base_env);
 	equal = str_array_equal(expected, tested);
 	free_ddarray((void **) tested);
 	if (!equal || error != ERR_NONE)
@@ -174,7 +268,7 @@ static void	get_env_basic_tests(void **case_name)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	tested = NULL;
 	expected = tc->str_env;
-	error = get_env(&tested, tc->content_env);
+	error = get_env(&tested, tc->base_env);
 	equal = str_equal(expected, tested);
 	free(tested);
 	if (!equal || error != ERR_NONE)
@@ -197,8 +291,34 @@ static void	get_var_basic_tests(void **case_name)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	tested = NULL;
 	expected = tc->value_env;
-	error = get_var(&tested, tc->content_env, tc->key_env);
+	error = get_var(&tested, tc->base_env, tc->key_env);
 	equal = str_equal(expected, tested);
+	if (!equal || error != ERR_NONE)
+		return (printf(FAIL_MSG, (char *) *case_name), assert_true(0));
+	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));
+}
+
+static void	remove_var_basic_tests(void **case_name)
+{
+	t_test_case	*tc;
+	char		**expected;
+	char		**tested;
+	t_error		error;
+	int			equal;
+
+	if (case_name == NULL)
+		return (printf("Implementation error.\n"), assert_true(0));
+	tc = find_case(env_cases, *case_name);
+	if (tc == NULL)
+		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
+	tested = NULL;
+	expected = tc->edited_env;
+	error = load_env(&tested, tc->base_env);
+	if (error != ERR_NONE)
+		return (printf("[ ERROR ] %s - load_env failed", (char *) *case_name), assert_true(0));
+	error = remove_var(&tested, tc->key_env);
+	equal = str_array_equal(expected, tested);
+	free_ddarray((void *) tested);
 	if (!equal || error != ERR_NONE)
 		return (printf(FAIL_MSG, (char *) *case_name), assert_true(0));
 	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));
@@ -217,6 +337,11 @@ t_test_result	execute_tests(void)
 		cmocka_unit_test_prestate(get_var_basic_tests, env_cases[7].name),
 		cmocka_unit_test_prestate(get_var_basic_tests, env_cases[8].name),
 		cmocka_unit_test_prestate(get_var_basic_tests, env_cases[9].name),
+		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[10].name),
+		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[11].name),
+		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[12].name),
+		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[13].name),
+		cmocka_unit_test_prestate(remove_var_basic_tests, env_cases[14].name),
 	};
 	char			name[] = "env/CRUD";
 	t_test_result	result;
