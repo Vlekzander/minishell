@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   create_varpos.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/24 23:22:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/30 12:39:02 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/01 20:10:43 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/01 20:12:35 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
-# include "data.h"
-# include "error.h"
-# include "libft.h"
+#include "data.h"
 
-t_error	tokenize(t_list **tokens, char *input);
-t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern);
-t_error	expand(t_list **tk_list, char **env);
+t_varpos	*create_varpos(void)
+{
+	t_varpos	*varpos;
 
-#endif
+	varpos = ft_calloc(1, sizeof(t_varpos));
+	if (varpos == NULL)
+		return (NULL);
+	return (varpos);
+}

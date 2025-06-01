@@ -6,12 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:33:25 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/15 12:18:54 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:40:25 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "lexer.h"
+#include "lexer_internal.h"
 #include "test.h"
 #include "test_utils.h"
 
@@ -19,12 +19,12 @@ static t_test_case extract_pattern_cases[] =
 {
 	{
 		.name = "no_valid_pattern",
-		.input_pattern = "blabliblou",
+		.input_extract = "blabliblou",
 		.expected_pattern = NULL
 	},
 	{
 		.name = "any_pattern",
-		.input_pattern = "*",
+		.input_extract = "*",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -34,7 +34,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "prefix_file_pattern",
-		.input_pattern = "*.txt",
+		.input_extract = "*.txt",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -44,7 +44,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "suffix_file_pattern",
-		.input_pattern = ".*",
+		.input_extract = ".*",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = ".",
@@ -54,7 +54,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "infix_file_pattern",
-		.input_pattern = "*bla*",
+		.input_extract = "*bla*",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -68,7 +68,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "infixes_file_pattern",
-		.input_pattern = "*bla*bli*",
+		.input_extract = "*bla*bli*",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -86,7 +86,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "prefix_suffix_pattern",
-		.input_pattern = "log*.txt",
+		.input_extract = "log*.txt",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = "log",
@@ -96,7 +96,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "prefix_infix_pattern",
-		.input_pattern = "foo*bar*",
+		.input_extract = "foo*bar*",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = "foo",
@@ -110,7 +110,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "infix_suffix_pattern",
-		.input_pattern = "*foo*bar",
+		.input_extract = "*foo*bar",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -124,7 +124,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "prefix_infix_suffix_pattern",
-		.input_pattern = "the*foo*bar",
+		.input_extract = "the*foo*bar",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = "the",
@@ -138,7 +138,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "prefix_infixes_suffix_pattern",
-		.input_pattern = "foo*bla*bli*blou*bar",
+		.input_extract = "foo*bla*bli*blou*bar",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = "foo",
@@ -160,12 +160,12 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "empty_pattern",
-		.input_pattern = "",
+		.input_extract = "",
 		.expected_pattern = NULL
 	},
 	{
 		.name = "consecutive_stars",
-		.input_pattern = "*****",
+		.input_extract = "*****",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -175,7 +175,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "prefix_consecutive_stars",
-		.input_pattern = "bla*****",
+		.input_extract = "bla*****",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = "bla",
@@ -185,7 +185,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "infix_consecutive_stars",
-		.input_pattern = "**bli**",
+		.input_extract = "**bli**",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -199,7 +199,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "infixes_consecutive_stars",
-		.input_pattern = "**bla**bli**blou**",
+		.input_extract = "**bla**bli**blou**",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -221,7 +221,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "suffix_consecutive_stars",
-		.input_pattern = "*****blou",
+		.input_extract = "*****blou",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -231,12 +231,12 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "trapped_pattern",
-		.input_pattern = "bla\"*\"bli\"*\"blou",
+		.input_extract = "bla\"*\"bli\"*\"blou",
 		.expected_pattern = NULL
 	},
 	{
 		.name = "trapped_prefix",
-		.input_pattern = "\"\"*",
+		.input_extract = "\"\"*",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -246,7 +246,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "trapped_infix",
-		.input_pattern = "*\"\"*",
+		.input_extract = "*\"\"*",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -256,7 +256,7 @@ static t_test_case extract_pattern_cases[] =
 	},
 	{
 		.name = "trapped_suffix",
-		.input_pattern = "*\"\"",
+		.input_extract = "*\"\"",
 		.expected_pattern = &(t_pattern)
 		{
 			.prefix = NULL,
@@ -280,7 +280,7 @@ static void	extract_pattern_basic_tests(void **case_name)
 	tc = find_case(extract_pattern_cases, *case_name);
 	if (tc == NULL)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
-	error = extract_pattern(&tested, tc->input_pattern);
+	error = extract_pattern(&tested, tc->input_extract);
 	equal = pattern_equal(tested, tc->expected_pattern);
 	free_pattern(tested);
 	if (!equal || error != ERR_NONE)

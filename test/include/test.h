@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/26 16:27:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/01 22:31:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,12 @@ typedef struct s_test_case {
 		};
 		struct
 		{
-			char	*input_pattern;
-			void	*expected_pattern;
+			char	*input_extract;
+			union
+			{
+				void		*expected_pattern;
+				void		*expected_var;
+			};
 		};
 		struct
 		{
@@ -57,6 +61,7 @@ typedef struct s_test_case {
 				{
 					void	*extracted_pattern_expand[CASE_ARRAY_MAX];
 					t_list	*filtered_files_expand[CASE_ARRAY_MAX];
+					void	*extracted_env_variable_expand[CASE_ARRAY_MAX];
 					char	*expected_tokens_expand[CASE_ARRAY_MAX];
 				};
 			};

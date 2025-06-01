@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/24 23:22:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/30 12:39:02 by apierret         ###   ########.fr       */
+/*   Created: 2025/05/29 23:43:04 by apierret          #+#    #+#             */
+/*   Updated: 2025/05/29 23:46:42 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
-# include "data.h"
-# include "error.h"
-# include "libft.h"
+#include "utils.h"
 
-t_error	tokenize(t_list **tokens, char *input);
-t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern);
-t_error	expand(t_list **tk_list, char **env);
+char	*ft_strndup(char *src, size_t len)
+{
+	char	*str;
 
-#endif
+	if (src == NULL)
+		return (NULL);
+	str = ft_calloc(len +1, sizeof(char));
+	if (str == NULL)
+		return (NULL);
+	ft_strlcpy(str, src, len +1);
+	return (str);
+}

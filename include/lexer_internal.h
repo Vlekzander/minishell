@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 15:58:59 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/14 12:06:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/01 20:18:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # include "data.h"
 # include "error.h"
 
+t_error	extract_pattern(t_pattern **pattern, char *str);
+t_error	extract_var(t_varpos **varpos, char *str);
 t_error	add_token(t_list **list, t_token_type type, char *value);
 t_error	process_input(t_list **tokens, char *input);
 t_error	process_operator(t_list **tokens, char **input, char *buf);

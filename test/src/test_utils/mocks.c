@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:56:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/15 14:12:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:52:39 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,13 @@ t_error	__wrap_parse_ast(t_ast **ast, t_list *tokens)
 {
 	(void) ast;
 	(void) tokens;
+	return (ERR_NONE);
+}
+
+__attribute__((weak))
+t_error	__wrap_extract_var(char **var, char *str)
+{
+	(void) var;
+	(void) str;
 	return (ERR_NONE);
 }

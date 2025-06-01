@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:14:40 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/22 14:14:13 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/02 00:09:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ static t_test_case expand_cases[] =
 		.input_tokens = { "echo", "hello", "world", NULL },
 		.extracted_pattern_expand = { NULL, NULL, NULL },
 		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
 		.expected_tokens_expand = { "echo", "hello", "world", NULL },
 	},
 	{
@@ -36,6 +42,11 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
 		.expected_tokens_expand = { "cat", "*.md", NULL },
 	},
 	{
@@ -58,6 +69,11 @@ static t_test_case expand_cases[] =
 				}
 			}
 		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
 		.expected_tokens_expand = { "ls", "a.txt", "b.txt", NULL },
 	},
 	{
@@ -79,6 +95,11 @@ static t_test_case expand_cases[] =
 					.next = NULL
 				}
 			}
+		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
 		},
 		.expected_tokens_expand = { "rm", "test1.log", "test2.log", NULL },
 	},
@@ -112,6 +133,13 @@ static t_test_case expand_cases[] =
 				.next = NULL
 			}
 		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
 		.expected_tokens_expand = { "cp", "main.c", "utils.c", "utils.h", "backup/", NULL },
 	},
 	{
@@ -136,6 +164,11 @@ static t_test_case expand_cases[] =
 					}
 				}
 			}
+		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
 		},
 		.expected_tokens_expand = { "echo", "a.txt", "b.md", "c.pdf", NULL },
 	},
@@ -163,6 +196,11 @@ static t_test_case expand_cases[] =
 				}
 			}
 		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
 		.expected_tokens_expand = { "cat", "main.c", "readme.md", NULL },
 	},
 	{
@@ -188,6 +226,11 @@ static t_test_case expand_cases[] =
 				}
 			}
 		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
 		.expected_tokens_expand = { "echo", ".bash_history", ".cache", ".config", NULL },
 	},
 	{
@@ -202,6 +245,11 @@ static t_test_case expand_cases[] =
 			}
 		},
 		.filtered_files_expand = {
+			NULL
+		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
 			NULL
 		},
 		.expected_tokens_expand = { "echo", "*", NULL },
@@ -229,6 +277,11 @@ static t_test_case expand_cases[] =
 				}
 			}
 		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
 		.expected_tokens_expand = { "echo", "main.c", "main.h", "main_backup.c", NULL },
 	},
 	{
@@ -253,6 +306,11 @@ static t_test_case expand_cases[] =
 					}
 				}
 			}
+		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
 		},
 		.expected_tokens_expand = { "echo", "main.c", "tests.c", "main_backup.c", NULL },
 	},
@@ -279,6 +337,11 @@ static t_test_case expand_cases[] =
 				}
 			}
 		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
 		.expected_tokens_expand = { "echo", "file*.txt", "file1.txt", "file2.txt", NULL },
 	},
 	{
@@ -304,9 +367,130 @@ static t_test_case expand_cases[] =
 				}
 			}
 		},
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
 		.expected_tokens_expand = { "echo", "file 1.txt", "file 2.txt", "file 3.txt", NULL },
 	},
+	{
+		.name = "expand_one_word_var",
+		.input_tokens = { "echo", "hello", "$USER", NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$USER", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "hello", "alex", NULL },
+	},
+	{
+		.name = "expand_multiples_word_var",
+		.input_tokens = { "echo", "$WELCOME2", NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$WELCOME2", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "Hello", "World", NULL },
+	},
+	{
+		.name = "expand_var_dquoted",
+		.input_tokens = { "echo", "hello", "\"$USER\"", NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$USER", 1 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "hello", "\"alex\"", NULL },
+	},
+	{
+		.name = "expand_var_squoted",
+		.input_tokens = { "echo", "hello", "\'$USER\'", NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "hello", "\'$USER\'", NULL },
+	},
+	{
+		.name = "expand_var_content_quoted",
+		.input_tokens = { "echo", "$WELCOME3", NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$WELCOME3", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "\"Hello", "Alex\"", NULL },
+	},
+	{
+		.name = "expand_var_prefix",
+		.input_tokens = { "echo", "user:$USER", NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$USER", 5 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "user:alex", NULL },
+	},
+	{
+		.name = "expand_no_var",
+		.input_tokens = { "echo", "hello", "$EMPTY", NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$EMPTY", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "hello", NULL },
+	},
+	{
+		.name = "expand_var_quotted_suffix",
+		.input_tokens = { "echo", "$USER\"__SUFFIX__\"", NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$USER", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "alex\"__SUFFIX__\"", NULL },
+	},
 	{ NULL }
+};
+
+static char *env[] = {
+	"USER=alex",
+	"WELCOME=Hello",
+	"WELCOME2=Hello World",
+	"WELCOME3=\"Hello Alex\"",
+	"EMPTY=",
+	NULL
 };
 
 t_error	__wrap_extract_pattern(t_pattern **pattern, char *str)
@@ -356,6 +540,18 @@ static void	lstclear(t_list **lst, void (*del)(void *))
 	}
 }
 
+void __wrap_free_varpos(t_varpos	*varpos)
+{
+	(void) varpos;
+}
+
+t_error	__wrap_extract_var(t_varpos **varpos, char *str)
+{
+	(void) str;
+	*varpos = mock_type(t_varpos *);
+	return (mock_type(t_error));
+}
+
 static void expand_basic_tests(void **case_name)
 {
 	t_test_case	*tc;
@@ -392,7 +588,14 @@ static void expand_basic_tests(void **case_name)
 		}
 		i++;
 	}
-	error = expand(&tested);
+	i = 0;
+	while (tc->extracted_env_variable_expand[i] != NULL)
+	{
+		will_return(__wrap_extract_var, tc->extracted_env_variable_expand[i]);
+		will_return(__wrap_extract_var, ERR_NONE);
+		i++;
+	}
+	error = expand(&tested, env);
 	equal = lst_equal(expected, tested, (void *) token_equal);
 	if (!equal || error != ERR_NONE)
 	{
@@ -427,6 +630,14 @@ t_test_result	execute_tests(void)
 		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[10].name),
 		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[11].name),
 		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[12].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[13].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[14].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[15].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[16].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[17].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[18].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[19].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[20].name),
 	};
 	char			name[] = "lexer/expand";
 	t_test_result	result;
