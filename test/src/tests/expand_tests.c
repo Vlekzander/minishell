@@ -6,13 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:14:40 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 14:49:47 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:19:11 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "lexer.h"
 #include "test.h"
 #include "test_utils.h"
@@ -22,7 +21,7 @@ static t_test_case expand_cases[] =
 	{
 		.name = "no_expand",
 		.input_tokens = { "echo", "hello", "world", NULL },
-		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL, (void *) 1 },
 		.filtered_files_expand = { NULL },
 		.extracted_env_variable_expand = {
 			&(t_varpos) { NULL, 0 },
@@ -41,7 +40,8 @@ static t_test_case expand_cases[] =
 				.prefix = NULL,
 				.infixes = NULL,
 				.suffix = ".md"
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = { NULL },
 		.extracted_env_variable_expand = {
@@ -60,7 +60,8 @@ static t_test_case expand_cases[] =
 				.prefix = NULL,
 				.infixes = NULL,
 				.suffix = ".txt"
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			&(t_list){
@@ -87,7 +88,8 @@ static t_test_case expand_cases[] =
 				.prefix = "test",
 				.infixes = NULL,
 				.suffix = ".log"
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			&(t_list){
@@ -121,6 +123,7 @@ static t_test_case expand_cases[] =
 				.suffix = ".h"
 			},
 			NULL,
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			&(t_list){
@@ -153,7 +156,8 @@ static t_test_case expand_cases[] =
 				.prefix = NULL,
 				.infixes = NULL,
 				.suffix = NULL
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			&(t_list){
@@ -187,7 +191,8 @@ static t_test_case expand_cases[] =
 					.next = NULL
 				},
 				.suffix = NULL
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			&(t_list){
@@ -214,7 +219,8 @@ static t_test_case expand_cases[] =
 				.prefix = ".",
 				.infixes = NULL,
 				.suffix = NULL
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			&(t_list){
@@ -244,7 +250,8 @@ static t_test_case expand_cases[] =
 				.prefix = NULL,
 				.infixes = NULL,
 				.suffix = NULL
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			NULL
@@ -265,7 +272,8 @@ static t_test_case expand_cases[] =
 				.prefix = "main",
 				.infixes = NULL,
 				.suffix = NULL
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			&(t_list){
@@ -295,7 +303,8 @@ static t_test_case expand_cases[] =
 				.prefix = NULL,
 				.infixes = NULL,
 				.suffix = ".c"
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			&(t_list){
@@ -325,7 +334,8 @@ static t_test_case expand_cases[] =
 				.prefix = "file",
 				.infixes = NULL,
 				.suffix = ".txt"
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			&(t_list){
@@ -355,7 +365,8 @@ static t_test_case expand_cases[] =
 				.prefix = "file",
 				.infixes = NULL,
 				.suffix = ".txt"
-			}
+			},
+			(void *) 1
 		},
 		.filtered_files_expand = {
 			&(t_list){
@@ -379,7 +390,7 @@ static t_test_case expand_cases[] =
 	{
 		.name = "expand_one_word_var",
 		.input_tokens = { "echo", "hello", "$USER", NULL },
-		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL, (void *) 1 },
 		.filtered_files_expand = { NULL },
 		.extracted_env_variable_expand = {
 			&(t_varpos) { NULL, 0 },
@@ -393,7 +404,7 @@ static t_test_case expand_cases[] =
 	{
 		.name = "expand_multiples_word_var",
 		.input_tokens = { "echo", "$WELCOME2", NULL },
-		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL, (void *) 1 },
 		.filtered_files_expand = { NULL },
 		.extracted_env_variable_expand = {
 			&(t_varpos) { NULL, 0 },
@@ -404,9 +415,39 @@ static t_test_case expand_cases[] =
 		.expected_tokens_expand = { "echo", "Hello", "World", NULL },
 	},
 	{
+		.name = "expand_multiples_vars",
+		.input_tokens = { "echo", "$USER", "$WELCOME2", NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL, NULL, (void *) 1 },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$USER", 0 },
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$WELCOME2", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "alex", "Hello", "World", NULL },
+	},
+	{
+		.name = "expand_recursive",
+		.input_tokens = { "echo", "$AAA", NULL },
+		.extracted_pattern_expand = { NULL, NULL, (void *) 1 },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$AAA", 0 },
+			&(t_varpos) { "$BBB", 0 },
+			&(t_varpos) { "$CCC", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "Valorant", NULL },
+	},
+	{
 		.name = "expand_var_dquoted",
 		.input_tokens = { "echo", "hello", "\"$USER\"", NULL },
-		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL, (void *) 1 },
 		.filtered_files_expand = { NULL },
 		.extracted_env_variable_expand = {
 			&(t_varpos) { NULL, 0 },
@@ -420,7 +461,7 @@ static t_test_case expand_cases[] =
 	{
 		.name = "expand_var_squoted",
 		.input_tokens = { "echo", "hello", "\'$USER\'", NULL },
-		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL, (void *) 1 },
 		.filtered_files_expand = { NULL },
 		.extracted_env_variable_expand = {
 			&(t_varpos) { NULL, 0 },
@@ -433,7 +474,7 @@ static t_test_case expand_cases[] =
 	{
 		.name = "expand_var_content_quoted",
 		.input_tokens = { "echo", "$WELCOME3", NULL },
-		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL, (void *) 1 },
 		.filtered_files_expand = { NULL },
 		.extracted_env_variable_expand = {
 			&(t_varpos) { NULL, 0 },
@@ -446,7 +487,7 @@ static t_test_case expand_cases[] =
 	{
 		.name = "expand_var_prefix",
 		.input_tokens = { "echo", "user:$USER", NULL },
-		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.extracted_pattern_expand = { NULL, NULL, (void *) 1 },
 		.filtered_files_expand = { NULL },
 		.extracted_env_variable_expand = {
 			&(t_varpos) { NULL, 0 },
@@ -457,9 +498,9 @@ static t_test_case expand_cases[] =
 		.expected_tokens_expand = { "echo", "user:alex", NULL },
 	},
 	{
-		.name = "expand_no_var",
+		.name = "expand_empty_var",
 		.input_tokens = { "echo", "hello", "$EMPTY", NULL },
-		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL, (void *) 1 },
 		.filtered_files_expand = { NULL },
 		.extracted_env_variable_expand = {
 			&(t_varpos) { NULL, 0 },
@@ -471,9 +512,23 @@ static t_test_case expand_cases[] =
 		.expected_tokens_expand = { "echo", "hello", NULL },
 	},
 	{
+		.name = "expand_no_var",
+		.input_tokens = { "echo", "hello", "$NONE", NULL },
+		.extracted_pattern_expand = { NULL, NULL, NULL, (void *) 1 },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$NONE", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { "echo", "hello", "$NONE", NULL },
+	},
+	{
 		.name = "expand_var_quotted_suffix",
 		.input_tokens = { "echo", "$USER\"__SUFFIX__\"", NULL },
-		.extracted_pattern_expand = { NULL, NULL, NULL },
+		.extracted_pattern_expand = { NULL, NULL, (void *) 1 },
 		.filtered_files_expand = { NULL },
 		.extracted_env_variable_expand = {
 			&(t_varpos) { NULL, 0 },
@@ -482,6 +537,133 @@ static t_test_case expand_cases[] =
 			NULL
 		},
 		.expected_tokens_expand = { "echo", "alex\"__SUFFIX__\"", NULL },
+	},
+	{
+		.name = "expand_empty_var_only",
+		.input_tokens = { "$EMPTY", NULL },
+		.extracted_pattern_expand = { NULL, (void *) 1 },
+		.filtered_files_expand = { NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { "$EMPTY", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.expected_tokens_expand = { NULL },
+	},
+	{
+		.name = "expand_env_and_wildcard",
+		.input_tokens = { "echo", "$WELCOME2", "*", NULL },
+		.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$WELCOME2", 0 },
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.extracted_pattern_expand = {
+			NULL,
+			NULL,
+			NULL,
+			&(t_pattern) {
+				.prefix = NULL,
+				.infixes = NULL,
+				.suffix = NULL
+			},
+			(void *) 1
+		},
+		.filtered_files_expand = {
+			&(t_list){
+				.content = "a.txt",
+				.next = &(t_list){
+					.content = "b.txt",
+					.next = &(t_list){
+						.content = "c.txt",
+						.next = NULL
+					}
+				}
+			}
+		},
+		.expected_tokens_expand = { "echo", "Hello", "World", "a.txt", "b.txt", "c.txt", NULL },
+	},
+	{
+		.name = "expand_wildcard_from_env",
+		.input_tokens = { "echo", "$WILDCARD", NULL },.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$WILDCARD", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.extracted_pattern_expand = {
+			NULL,
+			&(t_pattern) {
+				.prefix = NULL,
+				.infixes = NULL,
+				.suffix = NULL
+			},
+			(void *) 1
+		},
+		.filtered_files_expand = {
+			&(t_list){
+				.content = "a.txt",
+				.next = &(t_list){
+					.content = "b.txt",
+					.next = &(t_list){
+						.content = "c.txt",
+						.next = NULL
+					}
+				}
+			}
+		},
+		.expected_tokens_expand = { "echo", "a.txt", "b.txt", "c.txt", NULL },
+	},
+	{
+		.name = "expand_wildcards_from_env",
+		.input_tokens = { "echo", "$WILDCARDS", NULL },.extracted_env_variable_expand = {
+			&(t_varpos) { NULL, 0 },
+			&(t_varpos) { "$WILDCARDS", 0 },
+			&(t_varpos) { NULL, 0 },
+			NULL
+		},
+		.extracted_pattern_expand = {
+			NULL,
+			NULL,
+			&(t_pattern) {
+				.prefix = NULL,
+				.infixes = NULL,
+				.suffix = ".txt"
+			},
+			NULL,
+			&(t_pattern) {
+				.prefix = NULL,
+				.infixes = NULL,
+				.suffix = ".pdf"
+			},
+			NULL,
+			(void *) 1
+		},
+		.filtered_files_expand = {
+			&(t_list){
+				.content = "a.txt",
+				.next = &(t_list){
+					.content = "b.txt",
+					.next = &(t_list){
+						.content = "c.txt",
+						.next = NULL
+					}
+				}
+			},
+			&(t_list){
+				.content = "a.pdf",
+				.next = &(t_list){
+					.content = "b.pdf",
+					.next = &(t_list){
+						.content = "c.pdf",
+						.next = NULL
+					}
+				}
+			}
+		},
+		.expected_tokens_expand = { "echo", "BEFORE", "a.txt", "b.txt", "c.txt", "IN", "a.pdf", "b.pdf", "c.pdf", "AFTER", NULL },
 	},
 	{ NULL }
 };
@@ -492,6 +674,11 @@ static char *env[] = {
 	"WELCOME2=Hello World",
 	"WELCOME3=\"Hello Alex\"",
 	"EMPTY=",
+	"WILDCARD=*",
+	"WILDCARDS=BEFORE *.txt IN *.pdf AFTER",
+	"AAA=$BBB",
+	"BBB=$CCC",
+	"CCC=Valorant",
 	NULL
 };
 
@@ -528,7 +715,6 @@ static void expand_basic_tests(void **case_name)
 {
 	t_test_case	*tc;
 	t_list		*tested;
-	size_t		size;
 	t_list		*expected;
 	t_error		error;
 	int			equal;
@@ -544,10 +730,9 @@ static void expand_basic_tests(void **case_name)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	tested = create_token_list(tc->input_tokens);
 	expected = create_token_list(tc->expected_tokens_expand);
-	size = ft_lstsize(tested);
 	j = 0;
 	i = 0;
-	while (i < size)
+	while (tc->extracted_pattern_expand[i] != (void *) 1)
 	{
 		will_return(__wrap_extract_pattern, pattern_dup(tc->extracted_pattern_expand[i]));
 		will_return(__wrap_extract_pattern, ERR_NONE);
@@ -572,9 +757,9 @@ static void expand_basic_tests(void **case_name)
 	if (!equal || error != ERR_NONE)
 	{
 		printf(FAIL_MSG, (char *) *case_name);
-		printf("Expected:\t");
+		printf("Expected:\t%d\t", ERR_NONE);
 		print_token_list(expected);
-		printf("Tested:\t\t");
+		printf("Tested:\t\t%d\t", error);
 		print_token_list(tested);
 		ft_lstclear(&tested, (void *) free_token);
 		ft_lstclear(&expected, (void *) free_token);
@@ -610,6 +795,13 @@ t_test_result	execute_tests(void)
 		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[18].name),
 		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[19].name),
 		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[20].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[21].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[22].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[23].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[24].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[25].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[26].name),
+		cmocka_unit_test_prestate(expand_basic_tests, expand_cases[27].name),
 	};
 	char			name[] = "lexer/expand";
 	t_test_result	result;

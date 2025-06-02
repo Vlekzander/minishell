@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 14:33:58 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 14:34:59 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:23:51 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ t_error	override_var(char **output, char *base, t_varpos *var, char **env)
 	error = get_var(&var_content, env, var->str +1);
 	if (error != ERR_NONE)
 		return (free(str_one), error);
+	if (var_content == NULL)
+		var_content = var->str;
 	str_two = ft_strjoin(str_one, var_content);
 	if (str_two == NULL)
 		return (free(str_one), free(var_content), ERR_ALLOCATION);

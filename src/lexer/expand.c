@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:18:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 14:52:57 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:28:42 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static t_error	expand_env(t_list **node, t_token *token, char **env)
 
 	if (node == NULL || *node == NULL || token == NULL || env == NULL)
 		return (ERR_IMPLEMENTATION);
-	error = ERR_NONE;
 	var = NULL;
 	str = token->value;
 	while (var == NULL || var->str != NULL)
@@ -66,9 +65,10 @@ static t_error	expand_env(t_list **node, t_token *token, char **env)
 		error = override_var(&str, temp, var, env);
 		if (error != ERR_NONE)
 			return (free_varpos(var), error);
+		if (temp != token->value)
+			free(temp);
 	}
-	free_varpos(var);
-	return (apply_env_expand(node, token, str), error);
+	return (free_varpos(var), apply_env_expand(node, token, str), ERR_NONE);
 }
 
 static t_error	expand_wildcard(t_list **node, t_token *token)
@@ -100,7 +100,7 @@ static t_error	expand_wildcard(t_list **node, t_token *token)
 	return (error);
 }
 
-t_error	expand(t_list **tk_list, char **env)
+static t_error	apply_expand(t_list **tk_list, char **env, int is_env)
 {
 	t_list		*node;
 	t_list		*next;
@@ -116,15 +116,29 @@ t_error	expand(t_list **tk_list, char **env)
 		token = node->content;
 		if (token->type == TK_WORD)
 		{
-			error = expand_env(&node, token, env);
-			if (error != ERR_NONE)
-				return (error);
-			token = node->content;
-			error = expand_wildcard(&node, token);
+			if (is_env)
+				error = expand_env(&node, token, env);
+			else
+				error = expand_wildcard(&node, token);
 			if (error != ERR_NONE)
 				return (error);
 		}
 		node = next;
 	}
+	return (ERR_NONE);
+}
+
+t_error	expand(t_list **tk_list, char **env)
+{
+	t_error		error;
+
+	if (tk_list == NULL || env == NULL)
+		return (ERR_IMPLEMENTATION);
+	error = apply_expand(tk_list, env, 1);
+	if (error != ERR_NONE)
+		return (error);
+	error = apply_expand(tk_list, env, 0);
+	if (error != ERR_NONE)
+		return (error);
 	return (remove_empty_tokens(tk_list), ERR_NONE);
 }
