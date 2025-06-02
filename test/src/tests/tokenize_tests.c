@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:37:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/15 12:19:46 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/02 22:33:46 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ static t_test_case token_cases[] = {
 	{ NULL }
 };
 
+static char *env[] = {
+	NULL
+};
+
 static void	tokenize_basic_tests(void **case_name)
 {
 	t_test_case	*tc;
@@ -62,7 +66,7 @@ static void	tokenize_basic_tests(void **case_name)
 	if (tc == NULL)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	expected = create_token_list(tc->expected_tokens_tokenize);
-	error = tokenize(&tested, tc->input_tokenize);
+	error = tokenize(&tested, env, tc->input_tokenize);
 	equal = lst_equal(expected, tested, (void *) token_equal);
 	ft_lstclear(&tested, (void *) free_token);
 	ft_lstclear(&expected, (void *) free_token);
