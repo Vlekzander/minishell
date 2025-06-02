@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 23:37:37 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 00:23:31 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:17:26 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,46 +15,47 @@
 #include "libft.h"
 #include "utils.h"
 
-t_error	split_lst(t_list **lst, char *str, char c)
+static t_error	new_node(t_list **node, char *input, size_t size)
+{
+	char	*content;
+	t_list	*ptr;
+
+	if (node == NULL || input == NULL)
+		return (ERR_IMPLEMENTATION);
+	content = ft_strndup(input, size);
+	if (content == NULL)
+		return (ERR_ALLOCATION);
+	ptr = ft_lstnew(content);
+	if (ptr == NULL)
+		return (free(content), ERR_ALLOCATION);
+	return (*node = ptr, ERR_NONE);
+}
+
+t_error	split_lst(t_list **lst, char *input, char c)
 {
 	t_list	*list;
 	t_list	*node;
-	size_t	size;
 	char	*ptr;
-	char	*content;
+	t_error	error;
 
-	if (lst == NULL || str == NULL)
+	if (lst == NULL || input == NULL)
 		return (ERR_IMPLEMENTATION);
 	list = NULL;
-	if (*str == '\0')
+	while (*input != '\0')
 	{
-		content = ft_calloc(1, sizeof(char));
-		if (content == NULL)
-			return (ERR_ALLOCATION);
-		node = ft_lstnew(content);
-		if (node == NULL)
-			return (free(content), ft_lstclear(&list, free), ERR_ALLOCATION);
-		ft_lstadd_back(&list, node);
-	}
-	while (*str != '\0')
-	{
-		ptr = ft_strchr(str, c);
+		ptr = ft_strchr(input, c);
 		if (ptr == NULL)
-			ptr = str + ft_strlen(str);
-		size = ptr - str;
-		if (size > 0)
+			ptr = input + ft_strlen(input);
+		if (ptr - input > 0)
 		{
-			content = ft_strndup(str, size);
-			if (content == NULL)
-				return (ft_lstclear(&list, free), ERR_ALLOCATION);
-			node = ft_lstnew(content);
-			if (node == NULL)
-				return (free(content), ft_lstclear(&list, free), ERR_ALLOCATION);
+			error = new_node(&node, input, ptr - input);
+			if (error != ERR_NONE)
+				return (ft_lstclear(&list, free), error);
 			ft_lstadd_back(&list, node);
 		}
-		str = ptr;
+		input = ptr;
 		if (*ptr != '\0')
-			str++;
+			input++;
 	}
 	return (*lst = list, ERR_NONE);
 }

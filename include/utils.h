@@ -20,6 +20,6 @@ t_error	scan_dir(t_list **content, char *path);
 void	free_ddarray(void **array);
 char	*ft_strstr(char *str, char *to_find);
 char	*ft_strndup(char *src, size_t len);
-t_error	split_lst(t_list **lst, char *str, char c);
+t_error	split_lst(t_list **lst, char *input, char c);
 
 #endif

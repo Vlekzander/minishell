@@ -6,11 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:14:40 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 00:09:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:49:47 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "lexer.h"
 #include "test.h"
 #include "test_utils.h"
@@ -508,41 +510,11 @@ t_error	__wrap_globbing(t_list **out_files, t_list *in_files, t_pattern *pattern
 	return (mock_type(t_error));
 }
 
-void	__wrap_free_pattern(t_pattern *pattern)
-{
-	(void) pattern;
-}
-
 t_error	__wrap_scan_dir(t_list **content, char *path)
 {
 	(void) path;
 	*content = mock_type(t_list *);
 	return (mock_type(t_error));
-}
-
-void	__wrap_ft_lstclear(t_list **lst, void (*del)(void *))
-{
-	(void) lst;
-	(void) del;
-}
-
-static void	lstclear(t_list **lst, void (*del)(void *))
-{
-	t_list	*elem;
-
-	if (lst == NULL)
-		return ;
-	while (*lst != NULL)
-	{
-		elem = (*lst)->next;
-		ft_lstdelone(*lst, del);
-		*lst = elem;
-	}
-}
-
-void __wrap_free_varpos(t_varpos	*varpos)
-{
-	(void) varpos;
 }
 
 t_error	__wrap_extract_var(t_varpos **varpos, char *str)
@@ -577,13 +549,13 @@ static void expand_basic_tests(void **case_name)
 	i = 0;
 	while (i < size)
 	{
-		will_return(__wrap_extract_pattern, tc->extracted_pattern_expand[i]);
+		will_return(__wrap_extract_pattern, pattern_dup(tc->extracted_pattern_expand[i]));
 		will_return(__wrap_extract_pattern, ERR_NONE);
 		if (tc->extracted_pattern_expand[i] != NULL)
 		{
 			will_return(__wrap_scan_dir, NULL);
 			will_return(__wrap_scan_dir, ERR_NONE);
-			will_return(__wrap_globbing, tc->filtered_files_expand[j++]);
+			will_return(__wrap_globbing, lst_dup(tc->filtered_files_expand[j++], (void *) ft_strdup, free));
 			will_return(__wrap_globbing, ERR_NONE);
 		}
 		i++;
@@ -591,7 +563,7 @@ static void expand_basic_tests(void **case_name)
 	i = 0;
 	while (tc->extracted_env_variable_expand[i] != NULL)
 	{
-		will_return(__wrap_extract_var, tc->extracted_env_variable_expand[i]);
+		will_return(__wrap_extract_var, varpos_dup(tc->extracted_env_variable_expand[i]));
 		will_return(__wrap_extract_var, ERR_NONE);
 		i++;
 	}
@@ -604,12 +576,12 @@ static void expand_basic_tests(void **case_name)
 		print_token_list(expected);
 		printf("Tested:\t\t");
 		print_token_list(tested);
-		lstclear(&tested, (void *) free_token);
-		lstclear(&expected, (void *) free_token);
+		ft_lstclear(&tested, (void *) free_token);
+		ft_lstclear(&expected, (void *) free_token);
 		assert_true(0);
 	}
-	lstclear(&tested, (void *) free_token);
-	lstclear(&expected, (void *) free_token);
+	ft_lstclear(&tested, (void *) free_token);
+	ft_lstclear(&expected, (void *) free_token);
 	printf(SUCCESS_MSG, (char *) *case_name);
 	return(assert_true(1));
 }

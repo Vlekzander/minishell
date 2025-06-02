@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 11:15:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/03/25 11:20:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:41:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,7 @@ t_token	*create_token(t_token_type type, char *value)
 		return (NULL);
 	token->type = type;
 	token->value = ft_strdup(value);
+	if (value != NULL && token->value == NULL)
+		return (free_token(token), NULL);
 	return (token);
 }

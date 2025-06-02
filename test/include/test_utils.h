@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:48:19 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/22 13:01:23 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:48:20 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 
 t_test_case	*find_case(t_test_case *cases, const char *name);
 t_list		*create_token_list(char **strings);
+t_list		*lst_dup(t_list *src, void *(*dup)(void *), void (*del)(void *));
+t_pattern	*pattern_dup(t_pattern *pattern);
+t_varpos	*varpos_dup(t_varpos *varpos);
 int			ast_equal(t_ast *a, t_ast *b);
 int			lst_equal(t_list *a, t_list *b, int (*equ)(void *, void *));
 int			str_equal(char *a, char *b);
