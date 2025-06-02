@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:14:40 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 16:19:11 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/03 00:14:43 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -523,7 +523,7 @@ static t_test_case expand_cases[] =
 			&(t_varpos) { NULL, 0 },
 			NULL
 		},
-		.expected_tokens_expand = { "echo", "hello", "$NONE", NULL },
+		.expected_tokens_expand = { "echo", "hello", NULL },
 	},
 	{
 		.name = "expand_var_quotted_suffix",
