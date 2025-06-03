@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 12:38:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/01 20:27:45 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:10:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,15 @@ static t_error	scan_next_var(char *str, int *index, int *len)
 	return (ERR_NONE);
 }
 
-t_error	extract_var(t_varpos **varpos, char *str)
+t_error	extract_var(t_vref **varpos, char *str)
 {
-	t_error		error;
-	t_varpos	*var;
-	int			len;
+	t_error	error;
+	t_vref	*var;
+	int		len;
 
 	if (varpos == NULL || str == NULL)
 		return (ERR_IMPLEMENTATION);
-	var = create_varpos();
+	var = create_vref();
 	if (var == NULL)
 		return (*varpos = NULL, ERR_ALLOCATION);
 	len = 0;

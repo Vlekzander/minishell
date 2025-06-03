@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:18:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 16:28:42 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:18:27 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,59 +16,63 @@
 #include "lexer_internal.h"
 #include "utils.h"
 
-static t_error	apply_env_expand(t_list	**node, t_token *token, char *expanded)
+static t_error	process_exp_env(t_list	**node, t_token *token, t_list *lst_var,
+									char **env)
 {
 	t_list	*list;
 	t_error	error;
+	char	*str;
 
-	if (node == NULL || token == NULL || expanded == NULL)
+	if (node == NULL || token == NULL || env == NULL)
 		return (ERR_IMPLEMENTATION);
-	if (expanded != token->value)
+	error = override_vars(&str, token->value, lst_var, env);
+	if (error != ERR_NONE)
+		return (ft_lstclear(&lst_var, (void *) free_vref), error);
+	ft_lstclear(&lst_var, (void *) free_vref);
+	if (str == token->value)
+		return (ERR_NONE);
+	if (ft_strlen(str) == 0)
+		token->value[0] = '\0';
+	else
 	{
-		if (ft_strlen(expanded) == 0)
-			token->value[0] = '\0';
-		else
-		{
-			error = split_lst(&list, expanded, ' ');
-			if (error != ERR_NONE)
-				return (error);
-			error = insert_tkword_sublist(node, list);
-			ft_lstclear(&list, free);
-			if (error != ERR_NONE)
-				return (error);
-		}
-		free(expanded);
+		error = split_lst(&list, str, ' ');
+		if (error != ERR_NONE)
+			return (free(str), error);
+		error = insert_tkword_sublist(node, list);
+		if (error != ERR_NONE)
+			return (free(str), ft_lstclear(&list, free), error);
+		ft_lstclear(&list, free);
 	}
-	return (ERR_NONE);
+	return (free(str), ERR_NONE);
 }
 
 static t_error	expand_env(t_list **node, t_token *token, char **env)
 {
-	t_varpos	*var;
-	char		*str;
-	char		*temp;
-	t_error		error;
+	t_vref	*var;
+	char	*str;
+	t_list	*vrefs;
+	t_list	*node_var;
+	t_error	error;
 
 	if (node == NULL || *node == NULL || token == NULL || env == NULL)
 		return (ERR_IMPLEMENTATION);
-	var = NULL;
+	vrefs = NULL;
 	str = token->value;
-	while (var == NULL || var->str != NULL)
+	while (1)
 	{
-		free_varpos(var);
-		temp = str;
-		error = extract_var(&var, temp);
+		error = extract_var(&var, str);
 		if (error != ERR_NONE)
-			return (free_varpos(var), error);
+			return (free_vref(var), error);
 		if (var->str == NULL)
 			break ;
-		error = override_var(&str, temp, var, env);
-		if (error != ERR_NONE)
-			return (free_varpos(var), error);
-		if (temp != token->value)
-			free(temp);
+		node_var = ft_lstnew(var);
+		if (node_var == NULL)
+			return (ft_lstclear(&vrefs, (void *) free_vref),
+				free_vref(var), ERR_ALLOCATION);
+		ft_lstadd_back(&vrefs, node_var);
+		str = token->value + var->index + ft_strlen(var->str);
 	}
-	return (free_varpos(var), apply_env_expand(node, token, str), ERR_NONE);
+	return (free_vref(var), process_exp_env(node, token, vrefs, env), ERR_NONE);
 }
 
 static t_error	expand_wildcard(t_list **node, t_token *token)

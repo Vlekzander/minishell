@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_varpos.c                                      :+:      :+:    :+:   */
+/*   create_varpos.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/01 20:11:27 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/01 20:22:47 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/01 20:10:43 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/03 16:09:20 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "data.h"
 
-void	free_varpos(t_varpos *varpos)
+t_vref	*create_vref(void)
 {
-	if (varpos == NULL)
-		return ;
-	free(varpos->str);
-	free(varpos);
+	t_vref	*vref;
+
+	vref = ft_calloc(1, sizeof(t_vref));
+	if (vref == NULL)
+		return (NULL);
+	return (vref);
 }

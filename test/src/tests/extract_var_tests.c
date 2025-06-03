@@ -21,7 +21,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "var",
 		.input_extract = "$VAR",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = "$VAR",
 			.index = 0
 		}
@@ -29,7 +29,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "var_prefix",
 		.input_extract = "sometext$VAR",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = "$VAR",
 			.index = 8
 		}
@@ -37,7 +37,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "var_suffix",
 		.input_extract = "$VAR sometext",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = "$VAR",
 			.index = 0
 		}
@@ -45,7 +45,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "var_prefix_suffix",
 		.input_extract = "sometext$VAR sometext",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = "$VAR",
 			.index = 8
 		}
@@ -53,7 +53,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "var_dquote",
 		.input_extract = "\"$VAR\"",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = "$VAR",
 			.index = 1
 		}
@@ -61,7 +61,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "var_squote",
 		.input_extract = "'$VAR'",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = NULL,
 			.index = 0
 		}
@@ -69,7 +69,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "digit_at_first_char",
 		.input_extract = "$4four",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = NULL,
 			.index = 0
 		}
@@ -77,7 +77,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "forbidden_char_at_end",
 		.input_extract = "$VAR.",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = "$VAR",
 			.index = 0
 		}
@@ -85,7 +85,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "last_return_value",
 		.input_extract = "$?",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = "$?",
 			.index = 0
 		}
@@ -93,7 +93,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "name_with_digit",
 		.input_extract = "$VAR1",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = "$VAR1",
 			.index = 0
 		}
@@ -101,7 +101,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "underscore_start",
 		.input_extract = "$_VAR",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = "$_VAR",
 			.index = 0
 		}
@@ -109,7 +109,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "simple_text",
 		.input_extract = "hello world",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = NULL,
 			.index = 0
 		}
@@ -117,7 +117,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "only_dollar",
 		.input_extract = "$",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = NULL,
 			.index = 0
 		}
@@ -125,7 +125,7 @@ static t_test_case extract_var_cases[] =
 	{
 		.name = "var_followed_by_quotes",
 		.input_extract = "$VAR\"text\"",
-		.expected_var = &(t_varpos) {
+		.expected_var = &(t_vref) {
 			.str = "$VAR",
 			.index = 0
 		}
@@ -136,8 +136,8 @@ static t_test_case extract_var_cases[] =
 static void	extract_var_basic_tests(void **case_name)
 {
 	t_test_case	*tc;
-	t_varpos	*tested;
-	t_varpos	*base;
+	t_vref	*tested;
+	t_vref	*base;
 	t_error		error;
 	int			equal;
 
@@ -151,7 +151,7 @@ static void	extract_var_basic_tests(void **case_name)
 	equal = (tested->str == NULL && base->str == NULL) || (str_equal(tested->str, base->str) && tested->index == base->index);
 	if (!equal)
 		printf("TESTED: VAR:%s - INDEX:%d\n  BASE: VAR:%s - INDEX:%d \n", tested->str, tested->index, base->str, base->index);
-	free_varpos(tested);
+	free_vref(tested);
 	if (!equal || error != ERR_NONE)
 		return(printf(FAIL_MSG, (char *) *case_name), assert_true(0));
 	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));

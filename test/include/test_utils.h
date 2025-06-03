@@ -20,7 +20,7 @@ t_test_case	*find_case(t_test_case *cases, const char *name);
 t_list		*create_token_list(char **strings);
 t_list		*lst_dup(t_list *src, void *(*dup)(void *), void (*del)(void *));
 t_pattern	*pattern_dup(t_pattern *pattern);
-t_varpos	*varpos_dup(t_varpos *varpos);
+t_vref	*varpos_dup(t_vref *varpos);
 int			ast_equal(t_ast *a, t_ast *b);
 int			lst_equal(t_list *a, t_list *b, int (*equ)(void *, void *));
 int			str_equal(char *a, char *b);

@@ -35,17 +35,17 @@ t_pattern	*pattern_dup(t_pattern *src)
 	return (pattern);
 }
 
-t_varpos	*varpos_dup(t_varpos *src)
+t_vref	*varpos_dup(t_vref *src)
 {
-	t_varpos	*varpos;
+	t_vref	*varpos;
 	if (src == NULL)
 		return (NULL);
-	varpos = ft_calloc(1, sizeof(t_varpos));
+	varpos = ft_calloc(1, sizeof(t_vref));
 	if (varpos == NULL)
 		return (NULL);
 	varpos->index = src->index;
 	varpos->str = ft_strdup(src->str);
 	if (src->str != NULL && varpos->str == NULL)
-		return (free_varpos(varpos), NULL);
+		return (free_vref(varpos), NULL);
 	return (varpos);
 }
