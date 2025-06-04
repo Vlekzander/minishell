@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:04:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/14 19:01:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:32:04 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1030,6 +1030,33 @@ static t_test_case parse_ast_cases[] = {
 			}
 		}
 	},
+	{
+		.name = "cmd_arg_between_redirs",
+		.input_tokens = { "cat", "<", "in1.txt", "hello", "<", "in2.txt", "<", "in3.txt", NULL },
+		.expected_ast = &(t_ast)
+		{
+			.type = NODE_COMMAND,
+			.exit_code = 0,
+			.command = &(t_command)
+			{
+				.path = "cat",
+				.args = (char*[]){"cat", "hello", NULL}
+			},
+			.redirs = &(t_list)
+			{
+				.content = &(t_redir){.type = REDIR_IN, .out = "in1.txt", .append = 0},
+				.next = &(t_list)
+				{
+					.content = &(t_redir){.type = REDIR_IN, .out = "in2.txt", .append = 0},
+					.next = &(t_list)
+					{
+						.content = &(t_redir){.type = REDIR_IN, .out = "in3.txt", .append = 0},
+						.next = NULL
+					}
+				}
+			}
+		}
+	},
 	{ NULL }
 };
 
@@ -1145,6 +1172,7 @@ t_test_result	execute_tests(void)
 		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[30].name),
 		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[31].name),
 		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[32].name),
+		cmocka_unit_test_prestate(parse_ast_basic_tests, parse_ast_cases[33].name),
 		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[0].name),
 		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[1].name),
 		cmocka_unit_test_prestate(parse_ast_error_tests, parse_ast_error_cases[2].name),
