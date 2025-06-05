@@ -6,13 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:25:13 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 20:34:49 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 23:05:15 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "env.h"
 #include "test.h"
 #include "test_utils.h"
@@ -385,13 +384,24 @@ static t_test_case env_cases[] =
 	{ NULL }
 };
 
-char	**env_expected = NULL;
-char	**env_tested = NULL;
-char	*get_expected = NULL;
-char	*get_env_tested = NULL;
-char	*get_var_tested = NULL;
+char	**env_expected;
+char	**env_tested;
+char	*get_expected;
+char	*get_env_tested;
+char	*get_var_tested;
 
-static int test_teardown(void **state) {
+static int	test_setup(void **state)
+{
+	(void) state;
+	env_expected = NULL;
+	env_tested = NULL;
+	get_expected = NULL;
+	get_env_tested = NULL;
+	get_var_tested = NULL;
+	return (0);
+}
+
+static int	test_teardown(void **state) {
 	(void) state;
 	free_ddarray((void **) env_tested);
 	free(get_env_tested);
@@ -522,27 +532,27 @@ static void	set_var_basic_tests(void **case_name)
 t_test_result	execute_tests(void)
 {
 	const struct CMUnitTest test_cases[] = {
-		cmocka_unit_test_prestate_setup_teardown(load_env_basic_tests, NULL, test_teardown, env_cases[0].name),
-		cmocka_unit_test_prestate_setup_teardown(load_env_basic_tests, NULL, test_teardown, env_cases[1].name),
-		cmocka_unit_test_prestate_setup_teardown(load_env_basic_tests, NULL, test_teardown, env_cases[2].name),
-		cmocka_unit_test_prestate_setup_teardown(get_env_basic_tests, NULL, test_teardown, env_cases[3].name),
-		cmocka_unit_test_prestate_setup_teardown(get_env_basic_tests, NULL, test_teardown, env_cases[4].name),
-		cmocka_unit_test_prestate_setup_teardown(get_env_basic_tests, NULL, test_teardown, env_cases[5].name),
-		cmocka_unit_test_prestate_setup_teardown(get_var_basic_tests, NULL, test_teardown, env_cases[6].name),
-		cmocka_unit_test_prestate_setup_teardown(get_var_basic_tests, NULL, test_teardown, env_cases[7].name),
-		cmocka_unit_test_prestate_setup_teardown(get_var_basic_tests, NULL, test_teardown, env_cases[8].name),
-		cmocka_unit_test_prestate_setup_teardown(get_var_basic_tests, NULL, test_teardown, env_cases[9].name),
-		cmocka_unit_test_prestate_setup_teardown(get_var_basic_tests, NULL, test_teardown, env_cases[10].name),
-		cmocka_unit_test_prestate_setup_teardown(remove_var_basic_tests, NULL, test_teardown, env_cases[11].name),
-		cmocka_unit_test_prestate_setup_teardown(remove_var_basic_tests, NULL, test_teardown, env_cases[12].name),
-		cmocka_unit_test_prestate_setup_teardown(remove_var_basic_tests, NULL, test_teardown, env_cases[13].name),
-		cmocka_unit_test_prestate_setup_teardown(remove_var_basic_tests, NULL, test_teardown, env_cases[14].name),
-		cmocka_unit_test_prestate_setup_teardown(remove_var_basic_tests, NULL, test_teardown, env_cases[15].name),
-		cmocka_unit_test_prestate_setup_teardown(set_var_basic_tests, NULL, test_teardown, env_cases[16].name),
-		cmocka_unit_test_prestate_setup_teardown(set_var_basic_tests, NULL, test_teardown, env_cases[17].name),
-		cmocka_unit_test_prestate_setup_teardown(set_var_basic_tests, NULL, test_teardown, env_cases[18].name),
-		cmocka_unit_test_prestate_setup_teardown(set_var_basic_tests, NULL, test_teardown, env_cases[19].name),
-		cmocka_unit_test_prestate_setup_teardown(set_var_basic_tests, NULL, test_teardown, env_cases[20].name),
+		cmocka_unit_test_prestate_setup_teardown(load_env_basic_tests, test_setup, test_teardown, env_cases[0].name),
+		cmocka_unit_test_prestate_setup_teardown(load_env_basic_tests, test_setup, test_teardown, env_cases[1].name),
+		cmocka_unit_test_prestate_setup_teardown(load_env_basic_tests, test_setup, test_teardown, env_cases[2].name),
+		cmocka_unit_test_prestate_setup_teardown(get_env_basic_tests, test_setup, test_teardown, env_cases[3].name),
+		cmocka_unit_test_prestate_setup_teardown(get_env_basic_tests, test_setup, test_teardown, env_cases[4].name),
+		cmocka_unit_test_prestate_setup_teardown(get_env_basic_tests, test_setup, test_teardown, env_cases[5].name),
+		cmocka_unit_test_prestate_setup_teardown(get_var_basic_tests, test_setup, test_teardown, env_cases[6].name),
+		cmocka_unit_test_prestate_setup_teardown(get_var_basic_tests, test_setup, test_teardown, env_cases[7].name),
+		cmocka_unit_test_prestate_setup_teardown(get_var_basic_tests, test_setup, test_teardown, env_cases[8].name),
+		cmocka_unit_test_prestate_setup_teardown(get_var_basic_tests, test_setup, test_teardown, env_cases[9].name),
+		cmocka_unit_test_prestate_setup_teardown(get_var_basic_tests, test_setup, test_teardown, env_cases[10].name),
+		cmocka_unit_test_prestate_setup_teardown(remove_var_basic_tests, test_setup, test_teardown, env_cases[11].name),
+		cmocka_unit_test_prestate_setup_teardown(remove_var_basic_tests, test_setup, test_teardown, env_cases[12].name),
+		cmocka_unit_test_prestate_setup_teardown(remove_var_basic_tests, test_setup, test_teardown, env_cases[13].name),
+		cmocka_unit_test_prestate_setup_teardown(remove_var_basic_tests, test_setup, test_teardown, env_cases[14].name),
+		cmocka_unit_test_prestate_setup_teardown(remove_var_basic_tests, test_setup, test_teardown, env_cases[15].name),
+		cmocka_unit_test_prestate_setup_teardown(set_var_basic_tests, test_setup, test_teardown, env_cases[16].name),
+		cmocka_unit_test_prestate_setup_teardown(set_var_basic_tests, test_setup, test_teardown, env_cases[17].name),
+		cmocka_unit_test_prestate_setup_teardown(set_var_basic_tests, test_setup, test_teardown, env_cases[18].name),
+		cmocka_unit_test_prestate_setup_teardown(set_var_basic_tests, test_setup, test_teardown, env_cases[19].name),
+		cmocka_unit_test_prestate_setup_teardown(set_var_basic_tests, test_setup, test_teardown, env_cases[20].name),
 	};
 	char			name[] = "env/CRUD";
 	t_test_result	result;

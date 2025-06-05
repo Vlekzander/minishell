@@ -6,17 +6,15 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 18:52:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 20:39:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 23:06:34 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "parser.h"
 #include "test.h"
 #include "test_utils.h"
-#include "utils.h"
 
 static t_test_case parse_ast_cases[] =
 {
@@ -1302,11 +1300,20 @@ static t_test_case parse_ast_error_cases[] =
 	{ NULL }
 };
 
-static t_list	*tokens = NULL;
-static t_ast	*expected = NULL;
-static t_ast	*tested = NULL;
+static t_list	*tokens;
+static t_ast	*expected;
+static t_ast	*tested;
 
-static int test_teardown(void **state) {
+static int	test_setup(void **state)
+{
+	(void) state;
+	tokens = NULL;
+	expected = NULL;
+	tested = NULL;
+	return (0);
+}
+
+static int	test_teardown(void **state) {
 	(void) state;
 	free_ast(tested);
 	ft_lstclear(&tokens, (void *) free_token);
@@ -1357,7 +1364,7 @@ static void	parse_ast_error_tests(void **case_name)
 	if (tokens == NULL && data->input_tokens[0] != NULL)
 		return(printf(FAIL_MSG, (char *) *case_name, "create_token_list failed"), assert_true(0));
 	error = parse_ast(&tested, tokens);
-	equal = ast_equal(expected, tested);
+	equal = tested == NULL;
 	if (error != data->expected_error)
 		return(printf(FAIL_MSG, (char *) *case_name, "error"), assert_true(0));
 	if (!equal)
@@ -1402,28 +1409,28 @@ t_test_result	execute_tests(void)
 		cmocka_unit_test_prestate_setup_teardown(parse_ast_basic_tests, NULL, test_teardown, parse_ast_cases[31].name),
 		cmocka_unit_test_prestate_setup_teardown(parse_ast_basic_tests, NULL, test_teardown, parse_ast_cases[32].name),
 		cmocka_unit_test_prestate_setup_teardown(parse_ast_basic_tests, NULL, test_teardown, parse_ast_cases[33].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[0].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[1].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[2].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[3].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[4].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[5].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[6].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[7].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[8].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[9].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[10].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[11].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[12].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[13].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[14].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[15].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[16].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[17].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[18].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[19].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[20].name),
-		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, NULL, test_teardown, parse_ast_error_cases[21].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[0].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[1].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[2].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[3].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[4].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[5].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[6].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[7].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[8].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[9].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[10].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[11].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[12].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[13].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[14].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[15].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[16].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[17].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[18].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[19].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[20].name),
+		cmocka_unit_test_prestate_setup_teardown(parse_ast_error_tests, test_setup, test_teardown, parse_ast_error_cases[21].name),
 	};
 	char	name[] = "parser/parse_ast";
 	t_test_result	result;

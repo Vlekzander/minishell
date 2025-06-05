@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:30:41 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 20:36:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 23:05:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,14 @@ static t_test_case extract_var_cases[] =
 static t_vref	*expected = NULL;
 static t_vref	*tested = NULL;
 
-static int test_teardown(void **state) {
+static int	test_setup(void **state) {
+	(void) state;
+	expected = NULL;
+	tested = NULL;
+	return (0);
+}
+
+static int	test_teardown(void **state) {
 	(void) state;
 	free_vref(tested);
 	return (0);
@@ -209,20 +216,20 @@ static void	extract_var_basic_tests(void **case_name)
 t_test_result	execute_tests(void)
 {
 	const struct CMUnitTest test_cases[] = {
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[0].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[1].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[2].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[3].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[4].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[5].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[6].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[7].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[8].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[9].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[10].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[11].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[12].name),
-		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, NULL, test_teardown, extract_var_cases[13].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[0].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[1].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[2].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[3].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[4].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[5].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[6].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[7].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[8].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[9].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[10].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[11].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[12].name),
+		cmocka_unit_test_prestate_setup_teardown(extract_var_basic_tests, test_setup, test_teardown, extract_var_cases[13].name),
 	};
 	char			name[] = "lexer/extract_var";
 	t_test_result	result;

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 19:39:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 20:33:16 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 23:07:06 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -766,8 +766,8 @@ static char *env[] = {
 	"CCC=Valorant",
 	NULL
 };
-static t_list	*tested = NULL;
-static t_list	*expected = NULL;
+static t_list	*tested;
+static t_list	*expected;
 
 t_error	__wrap_extract_pattern(t_pattern **pattern, char *str)
 {
@@ -798,7 +798,14 @@ t_error	__wrap_extract_var(t_vref **varpos, char *str)
 	return (mock_type(t_error));
 }
 
-static int test_teardown(void **state) {
+static int	test_setup(void **state) {
+	(void) state;
+	tested = NULL;
+	expected = NULL;
+	return (0);
+}
+
+static int	test_teardown(void **state) {
 	(void) state;
 	ft_lstclear(&tested, (void *) free_token);
 	ft_lstclear(&expected, (void *) free_token);
@@ -869,33 +876,33 @@ static void expand_basic_tests(void **case_name)
 t_test_result	execute_tests(void)
 {
 	const struct CMUnitTest test_cases[] = {
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[0].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[1].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[2].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[3].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[4].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[5].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[6].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[7].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[8].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[9].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[10].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[11].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[12].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[13].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[14].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[15].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[16].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[17].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[18].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[19].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[20].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[21].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[22].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[23].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[24].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[25].name),
-		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, NULL, test_teardown, expand_cases[26].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[0].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[1].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[2].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[3].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[4].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[5].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[6].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[7].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[8].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[9].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[10].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[11].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[12].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[13].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[14].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[15].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[16].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[17].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[18].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[19].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[20].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[21].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[22].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[23].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[24].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[25].name),
+		cmocka_unit_test_prestate_setup_teardown(expand_basic_tests, test_setup, test_teardown, expand_cases[26].name),
 	};
 	char			name[] = "lexer/expand";
 	t_test_result	result;

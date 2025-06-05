@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 19:43:54 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 22:43:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,13 @@ typedef struct s_extract_var_case
 	char	*input;
 	t_vref	*expected_vref;
 }	t_extract_var_case;
+
+typedef struct s_globbing_case
+{
+	t_list		*input_files;
+	t_pattern	*pattern;
+	t_list		*expected_out_files;
+}	t_globbing_case;
 
 typedef struct s_parse_ast_case
 {
