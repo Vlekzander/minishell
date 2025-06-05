@@ -6,12 +6,82 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 12:58:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 18:38:05 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 19:09:01 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
 #include "test_utils.h"
+
+static int	redir_equal(t_list *a, t_list *b)
+{
+	t_redir	*redir_a;
+	t_redir	*redir_b;
+
+	if (a == NULL || b == NULL)
+		return (a == b);
+	while (a != NULL && b != NULL)
+	{
+		redir_a = a->content;
+		redir_b = b->content;
+		if (redir_a->type != redir_b->type)
+			return (0);
+		if (redir_a->type == REDIR_IN && !str_equal(redir_a->in, redir_b->in))
+			return (0);
+		if (redir_a->type == REDIR_OUT && !str_equal(redir_a->out, redir_b->out) && redir_a->append != redir_b->append)
+			return (0);
+		if (redir_a->type == REDIR_HEREDOC && !str_equal(redir_a->heredoc, redir_b->heredoc))
+			return (0);
+		a = a->next;
+		b = b->next;
+	}
+
+	return (a == b);
+}
+
+static int	command_equal(t_command *a, t_command *b)
+{
+	if (a == NULL || b == NULL)
+		return (a == b);
+	if (!str_equal(a->path, b->path))
+		return (0);
+	if (!str_array_equal(a->args, b->args))
+		return (0);
+	return (1);
+}
+
+static int	pipeline_equal(t_list *a, t_list *b)
+{
+	if (a == NULL || b == NULL)
+		return (a == b);
+	while (a != NULL && b != NULL)
+	{
+		if (!ast_equal(a->content, b->content))
+			return (0);
+		a = a->next;
+		b = b->next;
+	}
+	return (a == b);
+}
+
+int	ast_equal(t_ast *a, t_ast *b)
+{
+	if (a == NULL || b == NULL)
+		return (a == b);
+	if (a->type != b->type)
+		return (0);
+	if (a->type == NODE_COMMAND)
+		return (command_equal(a->command, b->command) && redir_equal(a->redirs, b->redirs));
+	if (a->type == NODE_PIPELINE)
+		return (pipeline_equal(a->pipeline, b->pipeline));
+	if (a->type == NODE_AND || a->type == NODE_OR)
+		return (ast_equal(a->left, b->left) && ast_equal(a->right, b->right));
+	if (a->type == NODE_SUBSHELL)
+		return (ast_equal(a->child, b->child) && redir_equal(a->redirs, b->redirs));
+	if (a->type == NODE_REDIR)
+		return (redir_equal(a->redirs, b->redirs));
+	return (0);
+}
 
 int	lst_equal(t_list *a, t_list *b, int (*equ)(void *, void *))
 {

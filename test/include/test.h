@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 18:26:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 19:15:09 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,16 @@ typedef struct s_extract_var_case
 	char	*input;
 	t_vref	*expected_vref;
 }	t_extract_var_case;
+
+typedef struct s_parse_ast_case
+{
+	char	*input_tokens[CASE_ARRAY_MAX];
+	union
+	{
+		t_ast	*expected_ast;
+		t_error	expected_error;
+	};
+}	t_parse_ast_case;
 
 typedef struct s_tokenize_case
 {
