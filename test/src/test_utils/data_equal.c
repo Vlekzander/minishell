@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 12:58:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 16:40:30 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:38:05 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,17 @@ int	lst_equal(t_list *a, t_list *b, int (*equ)(void *, void *))
 		b = b->next;
 	}
 	return (a == b);
+}
+
+int	pattern_equal(t_pattern *a, t_pattern *b)
+{
+	if (a == NULL || b == NULL)
+		return (a == b);
+	if (!str_equal(a->prefix, b->prefix))
+		return (0);
+	if (!str_equal(a->suffix, b->suffix))
+		return (0);
+	return (lst_equal(a->infixes, b->infixes, (void *) str_equal));
 }
 
 int	str_array_equal(char **a, char **b)

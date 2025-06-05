@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 17:39:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:26:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <stdarg.h>
 # include <stddef.h>
 # include <cmocka.h>
-
 # include "data.h"
 # include "error.h"
 # include "libft.h"
@@ -42,6 +41,12 @@ typedef struct s_env_case
 		char	*str_env;
 	};
 }	t_env_case;
+
+typedef struct s_extract_pattern_case
+{
+	char		*input;
+	t_pattern	*expected_pattern;
+}	t_extract_pattern_case;
 
 typedef struct s_extract_var_case
 {
