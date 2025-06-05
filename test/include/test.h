@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 19:15:09 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 19:43:54 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,15 @@ typedef struct s_env_case
 		char	*str_env;
 	};
 }	t_env_case;
+
+typedef struct s_expand_case
+{
+	char		*input_tokens[CASE_ARRAY_MAX];
+	t_vref		*extracted_vrefs[CASE_ARRAY_MAX];
+	t_pattern	*extracted_patterns[CASE_ARRAY_MAX];
+	t_list		*filtered_files[CASE_ARRAY_MAX];
+	char		*expected_tokens[CASE_ARRAY_MAX];
+}	t_expand_case;
 
 typedef struct s_extract_pattern_case
 {

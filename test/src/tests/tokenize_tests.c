@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 14:02:30 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 16:35:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 20:37:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ static char		*env[] = { NULL };
 static t_list	*expected = NULL;
 static t_list	*tested = NULL;
 
-static int test_setup(void **state) {
-	(void) state;
-	expected = NULL;
-	tested = NULL;
-	return (0);
+t_error	__wrap_expand(t_list **tk_list, char **env)
+{
+	(void) tk_list;
+	(void) env;
+	return (ERR_NONE);
 }
 
 static int test_teardown(void **state) {
@@ -92,33 +92,33 @@ static void	tokenize_basic_tests(void **case_name)
 t_test_result	execute_tests(void)
 {
 	const struct CMUnitTest test_cases[] = {
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[0].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[1].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[2].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[3].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[4].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[5].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[6].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[7].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[8].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[9].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[10].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[11].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[12].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[13].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[14].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[15].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[16].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[17].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[18].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[19].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[20].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[21].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[22].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[23].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[24].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[25].name),
-		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, test_setup, test_teardown, tokenize_cases[26].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[0].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[1].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[2].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[3].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[4].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[5].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[6].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[7].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[8].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[9].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[10].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[11].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[12].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[13].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[14].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[15].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[16].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[17].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[18].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[19].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[20].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[21].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[22].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[23].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[24].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[25].name),
+		cmocka_unit_test_prestate_setup_teardown(tokenize_basic_tests, NULL, test_teardown, tokenize_cases[26].name),
 	};
 	char	name[] = "lexer/tokenize";
 	t_test_result	result;

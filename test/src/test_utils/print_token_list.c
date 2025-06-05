@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mocks.c                                            :+:      :+:    :+:   */
+/*   print_token_list.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/05 14:14:10 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 15:00:39 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/05 20:32:39 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/05 20:33:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "test.h"
 
-__attribute__((weak))
-t_error	__wrap_expand(t_list **tk_list, char **env)
+void	print_token_list(t_list *tokens)
 {
-	(void) tk_list;
-	(void) env;
-	return (ERR_NONE);
+	t_token *token;
+
+	printf("[ ");
+	while (tokens != NULL)
+	{
+		token = tokens->content;
+		printf("(%d) %s, ", token->type, token->value);
+		tokens = tokens->next;
+	}
+	printf("(null) ]\n");
 }
