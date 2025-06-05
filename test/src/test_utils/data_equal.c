@@ -1,15 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst_equal.c                                        :+:      :+:    :+:   */
+/*   data_equal.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 18:58:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 19:01:13 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/05 12:58:49 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/05 12:59:56 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <string.h>
 #include "test_utils.h"
 
 int	lst_equal(t_list *a, t_list *b, int (*equ)(void *, void *))
@@ -22,4 +23,22 @@ int	lst_equal(t_list *a, t_list *b, int (*equ)(void *, void *))
 		b = b->next;
 	}
 	return (a == b);
+}
+
+int str_equal(char *a, char *b)
+{
+	if (a == NULL || b == NULL)
+		return (a == b);
+	return (strcmp(a, b) == 0);
+}
+
+int	token_equal(t_token *a, t_token *b)
+{
+	if (a == NULL || b == NULL || a->type != b->type)
+		return (0);
+	if (a->value == NULL && b->value == NULL)
+		return (1);
+	if (a->value == NULL || b->value == NULL)
+		return (0);
+	return (str_equal(a->value, b->value));
 }

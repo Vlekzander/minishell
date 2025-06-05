@@ -34,23 +34,14 @@ test: $(TEST_BINS)
 	done; \
 	printf "[ $(YELLOW)RESULTS$(RESET) ] Tests failed: $$fails\n";
 
-wraps_expand_tests = --wrap=extract_var,--wrap=scan_dir,
+wraps_tokenize_tests = -Wl,--wrap=expand
 
 bin_test/%: $(TEST_VARIANTS_DIR)/%.o $(OBJECTS_TEST)
 	@mkdir -p bin_test
 	@echo "$(BLUE)✦ Building libraries...$(RESET)\r"
 	@make -C $(LIBFT_DIR) --no-print-directory
 	@printf "$(YELLOW)◈ Linking $@...$(RESET)\r"
-	@others="$(filter-out $(TEST_VARIANTS_DIR)/$*.c, $(TEST_VARIANTS))"; \
-	wraps="$(value wraps_$*)"; \
-	sep=""; \
-	for f in $$others; do \
-		name=$$(basename $$f); \
-		name=$${name%_tests.c}; \
-		wraps="$$wraps$$sep--wrap=$$name"; \
-		sep=","; \
-	done; \
-	$(CC) $^ $(LDFLAGS) -lcmocka -Wl,$$wraps -o $@
+	@$(CC) $(TEST_CFLAGS) $< $(OBJECTS_TEST) $(LDFLAGS) -lcmocka $(if $(value wraps_$*),$(wraps_$*)) -o $@
 	@printf "$(GREEN)➤ Executable $@ successfully built!$(RESET)\n"
 
 %.o: %.c

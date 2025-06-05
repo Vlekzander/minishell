@@ -5,12 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 18:25:42 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/22 19:16:00 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/05 14:01:59 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/05 14:02:17 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "test.h"
 
 int main(void) {

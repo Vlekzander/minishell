@@ -5,34 +5,23 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 18:57:44 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 19:00:49 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/05 10:49:46 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/05 14:14:35 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
 #include "test_utils.h"
 
-static size_t	cases_len(t_test_case *cases)
+t_test_case	*find_case(t_test_case *cases, char *name)
 {
-	size_t	size;
-
-	size = 0;
-	while (cases[size].name != NULL)
-		size++;
-	return (size);
-}
-
-t_test_case	*find_case(t_test_case *cases, const char *name)
-{
-	size_t	size;
 	size_t	i;
+	if (cases == NULL || name == NULL)
+		return (NULL);
 
-	size = cases_len(cases);
 	i = 0;
-	while (i < size)
+	while (cases[i].name != NULL)
 	{
-		if (strcmp(cases[i].name, name) == 0)
+		if (str_equal(cases[i].name, name))
 			return (&cases[i]);
 		i++;
 	}

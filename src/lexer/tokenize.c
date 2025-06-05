@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:23:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 22:33:24 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:56:42 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,17 @@ static void	remove_tokens_quotes(t_list *tokens)
 t_error	tokenize(t_list **tokens, char **env, char *input)
 {
 	t_error	error;
+	t_list	*tk_list;
 
 	if (tokens == NULL || env == NULL || input == NULL)
 		return (ERR_IMPLEMENTATION);
-	error = process_input(tokens, input);
+	tk_list = NULL;
+	error = process_input(&tk_list, input);
 	if (error != ERR_NONE)
 		return (error);
-	expand(tokens, env);
-	remove_tokens_quotes(*tokens);
-	return (ERR_NONE);
+	error = expand(&tk_list, env);
+	if (error != ERR_NONE)
+		return (ft_lstclear(&tk_list, (void *) free_token), error);
+	remove_tokens_quotes(tk_list);
+	return (*tokens = tk_list, ERR_NONE);
 }
