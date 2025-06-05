@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:25:13 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 17:06:45 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:29:14 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,98 +290,98 @@ static t_test_case env_cases[] =
 			}
 		}
 	},
-{
-	"set_var_new",
-	&(t_env_case)
 	{
-		.base_env = {
-			"AAA=111",
-			"BBB=222",
-			"CCC=333",
-			NULL
-		},
-		.key_env = "DDD",
-		.value_env = "444",
-		.edited_env = {
-			"AAA=111",
-			"BBB=222",
-			"CCC=333",
-			"DDD=444",
-			NULL
+		"set_var_new",
+		&(t_env_case)
+		{
+			.base_env = {
+				"AAA=111",
+				"BBB=222",
+				"CCC=333",
+				NULL
+			},
+			.key_env = "DDD",
+			.value_env = "444",
+			.edited_env = {
+				"AAA=111",
+				"BBB=222",
+				"CCC=333",
+				"DDD=444",
+				NULL
+			}
 		}
-	}
-},
-{
-	"set_var_exist",
-	&(t_env_case)
+	},
 	{
-		.base_env = {
-			"AAA=111",
-			"BBB=222",
-			"CCC=333",
-			NULL
-		},
-		.key_env = "CCC",
-		.value_env = "___",
-		.edited_env = {
-			"AAA=111",
-			"BBB=222",
-			"CCC=___",
-			NULL
+		"set_var_exist",
+		&(t_env_case)
+		{
+			.base_env = {
+				"AAA=111",
+				"BBB=222",
+				"CCC=333",
+				NULL
+			},
+			.key_env = "CCC",
+			.value_env = "___",
+			.edited_env = {
+				"AAA=111",
+				"BBB=222",
+				"CCC=___",
+				NULL
+			}
 		}
-	}
-},
-{
-	"set_var_empty_value",
-	&(t_env_case)
+	},
 	{
-		.base_env = {
-			"AAA=111",
-			"BBB=222",
-			"CCC=333",
-			NULL
-		},
-		.key_env = "CCC",
-		.value_env = "",
-		.edited_env = {
-			"AAA=111",
-			"BBB=222",
-			"CCC=",
-			NULL
+		"set_var_empty_value",
+		&(t_env_case)
+		{
+			.base_env = {
+				"AAA=111",
+				"BBB=222",
+				"CCC=333",
+				NULL
+			},
+			.key_env = "CCC",
+			.value_env = "",
+			.edited_env = {
+				"AAA=111",
+				"BBB=222",
+				"CCC=",
+				NULL
+			}
 		}
-	}
-},
-{
-	"set_var_new_empty_env",
-	&(t_env_case)
+	},
 	{
-		.base_env = {
-			NULL
-		},
-		.key_env = "kwa",
-		.value_env = "feur",
-		.edited_env = {
-			"kwa=feur",
-			NULL
+		"set_var_new_empty_env",
+		&(t_env_case)
+		{
+			.base_env = {
+				NULL
+			},
+			.key_env = "kwa",
+			.value_env = "feur",
+			.edited_env = {
+				"kwa=feur",
+				NULL
+			}
 		}
-	}
-},
-{
-	"set_var_exist_alone",
-	&(t_env_case)
+	},
 	{
-		.base_env = {
-			"kwa=feur",
-			NULL
-		},
-		.key_env = "kwa",
-		.value_env = "kou",
-		.edited_env = {
-			"kwa=kou",
-			NULL
+		"set_var_exist_alone",
+		&(t_env_case)
+		{
+			.base_env = {
+				"kwa=feur",
+				NULL
+			},
+			.key_env = "kwa",
+			.value_env = "kou",
+			.edited_env = {
+				"kwa=kou",
+				NULL
+			}
 		}
-	}
-},
+	},
 	{ NULL }
 };
 
