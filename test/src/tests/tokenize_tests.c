@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 14:02:30 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 14:58:01 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:35:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ static int test_teardown(void **state) {
 
 static void	tokenize_basic_tests(void **case_name)
 {
-	t_test_case *tc;
-	t_tokenize_case *data;
-	t_error error;
-	int equal;
+	t_test_case		*tc;
+	t_tokenize_case	*data;
+	t_error			error;
+	int				equal;
 
 	if (case_name == NULL)
 		return(printf("Implementation error.\n"), assert_true(0));

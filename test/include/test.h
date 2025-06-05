@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 14:57:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:29:59 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,21 @@ typedef struct s_tokenize_case
 	char	*input;
 	char	*expected_tokens[CASE_ARRAY_MAX];
 }	t_tokenize_case;
+
+typedef struct s_env_case
+{
+	char	*base_env[CASE_ARRAY_MAX];
+	char	*edited_env[CASE_ARRAY_MAX];
+	union
+	{
+		struct
+		{
+			char	*key_env;
+			char	*value_env;
+		};
+		char	*str_env;
+	};
+}	t_env_case;
 
 typedef struct s_test_case
 {

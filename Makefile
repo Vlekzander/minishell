@@ -17,6 +17,8 @@ TEST_VARIANT_OBJECTS = $(TEST_VARIANTS:.c=.o)
 TEST_BINS = $(patsubst $(TEST_VARIANTS_DIR)/%.c, bin_test/%, $(TEST_VARIANTS))
 DEPS_TEST = $(SOURCES_TEST:.c=.d) $(TEST_VARIANTS:.c=.d)
 
+wraps_tokenize_tests = -Wl,--wrap=expand
+
 all: $(NAME) $(TEST_BINS)
 
 $(NAME): $(OBJECTS)
@@ -33,8 +35,6 @@ test: $(TEST_BINS)
 		./$$exe || fails=$$((fails + $$?)); \
 	done; \
 	printf "[ $(YELLOW)RESULTS$(RESET) ] Tests failed: $$fails\n";
-
-wraps_tokenize_tests = -Wl,--wrap=expand
 
 bin_test/%: $(TEST_VARIANTS_DIR)/%.o $(OBJECTS_TEST)
 	@mkdir -p bin_test
