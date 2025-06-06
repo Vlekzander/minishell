@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 12:18:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/03 16:18:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:19:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static t_error	expand_wildcard(t_list **node, t_token *token)
 		if (filtered != NULL)
 			error = insert_tkword_sublist(node, filtered);
 		ft_lstclear(&files, free);
-		ft_lstclear(&filtered, free);
+		ft_lstclear(&filtered, NULL);
 	}
 	free_pattern(pattern);
 	return (error);

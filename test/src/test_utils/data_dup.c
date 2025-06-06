@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 20:01:27 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 20:02:13 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:22:54 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ t_list	*lst_dup(t_list *src, void *(*dup)(void *), void (*del)(void *))
 	lst = NULL;
 	while (src != NULL)
 	{
-		ptr = dup(src->content);
+		ptr = src->content;
+		if (dup != NULL)
+			ptr = dup(src->content);
 		if (ptr == NULL)
 			return (ft_lstclear(&lst, del), NULL);
 		node = ft_lstnew(ptr);
