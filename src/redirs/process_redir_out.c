@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirs.h                                           :+:      :+:    :+:   */
+/*   process_redir_out.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/05 23:40:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/06 19:18:07 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/06 19:18:31 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/06 19:27:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REDIRS_H
-# define REDIRS_H
-# include "data.h"
-# include "error.h"
+#include <unistd.h>
+#include "redirs.h"
 
-t_error	open_file(int *fd, char *path, int write, int append);
-t_error	handle_redirs(t_list *redirs);
-t_error	process_redir_in(t_redir *redir);
-t_error	process_redir_out(t_redir *redir);
+t_error	process_redir_out(t_redir *redir)
+{
+	int		fd;
+	t_error	error;
 
-#endif
+	if (redir == NULL || redir->type != REDIR_OUT || redir->out == NULL)
+		return (ERR_IMPLEMENTATION);
+	error = open_file(&fd, redir->out, 1, redir->append);
+	if (error != ERR_NONE)
+		return (error);
+	dup2(fd, STDOUT_FILENO);
+	return (close(fd), ERR_NONE);
+}
