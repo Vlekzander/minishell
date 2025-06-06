@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 22:43:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/06 12:25:26 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@
 # include "data.h"
 # include "error.h"
 # include "libft.h"
+
+typedef struct s_file
+{
+	char	name[CASE_ARRAY_MAX +1];
+	int		perm;
+	int		is_folder;
+}	t_file;
 
 typedef struct s_env_case
 {
@@ -69,6 +76,15 @@ typedef struct s_globbing_case
 	t_pattern	*pattern;
 	t_list		*expected_out_files;
 }	t_globbing_case;
+
+typedef struct s_open_file_case
+{
+	t_file	file;
+	int		write;
+	int		append;
+	int		create;
+	t_error	expected_error;
+}	t_open_file_case;
 
 typedef struct s_parse_ast_case
 {

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:48:19 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 20:33:58 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/06 10:38:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ t_list		*lst_dup(t_list *src, void *(*dup)(void *), void (*del)(void *));
 t_pattern	*pattern_dup(t_pattern *src);
 t_vref		*varpos_dup(t_vref *src);
 void		print_token_list(t_list *tokens);
+t_error		create_file(t_file file);
+t_error		delete_file(t_file file);
 
 #endif
