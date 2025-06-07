@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_process.c                                   :+:      :+:    :+:   */
+/*   remove_empty_tokens.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/02 14:26:51 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 14:29:54 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/07 16:17:14 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/07 18:23:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_internal.h"
+#include "lexer.h"
 
 void	remove_node(t_list *node, t_list *prev, t_list **tk_list)
 {

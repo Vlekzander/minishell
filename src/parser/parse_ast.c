@@ -6,12 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/05 15:56:17 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:23:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include "parser_internal.h"
 
 static t_error	process_redirection(t_ast *node, t_token *token,
 	t_list **redirs, t_token_type *current_redir)

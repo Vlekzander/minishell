@@ -6,16 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:57:43 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 14:32:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:22:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_internal.h"
-
-int	is_quote(char c)
-{
-	return (c == '"' || c == '\'');
-}
+#include "lexer.h"
 
 int	is_operator(char *str)
 {

@@ -6,14 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 14:33:58 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/03 16:11:00 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:42:41 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include "env.h"
-#include "lexer_internal.h"
+#include "expand.h"
 #include "utils.h"
 
 static t_error	calculate_len(size_t *len, char *base, t_list *vars, char **env)
@@ -56,7 +55,8 @@ static void	str_append_n(char *dst, const char *src, size_t n, size_t dstsize)
 	dst[i + dest_len] = '\0';
 }
 
-t_error	process_override(char **strs, int len, t_list *vars, char **env)
+static t_error	process_override(char **strs, size_t len, t_list *vars,
+		char **env)
 {
 	t_vref	*var;
 	char	*var_content;

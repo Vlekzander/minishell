@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 22:39:38 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/08 16:35:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 17:06:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,4 @@ t_error	process_separator(t_list **tokens, char *buf)
 	if (error != ERR_NONE)
 		return (error);
 	return (ERR_NONE);
-}
-
-char	handle_quote(char c, char current)
-{
-	if (current == 0)
-		return (c);
-	if (current == c)
-		return (0);
-	return (current);
 }

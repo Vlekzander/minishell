@@ -6,12 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:46:17 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 23:07:44 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:07:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "lexer_internal.h"
+#include "expand.h"
 #include "test.h"
 #include "test_utils.h"
 

@@ -6,12 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:41:52 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 15:25:32 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:53:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "data.h"
-#include "lexer.h"
+#include "expand.h"
 #include "utils.h"
 
 static void	check_pattern(t_list *node, t_pattern *pattern)
@@ -26,7 +27,7 @@ static void	check_pattern(t_list *node, t_pattern *pattern)
 		ptr = ft_strstr(ptr, pattern->prefix);
 	if ((pattern->prefix != NULL && ptr != node->content)
 		|| (pattern->prefix == NULL && ptr[0] == '.'))
-		node->content = NULL;
+		((char *) node->content)[0] = '\0';
 	if (pattern->infixes != NULL && ptr != NULL)
 	{
 		infixe = pattern->infixes;
@@ -40,20 +41,24 @@ static void	check_pattern(t_list *node, t_pattern *pattern)
 		ptr = ft_strstr(ptr, pattern->suffix);
 	if (ptr == NULL || (pattern->suffix != NULL
 			&& ft_strlen(ptr) != ft_strlen(pattern->suffix)))
-		node->content = NULL;
+		((char *) node->content)[0] = '\0';
 }
 
-static t_error	lst_copy(t_list **dest, t_list *base)
+static t_error	lst_dup(t_list **dest, t_list *base)
 {
 	t_list	*node;
+	char	*str;
 
 	if (dest == NULL)
 		return (ERR_IMPLEMENTATION);
 	while (base != NULL)
 	{
-		node = ft_lstnew(base->content);
+		str = ft_strdup(base->content);
+		if (str == NULL)
+			return (ft_lstclear(dest, free), ERR_ALLOCATION);
+		node = ft_lstnew(str);
 		if (node == NULL)
-			return (ft_lstclear(dest, NULL), ERR_ALLOCATION);
+			return (ft_lstclear(dest, free), ERR_ALLOCATION);
 		ft_lstadd_back(dest, node);
 		base = base->next;
 	}
@@ -75,7 +80,7 @@ static void	remove_node(t_list **lst, t_list **prev, t_list **node)
 		(*prev)->next = (*node)->next;
 		*node = (*prev)->next;
 	}
-	ft_lstdelone(temp, NULL);
+	ft_lstdelone(temp, free);
 }
 
 static void	lst_remove_null(t_list **lst)
@@ -89,7 +94,7 @@ static void	lst_remove_null(t_list **lst)
 	node = *lst;
 	while (node != NULL)
 	{
-		if (node->content == NULL)
+		if (ft_strlen(node->content) == 0)
 		{
 			remove_node(lst, &prev, &node);
 			continue ;
@@ -107,7 +112,7 @@ t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern)
 	if (out_files == NULL || pattern == NULL)
 		return (ERR_IMPLEMENTATION);
 	*out_files = NULL;
-	error = lst_copy(out_files, in_files);
+	error = lst_dup(out_files, in_files);
 	if (error != ERR_NONE)
 		return (error);
 	node = *out_files;

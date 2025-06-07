@@ -6,12 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:30:41 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 23:05:58 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:12:56 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "lexer_internal.h"
+#include "expand.h"
 #include "test.h"
 #include "test_utils.h"
 
@@ -204,7 +204,7 @@ static void	extract_var_basic_tests(void **case_name)
 		return (printf(CASE_NOT_FOUND_MSG, (char *) *case_name), assert_true(0));
 	data = tc->data;
 	expected = data->expected_vref;
-	error = extract_var(&tested, data->input);
+	error = extract_var(&tested, data->input, 0);
 	equal = (tested->str == NULL && expected->str == NULL) || (str_equal(tested->str, expected->str) && tested->index == expected->index);
 	if (error != ERR_NONE)
 		return(printf(FAIL_MSG, (char *) *case_name, "error"), assert_true(0));

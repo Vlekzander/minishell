@@ -6,13 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:41:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/05 15:57:59 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:23:36 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "data.h"
 #include "error.h"
-#include "parser_internal.h"
+#include "parser.h"
 #include "utils.h"
 
 static t_error	led_word(t_ast **ast, t_token *token)

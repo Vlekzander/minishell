@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:22:41 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/01 16:27:09 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:21:22 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,14 @@
 # include "error.h"
 
 t_error	parse_ast(t_ast **ast, t_list *tokens);
+
+t_token	*pop_front(t_list **tk_lst);
+t_token	*peek_front(t_list *tk_lst);
+int		get_precedence(t_token_type type);
+int		is_redirection(t_token *token);
+t_error	nud(t_ast **ast, t_list **tk_lst, t_token *token, t_list **rds);
+t_error	led(t_ast **ast, t_list **tk_lst, t_token *token);
+t_error	parse_expression(t_ast **ast, t_list **tk_lst, int precedence);
+void	clear_redirs(t_list	**redirs);
 
 #endif

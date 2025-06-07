@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 19:39:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/06 18:22:23 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:41:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -843,7 +843,7 @@ static void expand_basic_tests(void **case_name)
 		{
 			will_return(__wrap_scan_dir, NULL);
 			will_return(__wrap_scan_dir, ERR_NONE);
-			will_return(__wrap_globbing, lst_dup(data->filtered_files[j++], NULL, free));
+			will_return(__wrap_globbing, lst_dup(data->filtered_files[j++], (void *) ft_strdup, free));
 			will_return(__wrap_globbing, ERR_NONE);
 		}
 		i++;
@@ -855,7 +855,7 @@ static void expand_basic_tests(void **case_name)
 		will_return(__wrap_extract_var, ERR_NONE);
 		i++;
 	}
-	error = expand(&tested, env);
+	error = expand_tokens(&tested, env);
 	equal = lst_equal(expected, tested, (void *) token_equal);
 	if (!equal || error != ERR_NONE)
 	{

@@ -6,18 +6,15 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 22:31:40 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 23:06:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:49:49 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "lexer.h"
-#include "parser.h"
+#include "expand.h"
 #include "test.h"
 #include "test_utils.h"
-#include "utils.h"
 
 static t_test_case globbing_cases[] =
 {
@@ -809,7 +806,7 @@ static int	test_setup(void **state) {
 
 static int	test_teardown(void **state) {
 	(void) state;
-	ft_lstclear(&tested, NULL);
+	ft_lstclear(&tested, free);
 	return (0);
 }
 

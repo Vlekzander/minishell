@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand.c                                           :+:      :+:    :+:   */
+/*   expand_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/15 12:18:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/06 18:19:13 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/07 16:17:14 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/07 18:38:27 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "expand.h"
 #include "lexer.h"
-#include "lexer_internal.h"
 #include "utils.h"
 
-static t_error	process_exp_env(t_list	**node, t_token *token, t_list *lst_var,
-									char **env)
+static t_error	process_expand_env(t_list **node, t_token *token, char **env)
 {
+	char	*str;
 	t_list	*list;
 	t_error	error;
-	char	*str;
 
 	if (node == NULL || token == NULL || env == NULL)
 		return (ERR_IMPLEMENTATION);
-	error = override_vars(&str, token->value, lst_var, env);
+	error = expand_env(&str, token->value, env, 0);
 	if (error != ERR_NONE)
-		return (ft_lstclear(&lst_var, (void *) free_vref), error);
-	ft_lstclear(&lst_var, (void *) free_vref);
+		return (error);
 	if (str == token->value)
 		return (ERR_NONE);
 	if (ft_strlen(str) == 0)
@@ -46,62 +44,24 @@ static t_error	process_exp_env(t_list	**node, t_token *token, t_list *lst_var,
 	return (free(str), ERR_NONE);
 }
 
-static t_error	expand_env(t_list **node, t_token *token, char **env)
+static t_error	process_expand_wildcard(t_list **node, t_token *token)
 {
-	t_vref	*var;
-	char	*str;
-	t_list	*vrefs;
-	t_list	*node_var;
-	t_error	error;
-
-	if (node == NULL || *node == NULL || token == NULL || env == NULL)
-		return (ERR_IMPLEMENTATION);
-	vrefs = NULL;
-	str = token->value;
-	while (1)
-	{
-		error = extract_var(&var, str);
-		if (error != ERR_NONE)
-			return (free_vref(var), error);
-		if (var->str == NULL)
-			break ;
-		node_var = ft_lstnew(var);
-		if (node_var == NULL)
-			return (ft_lstclear(&vrefs, (void *) free_vref),
-				free_vref(var), ERR_ALLOCATION);
-		ft_lstadd_back(&vrefs, node_var);
-		str = token->value + var->index + ft_strlen(var->str);
-	}
-	return (free_vref(var), process_exp_env(node, token, vrefs, env), ERR_NONE);
-}
-
-static t_error	expand_wildcard(t_list **node, t_token *token)
-{
-	t_pattern	*pattern;
-	t_list		*files;
 	t_list		*filtered;
 	t_error		error;
 
 	if (node == NULL || *node == NULL || token == NULL)
 		return (ERR_IMPLEMENTATION);
-	error = extract_pattern(&pattern, token->value);
+	error = expand_wildcard(&filtered, token->value);
 	if (error != ERR_NONE)
 		return (error);
-	if (pattern != NULL)
+	if (filtered != NULL)
 	{
-		error = scan_dir(&files, ".");
+		error = insert_tkword_sublist(node, filtered);
 		if (error != ERR_NONE)
-			return (free_pattern(pattern), error);
-		error = globbing(&filtered, files, pattern);
-		if (error != ERR_NONE)
-			return (free_pattern(pattern), ft_lstclear(&files, free), error);
-		if (filtered != NULL)
-			error = insert_tkword_sublist(node, filtered);
-		ft_lstclear(&files, free);
-		ft_lstclear(&filtered, NULL);
+			return (error);
+		ft_lstclear(&filtered, free);
 	}
-	free_pattern(pattern);
-	return (error);
+	return (ERR_NONE);
 }
 
 static t_error	apply_expand(t_list **tk_list, char **env, int is_env)
@@ -121,9 +81,9 @@ static t_error	apply_expand(t_list **tk_list, char **env, int is_env)
 		if (token->type == TK_WORD)
 		{
 			if (is_env)
-				error = expand_env(&node, token, env);
+				error = process_expand_env(&node, token, env);
 			else
-				error = expand_wildcard(&node, token);
+				error = process_expand_wildcard(&node, token);
 			if (error != ERR_NONE)
 				return (error);
 		}
@@ -132,7 +92,7 @@ static t_error	apply_expand(t_list **tk_list, char **env, int is_env)
 	return (ERR_NONE);
 }
 
-t_error	expand(t_list **tk_list, char **env)
+t_error	expand_tokens(t_list **tk_list, char **env)
 {
 	t_error		error;
 

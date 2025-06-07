@@ -6,12 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:16:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/08 19:24:22 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:21:55 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "lexer_internal.h"
+#include "lexer.h"
+#include "utils.h"
 
 static t_error	handle_op_sep(t_list **tokens, char **input, char *buf)
 {

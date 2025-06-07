@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   remove_str_quotes.c                                :+:      :+:    :+:   */
+/*   quote_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 15:55:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/08 16:02:28 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/07 17:05:57 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/07 17:06:51 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer_internal.h"
+#include "utils.h"
 
-void	remove_str_quotes(char *str)
+int	is_quote(char c)
 {
-	char	quote;
-	size_t	i;
-	size_t	len;
+	return (c == '"' || c == '\'');
+}
 
-	if (str == NULL)
-		return ;
-	quote = 0;
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (is_quote(str[i]) && (quote == 0 || quote == str[i]))
-		{
-			len = ft_strlen(str + i + 1);
-			quote = handle_quote(str[i], quote);
-			ft_memmove(str + i, str + i + 1, len + 1);
-		}
-		else
-			i++;
-	}
+char	handle_quote(char c, char current)
+{
+	if (current == 0)
+		return (c);
+	if (current == c)
+		return (0);
+	return (current);
 }

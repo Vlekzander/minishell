@@ -6,15 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 12:11:50 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/13 13:08:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 17:14:09 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "data.h"
 #include "error.h"
-#include "lexer.h"
-#include "lexer_internal.h"
+#include "utils.h"
 
 static t_error	add_prefix_suffix(t_pattern *pattern, char *buf, int is_prefix)
 {

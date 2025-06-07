@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:00:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/01 23:41:12 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:22:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,8 @@ void	free_ddarray(void **array);
 char	*ft_strstr(char *str, char *to_find);
 char	*ft_strndup(char *src, size_t len);
 t_error	split_lst(t_list **lst, char *input, char c);
+void	remove_str_quotes(char *str);
+int		is_quote(char c);
+char	handle_quote(char c, char current);
 
 #endif
