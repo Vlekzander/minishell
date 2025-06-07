@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:52:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/06 18:17:55 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/07 19:06:31 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static t_test_case tokenize_cases[] = {
 	{ "expand_var_quotted_suffix", &(t_tokenize_case) { "echo $USER\"__SUFFIX__\"", {"echo", "alex__SUFFIX__", NULL} } },
 	{ "expand_empty_var_only", &(t_tokenize_case) { "$EMPTY", {NULL} } },
 	{ "expand_wildcard_from_env", &(t_tokenize_case) { "echo $WILDCARD", {"echo", ".git", ".gitignore", ".idea", NULL} } },
-	{ "expand_wildcard_from_env", &(t_tokenize_case) { "echo $WILDCARDS", {"echo", "BEFORE", "*.txt", "IN", "Makefile", "libft", "AFTER", "Makefile", "bin_test", "include", "libft", "src", "test", NULL} } },
+	{ "expand_wildcards_from_env", &(t_tokenize_case) { "echo $WILDCARDS", {"echo", "BEFORE", "*.txt", "IN", "Makefile", "libft", "AFTER", "Makefile", "bin_test", "include", "libft", "minishell", "src", "test", NULL} } },
 	{ NULL }
 };
 
