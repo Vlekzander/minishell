@@ -6,37 +6,34 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:22:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/05/03 12:20:42 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:07:10 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "data.h"
 
-t_redir	*create_redir(t_token_type type, char *value)
+t_redir	*create_redir(t_redir_type type, int append, char *value)
 {
 	t_redir	*redir;
+	char	*str;
 
-	if (value == NULL || (type != TK_IN && type != TK_OUT
-			&& type != TK_APPEND && type != TK_HEREDOC))
+	if (value == NULL)
 		return (NULL);
 	redir = ft_calloc(1, sizeof(t_redir));
 	if (redir == NULL)
 		return (NULL);
-	if (type == TK_IN)
+	str = ft_strdup(value);
+	if (str == NULL)
+		return (NULL);
+	redir->type = type;
+	if (type == REDIR_IN)
+		redir->in = str;
+	else if (type == REDIR_OUT)
 	{
-		redir->type = REDIR_IN;
-		redir->in = ft_strdup(value);
+		redir->out = str;
+		redir->append = append;
 	}
-	else if (type == TK_OUT || type == TK_APPEND)
-	{
-		redir->type = REDIR_OUT;
-		redir->out = ft_strdup(value);
-		redir->append = (type == TK_APPEND);
-	}
-	else if (type == TK_HEREDOC)
-	{
-		redir->type = REDIR_HEREDOC;
-		redir->heredoc = ft_strdup(value);
-	}
+	else if (type == REDIR_HEREDOC)
+		redir->heredoc = str;
 	return (redir);
 }

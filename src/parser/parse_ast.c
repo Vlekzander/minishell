@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/08 22:57:55 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:11:29 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,28 @@
 static t_error	process_redirection(t_ast *node, t_token *token,
 	t_list **redirs, t_token_type *current_redir)
 {
-	t_list	**list;
-	t_list	*element;
-	t_redir	*redir;
+	t_list			**list;
+	t_list			*element;
+	t_redir			*redir;
+	t_redir_type	redir_type;
 
 	if (token == NULL || redirs == NULL || current_redir == NULL)
 		return (ERR_IMPLEMENTATION);
 	if (*current_redir == TK_NONE)
-		*current_redir = token->type;
-	else
-	{
-		list = redirs;
-		if (node != NULL && (node->type == NODE_COMMAND
-				|| node->type == NODE_SUBSHELL))
-			list = &node->redirs;
-		redir = create_redir(*current_redir, token->value);
-		if (redir == NULL)
-			return (ERR_ALLOCATION);
-		element = ft_lstnew(redir);
-		if (element == NULL)
-			return (ERR_ALLOCATION);
-		ft_lstadd_back(list, element);
-		*current_redir = TK_NONE;
-	}
+		return (*current_redir = token->type, ERR_NONE);
+	list = redirs;
+	if (node != NULL && (node->type == NODE_COMMAND
+			|| node->type == NODE_SUBSHELL))
+		list = &node->redirs;
+	redir_type = get_redir_type(*current_redir);
+	redir = create_redir(redir_type, *current_redir == TK_APPEND, token->value);
+	if (redir == NULL)
+		return (ERR_ALLOCATION);
+	element = ft_lstnew(redir);
+	if (element == NULL)
+		return (ERR_ALLOCATION);
+	ft_lstadd_back(list, element);
+	*current_redir = TK_NONE;
 	return (ERR_NONE);
 }
 

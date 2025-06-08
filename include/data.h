@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/03 16:09:13 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:07:36 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ typedef struct s_vref
 t_token_type	get_token_type(char *token);
 t_token			*create_token(t_token_type type, char *value);
 t_ast			*create_ast(t_node_type type);
-t_redir			*create_redir(t_token_type type, char *value);
+t_redir			*create_redir(t_redir_type type, int append, char *value);
 t_pattern		*create_pattern(void);
 t_vref			*create_vref(void);
 void			free_token(t_token *token);

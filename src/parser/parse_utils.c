@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 15:08:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/08 22:53:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:11:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,15 @@ int	get_precedence(t_token_type type)
 	if (type == TK_PIPE)
 		return (2);
 	return (0);
+}
+
+t_redir_type	get_redir_type(t_token_type type)
+{
+	if (type == TK_IN)
+		return (REDIR_IN);
+	if (type == TK_OUT || type == TK_APPEND)
+		return (REDIR_OUT);
+	return (REDIR_HEREDOC);
 }
 
 int	is_redirection(t_token *token)
