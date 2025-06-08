@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:24:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/07 18:23:44 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/08 22:59:24 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ static t_error	nud_subshell(t_ast **ast, t_list **tk_lst, t_list **redirs)
 	if (node == NULL)
 		return (ERR_ALLOCATION);
 	error = parse_expression(&node->child, tk_lst, -1);
-	next = peek_front(*tk_lst);
+	next = peek_front(tk_lst, 0);
 	if (node->child != NULL && next != NULL && next->type == TK_P_CLOSE)
-		pop_front(tk_lst);
+		peek_front(tk_lst, 1);
 	else
 		error = ERR_SYNTAX;
 	if (error != ERR_NONE)

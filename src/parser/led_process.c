@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:41:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/07 18:23:36 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/08 22:56:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst)
 {
 	t_ast	*node;
 	t_ast	*right;
+	t_token	*token;
 	t_error	error;
 
 	if (ast == NULL || tk_lst == NULL)
@@ -53,16 +54,15 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst)
 		*ast = node;
 	}
 	right = NULL;
-	if (peek_front(*tk_lst) == NULL || peek_front(*tk_lst)->type == TK_PIPE
-		|| peek_front(*tk_lst)->type == TK_AND
-		|| peek_front(*tk_lst)->type == TK_OR)
+	token = peek_front(tk_lst, 0);
+	if (token == NULL || token->type == TK_PIPE || token->type == TK_AND
+		|| token->type == TK_OR)
 		error = ERR_SYNTAX;
 	else
 		error = parse_expression(&right, tk_lst, get_precedence(TK_PIPE));
 	if (error != ERR_NONE)
 		return (error);
-	ft_lstadd_back(&(*ast)->pipeline, ft_lstnew(right));
-	return (ERR_NONE);
+	return (ft_lstadd_back(&(*ast)->pipeline, ft_lstnew(right)), ERR_NONE);
 }
 
 static t_error	led_logic(t_ast **ast, t_list **tk_lst, t_token_type tk_type)

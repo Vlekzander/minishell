@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/07 18:23:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/08 22:57:55 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	in_expression(t_token **token, t_list **tk_lst, int precedence)
 {
 	t_token	*next;
 
-	next = peek_front(*tk_lst);
+	next = peek_front(tk_lst, 0);
 	if (next == NULL
 		|| (next->type != TK_IN
 			&& next->type != TK_OUT
@@ -58,7 +58,7 @@ static int	in_expression(t_token **token, t_list **tk_lst, int precedence)
 		return (0);
 	if (next->type == TK_P_CLOSE && precedence == -1)
 		return (0);
-	return (*token = pop_front(tk_lst), 1);
+	return (*token = peek_front(tk_lst, 1), 1);
 }
 
 static t_error	finalize_expression(t_ast **ast, t_ast *node,

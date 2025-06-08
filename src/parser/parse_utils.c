@@ -6,31 +6,22 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 15:08:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/07 18:23:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/08 22:53:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "data.h"
 #include "parser.h"
 
-t_token	*pop_front(t_list **tk_lst)
+t_token	*peek_front(t_list **tk_lst, int pop)
 {
 	t_token	*token;
 
 	if (tk_lst == NULL || *tk_lst == NULL || (*tk_lst)->content == NULL)
 		return (NULL);
 	token = (t_token *)(*tk_lst)->content;
-	*tk_lst = (*tk_lst)->next;
-	return (token);
-}
-
-t_token	*peek_front(t_list *tk_lst)
-{
-	t_token	*token;
-
-	if (tk_lst == NULL || tk_lst->content == NULL)
-		return (NULL);
-	token = (t_token *)tk_lst->content;
+	if (pop)
+		*tk_lst = (*tk_lst)->next;
 	return (token);
 }
 
