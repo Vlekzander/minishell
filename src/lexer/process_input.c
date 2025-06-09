@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:16:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/07 18:21:55 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/09 23:53:02 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,10 @@ static t_error	process_loop(t_list **tokens, char *input, char *buf)
 		}
 		if (is_quote(*input) && (quote == 0 || quote == *input))
 			quote = handle_quote(*input, quote);
-		buf[i++] = *input;
-		input++;
+		buf[i++] = *(input++);
 	}
+	if (quote != 0)
+		return (ERR_SYNTAX);
 	return (add_token(tokens, TK_WORD, buf));
 }
 
