@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 23:26:17 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 00:13:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -53,11 +53,19 @@ static t_test_case prompt_redirs_case[] =
 		}
 	},
 	{
-		"insane_str",
+		"file_str",
 		&(t_prompt_redirs_case)
 		{
 			"END",
 			{"VERY_LARGE", "END", NULL}
+		}
+	},
+	{
+		"max_pipe",
+		&(t_prompt_redirs_case)
+		{
+			"END",
+			{"MAX_PIPE", "END", NULL}
 		}
 	},
 	{ NULL }
@@ -95,6 +103,12 @@ char	*get_str(char *line)
 		free(str);
 		str = ft_calloc(123456 + 1, sizeof(char));
 		ft_memset(str, 'X', 123456);
+	}
+	else if (str_equal(line, "MAX_PIPE"))
+	{
+		free(str);
+		str = ft_calloc(65534 + 1, sizeof(char));
+		ft_memset(str, 'X', 65534);
 	}
 	return (str);
 }
@@ -158,6 +172,7 @@ t_test_result	execute_tests(void)
 		cmocka_unit_test_prestate_setup_teardown(prompt_redirs_tests, test_setup, test_teardown, prompt_redirs_case[2].name),
 		cmocka_unit_test_prestate_setup_teardown(prompt_redirs_tests, test_setup, test_teardown, prompt_redirs_case[3].name),
 		cmocka_unit_test_prestate_setup_teardown(prompt_redirs_tests, test_setup, test_teardown, prompt_redirs_case[4].name),
+		cmocka_unit_test_prestate_setup_teardown(prompt_redirs_tests, test_setup, test_teardown, prompt_redirs_case[5].name),
 	};
 	char	name[] = "redirs/prompt_redirs";
 	t_test_result	result;
