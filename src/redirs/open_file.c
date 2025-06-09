@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:40:30 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/06 12:28:06 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/09 23:12:39 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
-
 #include "libft.h"
 #include "redirs.h"
 
@@ -37,7 +36,7 @@ static t_error	check_subpath(char *path)
 	return (error);
 }
 
-static t_error	check_file(char *path, int write)
+static t_error	check_file(char *path, t_redir_type type)
 {
 	struct stat	path_stat;
 
@@ -50,7 +49,7 @@ static t_error	check_file(char *path, int write)
 		if (S_ISDIR(path_stat.st_mode))
 			return (ERR_IS_DIRECTORY);
 	}
-	if (!write)
+	if (type == REDIR_IN)
 	{
 		if (access(path, F_OK) == -1)
 			return (ERR_FILE_NOT_FOUND);
@@ -63,27 +62,47 @@ static t_error	check_file(char *path, int write)
 	return (check_subpath(path));
 }
 
-t_error	open_file(int *fd, char *path, int write, int append)
+static t_error	prepare_of(t_redir_type type, int mode,
+		int *flags, int *perms)
+{
+	if (flags == NULL || perms == NULL)
+		return (ERR_IMPLEMENTATION);
+	*flags = O_RDONLY;
+	*perms = 0644;
+	if (type == REDIR_OUT)
+	{
+		*flags = O_WRONLY | O_CREAT;
+		if (mode)
+			*flags |= O_APPEND;
+		else
+			*flags |= O_TRUNC;
+	}
+	else if (type == REDIR_HEREDOC)
+	{
+		*flags = O_CREAT | O_RDWR;
+		if (mode)
+			*flags |= O_TRUNC;
+		*perms = 0600;
+	}
+	return (ERR_NONE);
+}
+
+t_error	open_file(int *fd, char *path, t_redir_type type, int mode)
 {
 	int		file;
 	int		flags;
+	int		perms;
 	t_error	error;
 
 	if (fd == NULL || path == NULL)
 		return (ERR_IMPLEMENTATION);
-	error = check_file(path, write);
+	error = check_file(path, type);
 	if (error != ERR_NONE)
 		return (error);
-	flags = O_RDONLY;
-	if (write)
-	{
-		flags = O_WRONLY | O_CREAT;
-		if (append)
-			flags |= O_APPEND;
-		else
-			flags |= O_TRUNC;
-	}
-	file = open(path, flags, 0644);
+	error = prepare_of(type, mode, &flags, &perms);
+	if (error != ERR_NONE)
+		return (error);
+	file = open(path, flags, perms);
 	if (file == -1)
 		return (ERR_ERRNO);
 	return (*fd = file, ERR_NONE);

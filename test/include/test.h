@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/06 12:25:26 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/09 22:40:19 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,19 @@ typedef struct s_globbing_case
 	t_list		*expected_out_files;
 }	t_globbing_case;
 
+typedef struct s_prompt_redirs_case
+{
+	char	*eof;
+	char	*lines[CASE_ARRAY_MAX];
+}	t_prompt_redirs_case;
+
 typedef struct s_open_file_case
 {
-	t_file	file;
-	int		write;
-	int		append;
-	int		create;
-	t_error	expected_error;
+	t_file			file;
+	t_redir_type	type;
+	int				append;
+	int				create;
+	t_error			expected_error;
 }	t_open_file_case;
 
 typedef struct s_parse_ast_case
@@ -95,6 +101,12 @@ typedef struct s_parse_ast_case
 		t_error	expected_error;
 	};
 }	t_parse_ast_case;
+
+typedef struct s_strbuilder_case
+{
+	char	*strs[CASE_ARRAY_MAX];
+	char	*str;
+}	t_strbuilder_case;
 
 typedef struct s_tokenize_case
 {

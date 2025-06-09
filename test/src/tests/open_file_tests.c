@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 10:35:43 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/06 12:32:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:07:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 1,
-			.write = 0,
+			.type = REDIR_IN,
 			.append = 0,
 			.expected_error = ERR_NONE
 		}
@@ -48,7 +48,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 1,
-			.write = 1,
+			.type = REDIR_OUT,
 			.append = 0,
 			.expected_error = ERR_NONE
 		}
@@ -64,7 +64,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 1,
-			.write = 1,
+			.type = REDIR_OUT,
 			.append = 1,
 			.expected_error = ERR_NONE
 		}
@@ -80,7 +80,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 0,
-			.write = 0,
+			.type = REDIR_IN,
 			.append = 0,
 			.expected_error = ERR_FILE_NOT_FOUND
 		}
@@ -96,7 +96,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 1,
-			.write = 0,
+			.type = REDIR_IN,
 			.append = 0,
 			.expected_error = ERR_PERMISSION
 		}
@@ -112,7 +112,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 1,
-			.write = 1,
+			.type = REDIR_OUT,
 			.append = 0,
 			.expected_error = ERR_PERMISSION
 		}
@@ -128,7 +128,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 1,
-			.write = 1,
+			.type = REDIR_OUT,
 			.append = 1,
 			.expected_error = ERR_PERMISSION
 		}
@@ -144,7 +144,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 1
 			},
 			.create = 1,
-			.write = 0,
+			.type = REDIR_IN,
 			.append = 0,
 			.expected_error = ERR_IS_DIRECTORY
 		}
@@ -160,7 +160,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 1
 			},
 			.create = 1,
-			.write = 1,
+			.type = REDIR_OUT,
 			.append = 0,
 			.expected_error = ERR_IS_DIRECTORY
 		}
@@ -176,7 +176,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 1
 			},
 			.create = 1,
-			.write = 1,
+			.type = REDIR_OUT,
 			.append = 1,
 			.expected_error = ERR_IS_DIRECTORY
 		}
@@ -192,7 +192,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 0,
-			.write = 0,
+			.type = REDIR_IN,
 			.append = 0,
 			.expected_error = ERR_FILE_NOT_FOUND
 		}
@@ -208,7 +208,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 0,
-			.write = 1,
+			.type = REDIR_OUT,
 			.append = 0,
 			.expected_error = ERR_FILE_NOT_FOUND
 		}
@@ -224,7 +224,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 0,
-			.write = 1,
+			.type = REDIR_OUT,
 			.append = 1,
 			.expected_error = ERR_FILE_NOT_FOUND
 		}
@@ -240,7 +240,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 0,
-			.write = 1,
+			.type = REDIR_OUT,
 			.append = 0,
 			.expected_error = ERR_PERMISSION
 		}
@@ -256,7 +256,7 @@ static t_test_case open_file_cases[] =
 				.is_folder = 0
 			},
 			.create = 0,
-			.write = 1,
+			.type = REDIR_OUT,
 			.append = 1,
 			.expected_error = ERR_PERMISSION
 		}
@@ -302,7 +302,7 @@ static void open_file_tests(void **case_name)
 		if (create_file(*file) != ERR_NONE)
 			return(printf(FAIL_MSG, (char *) *case_name, "create_file"), assert_true(0));
 	}
-	error =	open_file(&fd, file->name, data->write, data->append);
+	error =	open_file(&fd, file->name, data->type, data->append);
 	if (error != data->expected_error)
 		return(printf(FAIL_MSG, (char *) *case_name, "error"), assert_true(0));
 	return (printf(SUCCESS_MSG, (char *) *case_name), assert_true(1));

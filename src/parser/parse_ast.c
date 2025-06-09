@@ -6,11 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/08 23:11:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/09 22:44:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "redirs.h"
 
 static t_error	process_redirection(t_ast *node, t_token *token,
 	t_list **redirs, t_token_type *current_redir)
@@ -29,7 +30,7 @@ static t_error	process_redirection(t_ast *node, t_token *token,
 			|| node->type == NODE_SUBSHELL))
 		list = &node->redirs;
 	redir_type = get_redir_type(*current_redir);
-	redir = create_redir(redir_type, *current_redir == TK_APPEND, token->value);
+	redir = create_redir(redir_type, token->value, *current_redir == TK_APPEND);
 	if (redir == NULL)
 		return (ERR_ALLOCATION);
 	element = ft_lstnew(redir);
@@ -63,10 +64,23 @@ static int	in_expression(t_token **token, t_list **tk_lst, int precedence)
 static t_error	finalize_expression(t_ast **ast, t_ast *node,
 	t_token_type current_redir, t_list *redirs)
 {
+	t_error	error;
+
 	if (ast == NULL)
 		return (ERR_IMPLEMENTATION);
-	if (current_redir != TK_NONE)
+	error = prompt_redirs(redirs);
+	if (error != ERR_NONE)
+	{
+		if (node != NULL)
+			redirs = NULL;
 		return (free_ast(node), clear_redirs(&redirs), ERR_SYNTAX);
+	}
+	if (current_redir != TK_NONE)
+	{
+		if (node != NULL)
+			redirs = NULL;
+		return (free_ast(node), clear_redirs(&redirs), ERR_SYNTAX);
+	}
 	if (node == NULL && redirs != NULL)
 	{
 		node = create_ast(NODE_REDIR);

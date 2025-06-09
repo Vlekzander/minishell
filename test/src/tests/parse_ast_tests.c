@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 18:52:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 23:06:34 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/09 12:48:17 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1303,6 +1303,12 @@ static t_test_case parse_ast_error_cases[] =
 static t_list	*tokens;
 static t_ast	*expected;
 static t_ast	*tested;
+
+t_error	__wrap_prompt_redirs(t_list *redirs)
+{
+	(void) redirs;
+	return (ERR_NONE);
+}
 
 static int	test_setup(void **state)
 {

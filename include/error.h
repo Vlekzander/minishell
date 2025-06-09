@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:43:29 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 23:42:04 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:58:05 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ typedef enum e_error_code
 	ERR_CLOSE,
 	ERR_FILE_NOT_FOUND,
 	ERR_PERMISSION,
-	ERR_IS_DIRECTORY
+	ERR_IS_DIRECTORY,
+	ERR_PIPE
 }	t_error;
 
 #endif

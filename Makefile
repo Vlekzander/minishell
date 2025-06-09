@@ -17,8 +17,10 @@ TEST_VARIANT_OBJECTS = $(TEST_VARIANTS:.c=.o)
 TEST_BINS = $(patsubst $(TEST_VARIANTS_DIR)/%.c, bin_test/%, $(TEST_VARIANTS))
 DEPS_TEST = $(SOURCES_TEST:.c=.d) $(TEST_VARIANTS:.c=.d)
 
+wraps_expand_tests = -Wl,--wrap=extract_pattern,--wrap=globbing,--wrap=scan_dir,--wrap=extract_var
+wraps_prompt_redirs_tests = -Wl,--wrap=readline
+wraps_parse_ast_tests = -Wl,--wrap=prompt_redirs
 wraps_tokenize_tests = -Wl,--wrap=expand
-wraps_expand_tests = -Wl,-wrap=extract_pattern,-wrap=globbing,-wrap=scan_dir,-wrap=extract_var
 
 all: $(NAME) $(TEST_BINS)
 

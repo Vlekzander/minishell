@@ -6,13 +6,13 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:22:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/08 23:07:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/09 22:45:14 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "data.h"
 
-t_redir	*create_redir(t_redir_type type, int append, char *value)
+t_redir	*create_redir(t_redir_type type, char *value, int append)
 {
 	t_redir	*redir;
 	char	*str;
@@ -24,7 +24,7 @@ t_redir	*create_redir(t_redir_type type, int append, char *value)
 		return (NULL);
 	str = ft_strdup(value);
 	if (str == NULL)
-		return (NULL);
+		return (free_redir(redir), NULL);
 	redir->type = type;
 	if (type == REDIR_IN)
 		redir->in = str;
@@ -34,6 +34,9 @@ t_redir	*create_redir(t_redir_type type, int append, char *value)
 		redir->append = append;
 	}
 	else if (type == REDIR_HEREDOC)
+	{
 		redir->heredoc = str;
+		redir->fd = -1;
+	}
 	return (redir);
 }

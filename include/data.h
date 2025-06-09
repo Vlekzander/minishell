@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 12:32:56 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/09 22:45:25 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,15 @@ typedef struct s_redir
 	union
 	{
 		char	*in;
-		char	*heredoc;
 		struct
 		{
 			char	*out;
 			int		append;
+		};
+		struct
+		{
+			char	*heredoc;
+			int		fd;
 		};
 	};
 }	t_redir;
@@ -120,7 +124,7 @@ typedef struct s_strbuilder
 t_token_type	get_token_type(char *token);
 t_token			*create_token(t_token_type type, char *value);
 t_ast			*create_ast(t_node_type type);
-t_redir			*create_redir(t_redir_type type, int append, char *value);
+t_redir			*create_redir(t_redir_type type, char *value, int append);
 t_pattern		*create_pattern(void);
 t_vref			*create_vref(void);
 t_strbuilder	*create_strbuilder(size_t size);
