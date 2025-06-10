@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:23:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/07 18:22:02 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:04:23 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	remove_tokens_quotes(t_list *tokens)
 	while (tokens != NULL)
 	{
 		token = (t_token *) tokens->content;
-		if (token != NULL)
+		if (token != NULL && token->type != TK_HEREDOC)
 			remove_str_quotes(token->value);
 		tokens = tokens->next;
 	}

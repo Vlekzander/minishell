@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 12:04:13 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:43:45 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,44 +17,58 @@
 #include "lexer.h"
 #include "redirs.h"
 
+static t_error	bla(char **env, t_strbuilder *sb, char **line, int expand)
+{
+	char	*expanded;
+	t_error	error;
+
+	if (env == NULL || sb == NULL || line == NULL || *line == NULL)
+		return (ERR_IMPLEMENTATION);
+	expanded = NULL;
+	if (expand)
+	{
+		error = expand_env(&expanded, *line, env, 1);
+		if (error != ERR_NONE)
+			return (error);
+		if (expanded != *line)
+		{
+			free(*line);
+			*line = expanded;
+		}
+	}
+	if (strbuilder_append(sb, *line) != 0)
+		return (ERR_ALLOCATION);
+	if (strbuilder_append(sb, "\n") != 0)
+		return (ERR_ALLOCATION);
+	return (ERR_NONE);
+}
+
 static t_error	prompt_hd(char **env, t_strbuilder *sb, int is_last, char *eof)
 {
 	char	*line;
-	char	*expanded;
+	int		expand;
 	int		run;
-	size_t	len;
 	t_error	error;
 
 	if (env == NULL || sb == NULL || eof == NULL)
 		return (ERR_IMPLEMENTATION);
-	len = ft_strlen(eof);
+	expand = (ft_strchr(eof, '"') == NULL && ft_strchr(eof, '\'') == NULL);
+	remove_str_quotes(eof);
 	run = 1;
 	while (run)
 	{
 		line = readline("> ");
-		expanded = NULL;
-		if (line == NULL)
+		if (line == NULL || ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)
 			break ;
-		if (ft_strncmp(line, eof, len +1) == 0)
-			run = 0;
-		if (is_last && run)
+		if (is_last)
 		{
-			error = expand_env(&expanded, line, env, 1);
+			error = bla(env, sb, &line, expand);
 			if (error != ERR_NONE)
-				return (free(line), free_strbuilder(sb), error);
-			if (expanded != line)
-			{
-				free(line);
-				line = expanded;
-			}
-			if (strbuilder_append(sb, line) != 0)
-				return (free(line), free_strbuilder(sb), ERR_ALLOCATION);
-			if (strbuilder_append(sb, "\n") != 0)
-				return (free(line), free_strbuilder(sb), ERR_ALLOCATION);
+				return (free(line), error);
 		}
 		free(line);
 	}
-	return (ERR_NONE);
+	return (free(line), ERR_NONE);
 }
 
 static t_error	prompt_heredoc(t_redir *redir, char **env, int is_last)
@@ -77,26 +91,6 @@ static t_error	prompt_heredoc(t_redir *redir, char **env, int is_last)
 	if (is_last)
 		error = process_heredoc(redir, sb);
 	return (free_strbuilder(sb), error);
-}
-
-static t_error	prompt_hds(t_list *hds, char **env, int hd_end)
-{
-	t_redir	*redir;
-	t_list	*node;
-	t_error	error;
-
-	if (hds == NULL)
-		return (ERR_IMPLEMENTATION);
-	node = hds;
-	while (node != NULL)
-	{
-		redir = node->content;
-		error = prompt_heredoc(redir, env, node->next == NULL && hd_end);
-		if (error != ERR_NONE)
-			return (error);
-		node = node->next;
-	}
-	return (ERR_NONE);
 }
 
 static t_error	collect_hds(t_list *redirs, t_list **hds, int *hd_end)
@@ -129,16 +123,24 @@ t_error	prompt_redirs(t_list *redirs, char **env)
 	t_list	*hds;
 	int		hd_end;
 	t_error	error;
+	t_redir	*redir;
+	t_list	*node;
 
 	error = collect_hds(redirs, &hds, &hd_end);
 	if (error != ERR_NONE)
 		return (error);
 	if (hds != NULL)
 	{
-		error = prompt_hds(hds, env, hd_end);
+		node = hds;
+		while (node != NULL)
+		{
+			redir = node->content;
+			error = prompt_heredoc(redir, env, node->next == NULL && hd_end);
+			if (error != ERR_NONE)
+				return (ft_lstclear(&hds, NULL), error);
+			node = node->next;
+		}
 		ft_lstclear(&hds, NULL);
-		if (error != ERR_NONE)
-			return (error);
 	}
 	return (ERR_NONE);
 }

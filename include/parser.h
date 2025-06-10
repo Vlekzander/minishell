@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:22:41 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 11:55:01 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:50:32 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ t_redir_type	get_redir_type(t_token_type type);
 int				is_redirection(t_token *token);
 t_error			nud(t_ast **ast, t_list **tk_lst, char **env, t_token *token);
 t_error			led(t_ast **ast, t_list **tk_lst, char **env, t_token *token);
-t_error			parse_expression(t_ast **ast, t_list **tk_lst, char **env, int prec);
+t_error			parse_expression(t_ast **ast, t_list **tk_lst, char **env,
+					int prec);
 void			clear_redirs(t_list	**redirs);
 
 #endif

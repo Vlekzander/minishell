@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:41:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 11:54:21 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:48:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst, char **env)
 	return (ft_lstadd_back(&(*ast)->pipeline, ft_lstnew(right)), ERR_NONE);
 }
 
-static t_error	led_logic(t_ast **ast, t_list **tk_lst, char **env, t_token_type tk_type)
+static t_error	led_logic(t_ast **ast, t_list **tk_lst, char **env,
+	t_token_type tk_type)
 {
 	t_ast		*node;
 	t_ast		*right;

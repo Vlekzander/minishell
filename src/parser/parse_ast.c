@@ -6,14 +6,15 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 11:56:04 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:50:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "redirs.h"
 
-static t_error	process_redirection(t_ast **node, t_token *token, t_token_type *current_redir)
+static t_error	process_redirection(t_ast **node, t_token *token,
+	t_token_type *current_redir)
 {
 	t_list			**list;
 	t_list			*element;
@@ -39,8 +40,7 @@ static t_error	process_redirection(t_ast **node, t_token *token, t_token_type *c
 	if (element == NULL)
 		return (ERR_ALLOCATION);
 	ft_lstadd_back(list, element);
-	*current_redir = TK_NONE;
-	return (ERR_NONE);
+	return (*current_redir = TK_NONE, ERR_NONE);
 }
 
 static int	in_expression(t_token **token, t_list **tk_lst, int prec)
@@ -97,7 +97,8 @@ t_error	parse_expression(t_ast **ast, t_list **tk_lst, char **env, int prec)
 		if ((is_redirection(token) && current_redir == TK_NONE)
 			|| (token->type == TK_WORD && current_redir != TK_NONE))
 			error = process_redirection(&node, token, &current_redir);
-		else if (current_redir == TK_NONE && (node == NULL || node->type == NODE_REDIR))
+		else if (current_redir == TK_NONE
+			&& (node == NULL || node->type == NODE_REDIR))
 			error = nud(&node, tk_lst, env, token);
 		else if (current_redir == TK_NONE)
 			error = led(&node, tk_lst, env, token);
