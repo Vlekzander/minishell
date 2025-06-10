@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 18:07:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:04:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,36 @@
 #include "lexer.h"
 #include "redirs.h"
 
-static t_error	prompt_hd(t_strbuilder *sb, int is_last, char *eof, size_t len)
+static t_error	prompt_hd(char **env, t_strbuilder *sb, int is_last, char *eof)
 {
 	char	*line;
+	char	*expanded;
 	int		run;
+	size_t	len;
+	t_error	error;
 
-	if (eof == NULL)
+	if (env == NULL || sb == NULL || eof == NULL)
 		return (ERR_IMPLEMENTATION);
+	len = ft_strlen(eof);
 	run = 1;
 	while (run)
 	{
 		line = readline("> ");
+		expanded = NULL;
 		if (line == NULL)
 			break ;
 		if (ft_strncmp(line, eof, len +1) == 0)
 			run = 0;
 		if (is_last && run)
 		{
+			error = expand_env(&expanded, line, env, 1);
+			if (error != ERR_NONE)
+				return (free(line), free_strbuilder(sb), error);
+			if (expanded != line)
+			{
+				free(line);
+				line = expanded;
+			}
 			if (strbuilder_append(sb, line) != 0)
 				return (free(line), free_strbuilder(sb), ERR_ALLOCATION);
 			if (strbuilder_append(sb, "\n") != 0)
@@ -44,15 +57,13 @@ static t_error	prompt_hd(t_strbuilder *sb, int is_last, char *eof, size_t len)
 	return (ERR_NONE);
 }
 
-static t_error	prompt_heredoc(t_redir *redir, int is_last)
+static t_error	prompt_heredoc(t_redir *redir, char **env, int is_last)
 {
 	t_strbuilder	*sb;
-	size_t			eof_len;
 	t_error			error;
 
 	if (redir == NULL || redir->type != REDIR_HEREDOC)
 		return (ERR_IMPLEMENTATION);
-	eof_len = ft_strlen(redir->heredoc);
 	sb = NULL;
 	if (is_last)
 	{
@@ -60,7 +71,7 @@ static t_error	prompt_heredoc(t_redir *redir, int is_last)
 		if (sb == NULL)
 			return (ERR_ALLOCATION);
 	}
-	error = prompt_hd(sb, is_last, redir->heredoc, eof_len);
+	error = prompt_hd(env, sb, is_last, redir->heredoc);
 	if (error != ERR_NONE)
 		return (free_strbuilder(sb), error);
 	if (is_last)
@@ -68,7 +79,7 @@ static t_error	prompt_heredoc(t_redir *redir, int is_last)
 	return (free_strbuilder(sb), error);
 }
 
-static t_error	prompt_hds(t_list *hds, int hd_end)
+static t_error	prompt_hds(t_list *hds, char **env, int hd_end)
 {
 	t_redir	*redir;
 	t_list	*node;
@@ -80,7 +91,7 @@ static t_error	prompt_hds(t_list *hds, int hd_end)
 	while (node != NULL)
 	{
 		redir = node->content;
-		error = prompt_heredoc(redir, node->next == NULL && hd_end);
+		error = prompt_heredoc(redir, env, node->next == NULL && hd_end);
 		if (error != ERR_NONE)
 			return (error);
 		node = node->next;
@@ -113,7 +124,7 @@ static t_error	collect_hds(t_list *redirs, t_list **hds, int *hd_end)
 	return (ERR_NONE);
 }
 
-t_error	prompt_redirs(t_list *redirs)
+t_error	prompt_redirs(t_list *redirs, char **env)
 {
 	t_list	*hds;
 	int		hd_end;
@@ -124,7 +135,7 @@ t_error	prompt_redirs(t_list *redirs)
 		return (error);
 	if (hds != NULL)
 	{
-		error = prompt_hds(hds, hd_end);
+		error = prompt_hds(hds, env, hd_end);
 		ft_lstclear(&hds, NULL);
 		if (error != ERR_NONE)
 			return (error);

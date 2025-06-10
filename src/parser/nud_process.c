@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:24:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/08 22:59:24 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:55:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "parser.h"
 #include "utils.h"
 
-static t_error	nud_word(t_ast **ast, t_token *token, t_list **redirs)
+static t_error	nud_word(t_ast **ast, t_token *token)
 {
 	t_ast	*node;
 	char	*basename;
@@ -34,28 +34,27 @@ static t_error	nud_word(t_ast **ast, t_token *token, t_list **redirs)
 	else
 		basename = token->value;
 	str_array_push(&node->command->args, basename);
-	if (*redirs != NULL)
-		node->redirs = *redirs;
-	else
-		*redirs = node->redirs;
+	if (*ast != NULL)
+	{
+		node->redirs = (*ast)->redirs;
+		(*ast)->redirs = NULL;
+		free_ast(*ast);
+	}
 	return (*ast = node, ERR_NONE);
 }
 
-static t_error	nud_subshell(t_ast **ast, t_list **tk_lst, t_list **redirs)
+static t_error	nud_subshell(t_ast **ast, t_list **tk_lst, char **env)
 {
 	t_ast	*node;
 	t_error	error;
 	t_token	*next;
 
-	if (*redirs != NULL)
-	{
-		ft_lstclear(redirs, (void (*)(void *)) free_redir);
+	if (*ast != NULL)
 		return (ERR_SYNTAX);
-	}
 	node = create_ast(NODE_SUBSHELL);
 	if (node == NULL)
 		return (ERR_ALLOCATION);
-	error = parse_expression(&node->child, tk_lst, -1);
+	error = parse_expression(&node->child, tk_lst, env, -1);
 	next = peek_front(tk_lst, 0);
 	if (node->child != NULL && next != NULL && next->type == TK_P_CLOSE)
 		peek_front(tk_lst, 1);
@@ -66,7 +65,7 @@ static t_error	nud_subshell(t_ast **ast, t_list **tk_lst, t_list **redirs)
 	return (*ast = node, ERR_NONE);
 }
 
-t_error	nud(t_ast **ast, t_list **tk_lst, t_token *token, t_list **rds)
+t_error	nud(t_ast **ast, t_list **tk_lst, char **env, t_token *token)
 {
 	t_error	error;
 
@@ -74,13 +73,13 @@ t_error	nud(t_ast **ast, t_list **tk_lst, t_token *token, t_list **rds)
 		return (ERR_IMPLEMENTATION);
 	if (token->type == TK_WORD)
 	{
-		error = nud_word(ast, token, rds);
+		error = nud_word(ast, token);
 		if (error != ERR_NONE)
 			return (error);
 	}
 	else if (token->type == TK_P_OPEN)
 	{
-		error = nud_subshell(ast, tk_lst, rds);
+		error = nud_subshell(ast, tk_lst, env);
 		if (error != ERR_NONE)
 			return (error);
 	}

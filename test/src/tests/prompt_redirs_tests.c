@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 00:13:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:04:44 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -25,6 +25,7 @@ static t_test_case prompt_redirs_case[] =
 		&(t_prompt_redirs_case)
 		{
 			"END",
+			{"hello world", "END", NULL},
 			{"hello world", "END", NULL}
 		}
 	},
@@ -33,6 +34,7 @@ static t_test_case prompt_redirs_case[] =
 		&(t_prompt_redirs_case)
 		{
 			"END",
+			{"hello", "world", "END", NULL},
 			{"hello", "world", "END", NULL}
 		}
 	},
@@ -41,6 +43,7 @@ static t_test_case prompt_redirs_case[] =
 		&(t_prompt_redirs_case)
 		{
 			"END",
+			{"hello world", NULL},
 			{"hello world", NULL}
 		}
 	},
@@ -49,6 +52,7 @@ static t_test_case prompt_redirs_case[] =
 		&(t_prompt_redirs_case)
 		{
 			"END",
+			{"hello", "world", NULL},
 			{"hello", "world", NULL}
 		}
 	},
@@ -57,6 +61,7 @@ static t_test_case prompt_redirs_case[] =
 		&(t_prompt_redirs_case)
 		{
 			"END",
+			{"VERY_LARGE", "END", NULL},
 			{"VERY_LARGE", "END", NULL}
 		}
 	},
@@ -65,14 +70,25 @@ static t_test_case prompt_redirs_case[] =
 		&(t_prompt_redirs_case)
 		{
 			"END",
+			{"MAX_PIPE", "END", NULL},
 			{"MAX_PIPE", "END", NULL}
+		}
+	},
+	{
+		"single_env",
+		&(t_prompt_redirs_case)
+		{
+			"END",
+			{"$USER", "END", NULL},
+			{"alex", "END", NULL}
 		}
 	},
 	{ NULL }
 };
 
-t_redir	*redir;
-t_list	*node;
+t_redir		*redir;
+t_list		*node;
+static char	*env[] = { "USER=alex", NULL };
 
 static int	test_setup(void **state)
 {
@@ -143,7 +159,7 @@ static void prompt_redirs_tests(void **case_name)
 		will_return(__wrap_readline, get_str(data->lines[i]));
 	if (!str_equal(redir->heredoc, data->lines[i-1]))
 		will_return(__wrap_readline, NULL);
-	error = prompt_redirs(node);
+	error = prompt_redirs(node, env);
 	if (error != ERR_NONE)
 		return(printf(FAIL_MSG, (char *) *case_name, "error"), assert_true(0));
 	i = 0;
@@ -151,7 +167,7 @@ static void prompt_redirs_tests(void **case_name)
 	str = get_next_line(redir->fd);
 	while (str != NULL)
 	{
-		char *line = get_str(data->lines[i]);
+		char *line = get_str(data->outputs[i]);
 		if (ft_strncmp(line, str, ft_strlen(line)) != 0)
 			equal = 0;
 		free(line);
@@ -173,6 +189,7 @@ t_test_result	execute_tests(void)
 		cmocka_unit_test_prestate_setup_teardown(prompt_redirs_tests, test_setup, test_teardown, prompt_redirs_case[3].name),
 		cmocka_unit_test_prestate_setup_teardown(prompt_redirs_tests, test_setup, test_teardown, prompt_redirs_case[4].name),
 		cmocka_unit_test_prestate_setup_teardown(prompt_redirs_tests, test_setup, test_teardown, prompt_redirs_case[5].name),
+		cmocka_unit_test_prestate_setup_teardown(prompt_redirs_tests, test_setup, test_teardown, prompt_redirs_case[6].name),
 	};
 	char	name[] = "redirs/prompt_redirs";
 	t_test_result	result;

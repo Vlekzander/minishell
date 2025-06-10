@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 10:53:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:58:24 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ static t_error	get_file_path(char **filename)
 		end[i] = 'A' + ((ptr >> (i * 4)) % 26);
 		i++;
 	}
-	printf("%s\n", name);
 	return (*filename = name, ERR_NONE);
 }
 

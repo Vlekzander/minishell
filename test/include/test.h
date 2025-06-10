@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:33:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 22:40:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:59:41 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_prompt_redirs_case
 {
 	char	*eof;
 	char	*lines[CASE_ARRAY_MAX];
+	char	*outputs[CASE_ARRAY_MAX];
 }	t_prompt_redirs_case;
 
 typedef struct s_open_file_case

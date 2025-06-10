@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 18:52:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 12:48:17 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:57:05 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1303,6 +1303,7 @@ static t_test_case parse_ast_error_cases[] =
 static t_list	*tokens;
 static t_ast	*expected;
 static t_ast	*tested;
+static char		*env[] = { NULL };
 
 t_error	__wrap_prompt_redirs(t_list *redirs)
 {
@@ -1343,7 +1344,7 @@ static void	parse_ast_basic_tests(void **case_name)
 	tokens = create_token_list(data->input_tokens);
 	if (tokens == NULL && data->input_tokens[0] != NULL)
 		return(printf(FAIL_MSG, (char *) *case_name, "create_token_list failed"), assert_true(0));
-	error = parse_ast(&tested, tokens);
+	error = parse_ast(&tested, tokens, env);
 	equal = ast_equal(expected, tested);
 	if (error != ERR_NONE)
 		return(printf(FAIL_MSG, (char *) *case_name, "error"), assert_true(0));
@@ -1369,7 +1370,7 @@ static void	parse_ast_error_tests(void **case_name)
 	tokens = create_token_list(data->input_tokens);
 	if (tokens == NULL && data->input_tokens[0] != NULL)
 		return(printf(FAIL_MSG, (char *) *case_name, "create_token_list failed"), assert_true(0));
-	error = parse_ast(&tested, tokens);
+	error = parse_ast(&tested, tokens, env);
 	equal = tested == NULL;
 	if (error != data->expected_error)
 		return(printf(FAIL_MSG, (char *) *case_name, "error"), assert_true(0));
