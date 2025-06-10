@@ -6,38 +6,41 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 23:13:45 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 10:53:41 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "redirs.h"
-#define FILE_PATH_PREFIX "/tmp/msh-thd."
+#define FILE_PATH_PREFIX "/tmp/msh-thd-"
 
-static t_error	get_file_path(char **output, unsigned long ptr)
+static t_error	get_file_path(char **filename)
 {
-	const char	*hex_digits = "0123456789abcdef";
-	char		*name;
-	char		*hexa;
-	size_t		i;
-	size_t		len;
+	char			*name;
+	char			*end;
+	size_t			i;
+	size_t			len;
+	unsigned long	ptr;
 
-	if (output == NULL)
+	if (filename == NULL)
 		return (ERR_IMPLEMENTATION);
 	len = ft_strlen(FILE_PATH_PREFIX);
-	name = ft_calloc(len + 16 + 1, sizeof(char));
+	name = ft_calloc(len + 5 + 1, sizeof(char));
 	if (name == NULL)
 		return (ERR_ALLOCATION);
+	ptr = (unsigned long) &name;
 	ft_memcpy(name, FILE_PATH_PREFIX, len);
-	hexa = name + len;
+	end = name + len;
 	i = 0;
-	while (i < 16)
+	while (i < 5)
 	{
-		hexa[i] = hex_digits[ptr >> (15 - i) * 4 & 0xF];
+		end[i] = 'A' + ((ptr >> (i * 4)) % 26);
 		i++;
 	}
-	return (*output = name, ERR_NONE);
+	printf("%s\n", name);
+	return (*filename = name, ERR_NONE);
 }
 
 static t_error	buf_to_file(int *fd, t_strbuilder *sb)
@@ -47,7 +50,7 @@ static t_error	buf_to_file(int *fd, t_strbuilder *sb)
 
 	if (fd == NULL || sb == NULL || sb->buffer == NULL)
 		return (ERR_IMPLEMENTATION);
-	error = get_file_path(&path, (unsigned long) sb);
+	error = get_file_path(&path);
 	if (error != ERR_NONE)
 		return (error);
 	error = open_file(fd, path, REDIR_HEREDOC, 1);

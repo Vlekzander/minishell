@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:40:30 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 23:12:39 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/10 10:41:10 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,10 @@ static t_error	prepare_of(t_redir_type type, int mode,
 	}
 	else if (type == REDIR_HEREDOC)
 	{
-		*flags = O_CREAT | O_RDWR;
 		if (mode)
-			*flags |= O_TRUNC;
+			*flags = O_CREAT | O_WRONLY | O_EXCL | O_TRUNC;
+		else
+			*flags = O_RDONLY;
 		*perms = 0600;
 	}
 	return (ERR_NONE);
