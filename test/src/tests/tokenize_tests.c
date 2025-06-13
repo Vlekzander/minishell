@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 14:02:30 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 23:06:57 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/13 14:32:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ static t_test_case tokenize_cases[] = {
 	{ "single_pipe", &(t_tokenize_case) { "ls | grep .c", { "ls", "|", "grep", ".c", NULL } } },
 	{ "multiple_pipes", &(t_tokenize_case) { "ls | grep .c | wc -l", { "ls", "|", "grep", ".c", "|", "wc", "-l", NULL } } },
 	{ "pipes_and_redir", &(t_tokenize_case) { "cat < in.txt | grep hello | wc -l > out.txt", { "cat", "<", "in.txt", "|", "grep", "hello", "|", "wc", "-l", ">", "out.txt", NULL } } },
-	{ "quoted_arg", &(t_tokenize_case) { "echo \"hello world\"", { "echo", "hello world", NULL } } },
-	{ "mixed_quotes", &(t_tokenize_case) { "echo \"it's fine\"", { "echo", "it's fine", NULL } } },
-	{ "complex_quotes_redir", &(t_tokenize_case) { "ech\"o\" Hello > ne\"w\".txt\"\"", { "echo", "Hello", ">", "new.txt", NULL } } },
+	{ "quoted_arg", &(t_tokenize_case) { "echo \"hello world\"", { "echo", "\"hello world\"", NULL } } },
+	{ "mixed_quotes", &(t_tokenize_case) { "echo \"it's fine\"", { "echo", "\"it's fine\"", NULL } } },
+	{ "complex_quotes_redir", &(t_tokenize_case) { "ech\"o\" Hello > ne\"w\".txt\"\"", { "ech\"o\"", "Hello", ">", "ne\"w\".txt\"\"", NULL } } },
 	{ "command_and", &(t_tokenize_case) { "make && ./program", { "make", "&&", "./program", NULL } } },
 	{ "command_or", &(t_tokenize_case) { "./build || echo fail", { "./build", "||", "echo", "fail", NULL } } },
 	{ "subshell", &(t_tokenize_case) { "(pwd)", { "(", "pwd", ")", NULL } } },
@@ -42,7 +42,7 @@ static t_test_case tokenize_cases[] = {
 	{ "subshell_and_redir", &(t_tokenize_case) { "(echo hello) > out.txt && echo done", { "(", "echo", "hello", ")", ">", "out.txt", "&&", "echo", "done", NULL } } },
 	{ "nested_logic", &(t_tokenize_case) { "make && (./run || echo fallback)", { "make", "&&", "(", "./run", "||", "echo", "fallback", ")", NULL } } },
 	{ "deep_nested_group", &(t_tokenize_case) { "(((echo ok)))", { "(", "(", "(", "echo", "ok", ")", ")", ")", NULL } } },
-	{ "multi_op_complex", &(t_tokenize_case) { "(cat file | grep error) && echo \"found\" || echo \"none\"", { "(", "cat", "file", "|", "grep", "error", ")", "&&", "echo", "found", "||", "echo", "none", NULL } } },
+	{ "multi_op_complex", &(t_tokenize_case) { "(cat file | grep error) && echo \"found\" || echo \"none\"", { "(", "cat", "file", "|", "grep", "error", ")", "&&", "echo", "\"found\"", "||", "echo", "\"none\"", NULL } } },
 	{ NULL }
 };
 

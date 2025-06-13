@@ -6,26 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:23:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 14:04:23 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/13 14:27:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-
-static void	remove_tokens_quotes(t_list *tokens)
-{
-	t_token	*token;
-
-	if (tokens == NULL)
-		return ;
-	while (tokens != NULL)
-	{
-		token = (t_token *) tokens->content;
-		if (token != NULL && token->type != TK_HEREDOC)
-			remove_str_quotes(token->value);
-		tokens = tokens->next;
-	}
-}
 
 t_error	tokenize(t_list **tokens, char **env, char *input)
 {
@@ -38,9 +23,5 @@ t_error	tokenize(t_list **tokens, char **env, char *input)
 	error = process_input(&tk_list, input);
 	if (error != ERR_NONE)
 		return (error);
-	error = expand_tokens(&tk_list, env);
-	if (error != ERR_NONE)
-		return (ft_lstclear(&tk_list, (void *) free_token), error);
-	remove_tokens_quotes(tk_list);
 	return (*tokens = tk_list, ERR_NONE);
 }
