@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 12:58:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/05 19:09:01 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/16 15:00:38 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,6 @@ static int	redir_equal(t_list *a, t_list *b)
 	return (a == b);
 }
 
-static int	command_equal(t_command *a, t_command *b)
-{
-	if (a == NULL || b == NULL)
-		return (a == b);
-	if (!str_equal(a->path, b->path))
-		return (0);
-	if (!str_array_equal(a->args, b->args))
-		return (0);
-	return (1);
-}
-
 static int	pipeline_equal(t_list *a, t_list *b)
 {
 	if (a == NULL || b == NULL)
@@ -71,13 +60,13 @@ int	ast_equal(t_ast *a, t_ast *b)
 	if (a->type != b->type)
 		return (0);
 	if (a->type == NODE_COMMAND)
-		return (command_equal(a->command, b->command) && redir_equal(a->redirs, b->redirs));
+		return (lst_equal(a->command_args, b->command_args, (void *) str_equal) && redir_equal(a->redirs, b->redirs));
 	if (a->type == NODE_PIPELINE)
 		return (pipeline_equal(a->pipeline, b->pipeline));
 	if (a->type == NODE_AND || a->type == NODE_OR)
 		return (ast_equal(a->left, b->left) && ast_equal(a->right, b->right));
-	if (a->type == NODE_SUBSHELL)
-		return (ast_equal(a->child, b->child) && redir_equal(a->redirs, b->redirs));
+	if (a->type == NODE_GROUP)
+		return (ast_equal(a->group, b->group));
 	if (a->type == NODE_REDIR)
 		return (redir_equal(a->redirs, b->redirs));
 	return (0);

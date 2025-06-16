@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:27:43 by apierret          #+#    #+#             */
-/*   Updated: 2025/04/30 14:30:30 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:24:47 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,5 @@ t_ast	*create_ast(t_node_type	type)
 	if (ast == NULL)
 		return (NULL);
 	ast->type = type;
-	if (type == NODE_COMMAND)
-	{
-		ast->command = ft_calloc(1, sizeof(t_command));
-		if (ast->command == NULL)
-			return (free_ast(ast), NULL);
-	}
 	return (ast);
 }

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 12:50:12 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/16 15:26:12 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static t_error	process_redirection(t_ast **node, t_token *token,
 		return (ERR_ALLOCATION);
 	element = ft_lstnew(redir);
 	if (element == NULL)
-		return (ERR_ALLOCATION);
+		return (free_redir(redir), ERR_ALLOCATION);
 	ft_lstadd_back(list, element);
 	return (*current_redir = TK_NONE, ERR_NONE);
 }
@@ -94,8 +94,9 @@ t_error	parse_expression(t_ast **ast, t_list **tk_lst, char **env, int prec)
 	while (in_expression(&token, tk_lst, prec))
 	{
 		error = ERR_SYNTAX;
-		if ((is_redirection(token) && current_redir == TK_NONE)
-			|| (token->type == TK_WORD && current_redir != TK_NONE))
+		if (((node != NULL && node->type != NODE_GROUP) || node == NULL)
+			&& ((is_redirection(token) && current_redir == TK_NONE)
+				|| (token->type == TK_WORD && current_redir != TK_NONE)))
 			error = process_redirection(&node, token, &current_redir);
 		else if (current_redir == TK_NONE
 			&& (node == NULL || node->type == NODE_REDIR))

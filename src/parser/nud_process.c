@@ -6,10 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:24:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 11:55:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:24:07 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "data.h"
 #include "error.h"
 #include "parser.h"
@@ -18,22 +19,21 @@
 static t_error	nud_word(t_ast **ast, t_token *token)
 {
 	t_ast	*node;
-	char	*basename;
+	t_list	*arg;
+	char	*str;
 
 	if (ast == NULL || token == NULL)
 		return (ERR_IMPLEMENTATION);
 	node = create_ast(NODE_COMMAND);
 	if (node == NULL)
 		return (ERR_ALLOCATION);
-	node->command->path = ft_strdup(token->value);
-	if (node->command->path == NULL)
-		return (free_ast(node), ERR_ALLOCATION);
-	basename = ft_strrchr(token->value, '/');
-	if (basename != NULL)
-		basename++;
-	else
-		basename = token->value;
-	str_array_push(&node->command->args, basename);
+	str = ft_strdup(token->value);
+	if (str == NULL)
+		return (ERR_ALLOCATION);
+	arg = ft_lstnew(str);
+	if (arg == NULL)
+		return (free(str), ERR_ALLOCATION);
+	ft_lstadd_back(&node->command_args, arg);
 	if (*ast != NULL)
 	{
 		node->redirs = (*ast)->redirs;
@@ -43,7 +43,7 @@ static t_error	nud_word(t_ast **ast, t_token *token)
 	return (*ast = node, ERR_NONE);
 }
 
-static t_error	nud_subshell(t_ast **ast, t_list **tk_lst, char **env)
+static t_error	nud_group(t_ast **ast, t_list **tk_lst, char **env)
 {
 	t_ast	*node;
 	t_error	error;
@@ -51,12 +51,12 @@ static t_error	nud_subshell(t_ast **ast, t_list **tk_lst, char **env)
 
 	if (*ast != NULL)
 		return (ERR_SYNTAX);
-	node = create_ast(NODE_SUBSHELL);
+	node = create_ast(NODE_GROUP);
 	if (node == NULL)
 		return (ERR_ALLOCATION);
-	error = parse_expression(&node->child, tk_lst, env, -1);
+	error = parse_expression(&node->group, tk_lst, env, -1);
 	next = peek_front(tk_lst, 0);
-	if (node->child != NULL && next != NULL && next->type == TK_P_CLOSE)
+	if (node->group != NULL && next != NULL && next->type == TK_P_CLOSE)
 		peek_front(tk_lst, 1);
 	else
 		error = ERR_SYNTAX;
@@ -79,7 +79,7 @@ t_error	nud(t_ast **ast, t_list **tk_lst, char **env, t_token *token)
 	}
 	else if (token->type == TK_P_OPEN)
 	{
-		error = nud_subshell(ast, tk_lst, env);
+		error = nud_group(ast, tk_lst, env);
 		if (error != ERR_NONE)
 			return (error);
 	}

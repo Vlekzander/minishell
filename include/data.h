@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 22:45:25 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:27:09 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef enum e_node_type
 	NODE_PIPELINE,
 	NODE_AND,
 	NODE_OR,
-	NODE_SUBSHELL,
+	NODE_GROUP,
 	NODE_REDIR
 }	t_node_type;
 
@@ -71,27 +71,18 @@ typedef struct s_redir
 	};
 }	t_redir;
 
-typedef struct s_command
-{
-	char		*path;
-	char		**args;
-}	t_command;
-
 typedef struct s_ast
 {
 	t_node_type	type;
 	int			exit_code;
 	union
 	{
-		t_list	*pipeline;
+		t_list			*pipeline;
+		struct s_ast	*group;
 		struct
 		{
-			t_list			*redirs;
-			union
-			{
-				t_command		*command;
-				struct s_ast	*child;
-			};
+			t_list	*redirs;
+			t_list	*command_args;
 		};
 		struct
 		{
@@ -130,7 +121,6 @@ t_vref			*create_vref(void);
 t_strbuilder	*create_strbuilder(size_t size);
 void			free_token(t_token *token);
 void			free_ast(t_ast *ast);
-void			free_command(t_command *command);
 void			free_redir(t_redir *redir);
 void			free_pattern(t_pattern *pattern);
 void			free_vref(t_vref *vref);
