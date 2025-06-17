@@ -6,27 +6,23 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 12:31:58 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/17 13:55:51 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:08:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "hash.h"
 
-int	htable_remove(t_hash_table *htable, char *key)
+static t_list	*find_deleted_node(t_list **head, char *key)
 {
 	size_t		key_len;
-	size_t		index;
-	t_hash_node	*node;
 	t_list		*lst;
 	t_list		*prev;
+	t_hash_node	*node;
 
-	if (htable == NULL || key == NULL)
-		return (-1);
 	key_len = ft_strlen(key);
-	index = htable->hash(key) % htable->buckets_count;
 	prev = NULL;
-	lst = htable->buckets[index];
+	lst = *head;
 	while (lst != NULL)
 	{
 		node = lst->content;
@@ -35,11 +31,28 @@ int	htable_remove(t_hash_table *htable, char *key)
 			if (prev != NULL)
 				prev->next = lst->next;
 			else
-				htable->buckets[index] = lst->next;
-			return (free_hnode(lst->content, htable->del), free(lst), 0);
+				*head = lst->next;
+			return (lst);
 		}
 		prev = lst;
 		lst = lst->next;
+	}
+	return (NULL);
+}
+
+int	htable_remove(t_hash_table *htable, char *key)
+{
+	size_t	index;
+	t_list	*node;
+
+	if (htable == NULL || key == NULL)
+		return (-1);
+	index = htable->hash(key) % htable->buckets_count;
+	node = find_deleted_node(&htable->buckets[index], key);
+	if (node != NULL)
+	{
+		free_hnode(node->content, htable->del);
+		free(node);
 	}
 	return (0);
 }
