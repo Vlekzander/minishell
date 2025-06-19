@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 14:33:58 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/07 18:42:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/17 22:43:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static t_error	calculate_len(size_t *len, char *base, t_list *vars, char **env)
 	while (vars != NULL)
 	{
 		var = vars->content;
-		error = get_var(&var_content, env, var->str +1);
+		error = ERR_IMPLEMENTATION;
 		if (error != ERR_NONE)
 			return (error);
 		size += ft_strlen(var_content);
@@ -63,11 +63,12 @@ static t_error	process_override(char **strs, size_t len, t_list *vars,
 	size_t	i;
 	t_error	error;
 
+	(void) env;
 	i = 0;
 	while (vars != NULL)
 	{
 		var = vars->content;
-		error = get_var(&var_content, env, var->str +1);
+		error = ERR_IMPLEMENTATION;
 		if (error != ERR_NONE)
 			return (free(strs[1]), error);
 		str_append_n(strs[1], strs[0] + i, var->index - i, len + 1);

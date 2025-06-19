@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 22:42:24 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/16 23:20:46 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/17 23:42:21 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ t_hash_table	*htable_init(size_t buckets_count, size_t (*hash)(char *key),
 	if (htable->buckets == NULL)
 		return (free(htable), NULL);
 	htable->buckets_count = buckets_count;
-	htable->hash = hash;
+	htable->hash = htable_hash;
+	if (hash != NULL)
+		htable->hash = hash;
 	htable->del = del;
 	return (htable);
 }
