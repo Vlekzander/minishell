@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 14:43:45 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:06:43 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 #include "lexer.h"
 #include "redirs.h"
 
-static t_error	bla(char **env, t_strbuilder *sb, char **line, int expand)
+static t_error	process_line(t_hash_table *env, t_strbuilder *sb, char **line,
+					int expand)
 {
 	char	*expanded;
 	t_error	error;
@@ -43,7 +44,8 @@ static t_error	bla(char **env, t_strbuilder *sb, char **line, int expand)
 	return (ERR_NONE);
 }
 
-static t_error	prompt_hd(char **env, t_strbuilder *sb, int is_last, char *eof)
+static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
+					char *eof)
 {
 	char	*line;
 	int		expand;
@@ -62,7 +64,7 @@ static t_error	prompt_hd(char **env, t_strbuilder *sb, int is_last, char *eof)
 			break ;
 		if (is_last)
 		{
-			error = bla(env, sb, &line, expand);
+			error = process_line(env, sb, &line, expand);
 			if (error != ERR_NONE)
 				return (free(line), error);
 		}
@@ -71,7 +73,7 @@ static t_error	prompt_hd(char **env, t_strbuilder *sb, int is_last, char *eof)
 	return (free(line), ERR_NONE);
 }
 
-static t_error	prompt_heredoc(t_redir *redir, char **env, int is_last)
+static t_error	prompt_heredoc(t_redir *redir, t_hash_table *env, int is_last)
 {
 	t_strbuilder	*sb;
 	t_error			error;
@@ -118,7 +120,7 @@ static t_error	collect_hds(t_list *redirs, t_list **hds, int *hd_end)
 	return (ERR_NONE);
 }
 
-t_error	prompt_redirs(t_list *redirs, char **env)
+t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 {
 	t_list	*hds;
 	int		hd_end;

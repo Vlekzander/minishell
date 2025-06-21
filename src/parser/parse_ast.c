@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/16 16:39:58 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:06:59 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ static int	in_expression(t_token **token, t_list **tk_lst, int prec)
 	return (*token = peek_front(tk_lst, 1), 1);
 }
 
-static t_error	finalize_expression(t_ast **ast, char **env, t_ast *node,
-	t_token_type current_redir)
+static t_error	finalize_expression(t_ast **ast, t_hash_table *env, t_ast *node,
+					t_token_type current_redir)
 {
 	t_error	error;
 
@@ -80,7 +80,8 @@ static t_error	finalize_expression(t_ast **ast, char **env, t_ast *node,
 	return (*ast = node, ERR_NONE);
 }
 
-t_error	parse_expression(t_ast **ast, t_list **tk_lst, char **env, int prec)
+t_error	parse_expression(t_ast **ast, t_list **tk_lst, t_hash_table *env,
+			int prec)
 {
 	t_ast			*node;
 	t_token			*token;
@@ -109,7 +110,7 @@ t_error	parse_expression(t_ast **ast, t_list **tk_lst, char **env, int prec)
 	return (finalize_expression(ast, env, node, current_redir));
 }
 
-t_error	parse_ast(t_ast **ast, t_list *tokens, char **env)
+t_error	parse_ast(t_ast **ast, t_list *tokens, t_hash_table *env)
 {
 	if (ast == NULL || tokens == NULL)
 		return (ERR_IMPLEMENTATION);

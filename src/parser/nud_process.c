@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:24:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/16 16:39:58 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:54:41 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static t_error	nud_word(t_ast **ast, t_token *token)
 	return (*ast = node, ERR_NONE);
 }
 
-static t_error	nud_group(t_ast **ast, t_list **tk_lst, char **env)
+static t_error	nud_group(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 {
 	t_ast	*node;
 	t_error	error;
@@ -65,7 +65,7 @@ static t_error	nud_group(t_ast **ast, t_list **tk_lst, char **env)
 	return (*ast = node, ERR_NONE);
 }
 
-t_error	nud(t_ast **ast, t_list **tk_lst, char **env, t_token *token)
+t_error	nud(t_ast **ast, t_list **tk_lst, t_hash_table *env, t_token *token)
 {
 	t_error	error;
 

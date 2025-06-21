@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   override_var.c                                     :+:      :+:    :+:   */
+/*   override_vars.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/02 14:33:58 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/17 22:43:58 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/21 15:15:26 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/21 16:07:35 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 #include "expand.h"
 #include "utils.h"
 
-static t_error	calculate_len(size_t *len, char *base, t_list *vars, char **env)
+static t_error	calculate_len(size_t *len, char *base, t_list *vars,
+					t_hash_table *env)
 {
 	size_t	size;
 	t_vref	*var;
@@ -28,7 +29,7 @@ static t_error	calculate_len(size_t *len, char *base, t_list *vars, char **env)
 	while (vars != NULL)
 	{
 		var = vars->content;
-		error = ERR_IMPLEMENTATION;
+		error = get_var(&var_content, env, var->str +1);
 		if (error != ERR_NONE)
 			return (error);
 		size += ft_strlen(var_content);
@@ -56,7 +57,7 @@ static void	str_append_n(char *dst, const char *src, size_t n, size_t dstsize)
 }
 
 static t_error	process_override(char **strs, size_t len, t_list *vars,
-		char **env)
+		t_hash_table *env)
 {
 	t_vref	*var;
 	char	*var_content;
@@ -68,7 +69,7 @@ static t_error	process_override(char **strs, size_t len, t_list *vars,
 	while (vars != NULL)
 	{
 		var = vars->content;
-		error = ERR_IMPLEMENTATION;
+		error = get_var(&var_content, env, var->str +1);
 		if (error != ERR_NONE)
 			return (free(strs[1]), error);
 		str_append_n(strs[1], strs[0] + i, var->index - i, len + 1);
@@ -81,7 +82,7 @@ static t_error	process_override(char **strs, size_t len, t_list *vars,
 	return (ERR_NONE);
 }
 
-t_error	override_vars(char **output, char *base, t_list *vars, char **env)
+t_error	over_vars(char **output, char *base, t_list *vars, t_hash_table *env)
 {
 	char		*strs[2];
 	size_t		len;

@@ -22,7 +22,7 @@ wraps_prompt_redirs_tests = -Wl,--wrap=readline
 wraps_parse_ast_tests = -Wl,--wrap=prompt_redirs
 wraps_tokenize_tests = -Wl,--wrap=expand
 
-all: $(NAME) $(TEST_BINS)
+all: $(NAME)
 
 $(NAME): $(OBJECTS)
 	@echo "$(BLUE)✦ Building libraries...$(RESET)\r"
