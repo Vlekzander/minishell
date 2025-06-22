@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:40:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/22 23:30:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static t_error	collect_hds(t_list *redirs, t_list **hds, int *hd_end)
 	t_redir	*redir;
 	t_list	*node;
 
-	if(hds == NULL || hd_end == NULL)
+	if (hds == NULL || hd_end == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	*hd_end = 0;
 	*hds = NULL;

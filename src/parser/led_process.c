@@ -40,9 +40,26 @@ static t_error	led_word(t_ast **ast, t_token *token)
 	return (error(ERR_NONE, NULL));
 }
 
-static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
+static t_error	prepare_pipeline(t_ast **ast)
 {
 	t_ast	*node;
+	t_list	*lst_node;
+
+	if (ast == NULL || *ast == NULL || (*ast)->type != NODE_COMMAND)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	node = create_ast(NODE_PIPELINE);
+	if (node == NULL)
+		return (error(ERR_ALLOCATION, NULL));
+	lst_node = ft_lstnew(*ast);
+	if (lst_node == NULL)
+		return (error(ERR_ALLOCATION, NULL));
+	ft_lstadd_back(&node->pipeline, lst_node);
+	*ast = node;
+	return (error(ERR_NONE, NULL));
+}
+
+static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
+{
 	t_ast	*right;
 	t_token	*token;
 	t_error	err;
@@ -51,11 +68,9 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	if ((*ast)->type == NODE_COMMAND)
 	{
-		node = create_ast(NODE_PIPELINE);
-		if (node == NULL)
-			return (error(ERR_ALLOCATION, NULL));
-		ft_lstadd_back(&node->pipeline, ft_lstnew(*ast));
-		*ast = node;
+		err = prepare_pipeline(ast);
+		if (err.code != ERR_NONE)
+			return (err);
 	}
 	right = NULL;
 	token = peek_front(tk_lst, 0);
@@ -66,7 +81,8 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 		err = parse_expression(&right, tk_lst, env, get_precedence(TK_PIPE));
 	if (err.code != ERR_NONE)
 		return (err);
-	return (ft_lstadd_back(&(*ast)->pipeline, ft_lstnew(right)), error(ERR_NONE, NULL));
+	return (ft_lstadd_back(&(*ast)->pipeline, ft_lstnew(right)),
+		error(ERR_NONE, NULL));
 }
 
 static t_error	led_logic(t_ast **ast, t_list **tk_lst, t_hash_table *env,
