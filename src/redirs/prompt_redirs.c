@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/21 16:06:43 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:40:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ static t_error	process_line(t_hash_table *env, t_strbuilder *sb, char **line,
 					int expand)
 {
 	char	*expanded;
-	t_error	error;
+	t_error	err;
 
 	if (env == NULL || sb == NULL || line == NULL || *line == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	expanded = NULL;
 	if (expand)
 	{
-		error = expand_env(&expanded, *line, env, 1);
-		if (error != ERR_NONE)
-			return (error);
+		err = expand_env(&expanded, *line, env, 1);
+		if (err.code != ERR_NONE)
+			return (err);
 		if (expanded != *line)
 		{
 			free(*line);
@@ -38,10 +38,10 @@ static t_error	process_line(t_hash_table *env, t_strbuilder *sb, char **line,
 		}
 	}
 	if (strbuilder_append(sb, *line) != 0)
-		return (ERR_ALLOCATION);
+		return (error(ERR_ALLOCATION, NULL));
 	if (strbuilder_append(sb, "\n") != 0)
-		return (ERR_ALLOCATION);
-	return (ERR_NONE);
+		return (error(ERR_ALLOCATION, NULL));
+	return (error(ERR_NONE, NULL));
 }
 
 static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
@@ -50,10 +50,10 @@ static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
 	char	*line;
 	int		expand;
 	int		run;
-	t_error	error;
+	t_error	err;
 
 	if (env == NULL || sb == NULL || eof == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	expand = (ft_strchr(eof, '"') == NULL && ft_strchr(eof, '\'') == NULL);
 	remove_str_quotes(eof);
 	run = 1;
@@ -64,35 +64,35 @@ static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
 			break ;
 		if (is_last)
 		{
-			error = process_line(env, sb, &line, expand);
-			if (error != ERR_NONE)
-				return (free(line), error);
+			err = process_line(env, sb, &line, expand);
+			if (err.code != ERR_NONE)
+				return (free(line), err);
 		}
 		free(line);
 	}
-	return (free(line), ERR_NONE);
+	return (free(line), error(ERR_NONE, NULL));
 }
 
 static t_error	prompt_heredoc(t_redir *redir, t_hash_table *env, int is_last)
 {
 	t_strbuilder	*sb;
-	t_error			error;
+	t_error			err;
 
 	if (redir == NULL || redir->type != REDIR_HEREDOC)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	sb = NULL;
 	if (is_last)
 	{
 		sb = create_strbuilder(8192);
 		if (sb == NULL)
-			return (ERR_ALLOCATION);
+			return (error(ERR_ALLOCATION, NULL));
 	}
-	error = prompt_hd(env, sb, is_last, redir->heredoc);
-	if (error != ERR_NONE)
-		return (free_strbuilder(sb), error);
+	err = prompt_hd(env, sb, is_last, redir->heredoc);
+	if (err.code != ERR_NONE)
+		return (free_strbuilder(sb), err);
 	if (is_last)
-		error = process_heredoc(redir, sb);
-	return (free_strbuilder(sb), error);
+		err = process_heredoc(redir, sb);
+	return (free_strbuilder(sb), err);
 }
 
 static t_error	collect_hds(t_list *redirs, t_list **hds, int *hd_end)
@@ -100,6 +100,8 @@ static t_error	collect_hds(t_list *redirs, t_list **hds, int *hd_end)
 	t_redir	*redir;
 	t_list	*node;
 
+	if(hds == NULL || hd_end == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
 	*hd_end = 0;
 	*hds = NULL;
 	while (redirs != NULL)
@@ -109,7 +111,7 @@ static t_error	collect_hds(t_list *redirs, t_list **hds, int *hd_end)
 		{
 			node = ft_lstnew(redir);
 			if (node == NULL)
-				return (ft_lstclear(hds, NULL), ERR_ALLOCATION);
+				return (ft_lstclear(hds, NULL), error(ERR_ALLOCATION, NULL));
 			ft_lstadd_back(hds, node);
 			*hd_end = 1;
 		}
@@ -117,32 +119,32 @@ static t_error	collect_hds(t_list *redirs, t_list **hds, int *hd_end)
 			*hd_end = 0;
 		redirs = redirs->next;
 	}
-	return (ERR_NONE);
+	return (error(ERR_NONE, NULL));
 }
 
 t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 {
 	t_list	*hds;
 	int		hd_end;
-	t_error	error;
+	t_error	err;
 	t_redir	*redir;
 	t_list	*node;
 
-	error = collect_hds(redirs, &hds, &hd_end);
-	if (error != ERR_NONE)
-		return (error);
+	err = collect_hds(redirs, &hds, &hd_end);
+	if (err.code != ERR_NONE)
+		return (err);
 	if (hds != NULL)
 	{
 		node = hds;
 		while (node != NULL)
 		{
 			redir = node->content;
-			error = prompt_heredoc(redir, env, node->next == NULL && hd_end);
-			if (error != ERR_NONE)
-				return (ft_lstclear(&hds, NULL), error);
+			err = prompt_heredoc(redir, env, node->next == NULL && hd_end);
+			if (err.code != ERR_NONE)
+				return (ft_lstclear(&hds, NULL), err);
 			node = node->next;
 		}
 		ft_lstclear(&hds, NULL);
 	}
-	return (ERR_NONE);
+	return (error(ERR_NONE, NULL));
 }

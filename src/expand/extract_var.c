@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 12:38:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/21 16:04:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:19:07 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static t_error	scan_next_var(char *str, int *index, int *len, int ignore_quote)
 	int		i;
 
 	if (str == NULL || index == NULL || len == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	*index = -1;
 	*len = 0;
 	quote = 0;
@@ -39,27 +39,27 @@ static t_error	scan_next_var(char *str, int *index, int *len, int ignore_quote)
 			(*len)++;
 		i++;
 	}
-	return (ERR_NONE);
+	return (error(ERR_NONE, NULL));
 }
 
 t_error	extract_var(t_vref **varpos, char *str, int ignore_quote)
 {
-	t_error	error;
+	t_error	err;
 	t_vref	*var;
 	int		len;
 
 	if (varpos == NULL || str == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	var = create_vref();
 	if (var == NULL)
-		return (*varpos = NULL, ERR_ALLOCATION);
+		return (*varpos = NULL, error(ERR_ALLOCATION, NULL));
 	len = 0;
-	error = scan_next_var(str, &var->index, &len, ignore_quote);
-	if (error != ERR_NONE)
-		return (error);
+	err = scan_next_var(str, &var->index, &len, ignore_quote);
+	if (err.code != ERR_NONE)
+		return (err);
 	if (var->index != -1 && len > 1)
 		var->str = ft_strndup(str + var->index, len);
 	if (var->index != -1 && len > 1 && var->str == NULL)
-		return (*varpos = NULL, ERR_ALLOCATION);
-	return (*varpos = var, ERR_NONE);
+		return (*varpos = NULL, error(ERR_ALLOCATION, NULL));
+	return (*varpos = var, error(ERR_NONE, NULL));
 }

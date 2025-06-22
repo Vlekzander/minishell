@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 23:37:37 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/02 14:17:26 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:43:20 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ static t_error	new_node(t_list **node, char *input, size_t size)
 	t_list	*ptr;
 
 	if (node == NULL || input == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	content = ft_strndup(input, size);
 	if (content == NULL)
-		return (ERR_ALLOCATION);
+		return (error(ERR_ALLOCATION, NULL));
 	ptr = ft_lstnew(content);
 	if (ptr == NULL)
-		return (free(content), ERR_ALLOCATION);
-	return (*node = ptr, ERR_NONE);
+		return (free(content), error(ERR_ALLOCATION, NULL));
+	return (*node = ptr, error(ERR_NONE, NULL));
 }
 
 t_error	split_lst(t_list **lst, char *input, char c)
@@ -36,10 +36,10 @@ t_error	split_lst(t_list **lst, char *input, char c)
 	t_list	*list;
 	t_list	*node;
 	char	*ptr;
-	t_error	error;
+	t_error	err;
 
 	if (lst == NULL || input == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	list = NULL;
 	while (*input != '\0')
 	{
@@ -48,14 +48,14 @@ t_error	split_lst(t_list **lst, char *input, char c)
 			ptr = input + ft_strlen(input);
 		if (ptr - input > 0)
 		{
-			error = new_node(&node, input, ptr - input);
-			if (error != ERR_NONE)
-				return (ft_lstclear(&list, free), error);
+			err = new_node(&node, input, ptr - input);
+			if (err.code != ERR_NONE)
+				return (ft_lstclear(&list, free), err);
 			ft_lstadd_back(&list, node);
 		}
 		input = ptr;
 		if (*ptr != '\0')
 			input++;
 	}
-	return (*lst = list, ERR_NONE);
+	return (*lst = list, error(ERR_NONE, NULL));
 }

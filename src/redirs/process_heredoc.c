@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/10 11:58:24 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:38:45 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static t_error	get_file_path(char **filename)
 	unsigned long	ptr;
 
 	if (filename == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	len = ft_strlen(FILE_PATH_PREFIX);
 	name = ft_calloc(len + 5 + 1, sizeof(char));
 	if (name == NULL)
-		return (ERR_ALLOCATION);
+		return (error(ERR_ALLOCATION, NULL));
 	ptr = (unsigned long) &name;
 	ft_memcpy(name, FILE_PATH_PREFIX, len);
 	end = name + len;
@@ -39,30 +39,30 @@ static t_error	get_file_path(char **filename)
 		end[i] = 'A' + ((ptr >> (i * 4)) % 26);
 		i++;
 	}
-	return (*filename = name, ERR_NONE);
+	return (*filename = name, error(ERR_NONE, NULL));
 }
 
 static t_error	buf_to_file(int *fd, t_strbuilder *sb)
 {
-	t_error	error;
+	t_error	err;
 	char	*path;
 
 	if (fd == NULL || sb == NULL || sb->buffer == NULL)
-		return (ERR_IMPLEMENTATION);
-	error = get_file_path(&path);
-	if (error != ERR_NONE)
-		return (error);
-	error = open_file(fd, path, REDIR_HEREDOC, 1);
-	if (error != ERR_NONE)
-		return (error);
+		return (error(ERR_IMPLEMENTATION, NULL));
+	err = get_file_path(&path);
+	if (err.code != ERR_NONE)
+		return (err);
+	err = open_file(fd, path, REDIR_HEREDOC, 1);
+	if (err.code != ERR_NONE)
+		return (err);
 	write(*fd, sb->buffer, sb->length);
 	close(*fd);
-	error = open_file(fd, path, REDIR_HEREDOC, 0);
-	if (error != ERR_NONE)
-		return (error);
+	err = open_file(fd, path, REDIR_HEREDOC, 0);
+	if (err.code != ERR_NONE)
+		return (err);
 	unlink(path);
 	free(path);
-	return (ERR_NONE);
+	return (error(ERR_NONE, NULL));
 }
 
 static t_error	buf_to_pipe(int *fd, t_strbuilder *sb)
@@ -70,26 +70,26 @@ static t_error	buf_to_pipe(int *fd, t_strbuilder *sb)
 	int	pipe_fds[2];
 
 	if (fd == NULL || sb == NULL || sb->buffer == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	if (pipe(pipe_fds) == -1)
-		return (ERR_PIPE);
+		return (error(ERR_PIPE, NULL));
 	write(pipe_fds[1], sb->buffer, sb->length);
 	close(pipe_fds[1]);
-	return (*fd = pipe_fds[0], ERR_NONE);
+	return (*fd = pipe_fds[0], error(ERR_NONE, NULL));
 }
 
 t_error	process_heredoc(t_redir *redir, t_strbuilder *sb)
 {
 	int		fd;
-	t_error	error;
+	t_error	err;
 
 	if (redir == NULL || sb == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	if (sb->length > 65535)
-		error = buf_to_file(&fd, sb);
+		err = buf_to_file(&fd, sb);
 	else
-		error = buf_to_pipe(&fd, sb);
-	if (error != ERR_NONE)
-		return (error);
-	return (redir->fd = fd, ERR_NONE);
+		err = buf_to_pipe(&fd, sb);
+	if (err.code != ERR_NONE)
+		return (err);
+	return (redir->fd = fd, error(ERR_NONE, NULL));
 }

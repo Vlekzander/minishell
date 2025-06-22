@@ -14,14 +14,14 @@
 
 t_error	tokenize(t_list **tokens, char **env, char *input)
 {
-	t_error	error;
+	t_error	err;
 	t_list	*tk_list;
 
 	if (tokens == NULL || env == NULL || input == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	tk_list = NULL;
-	error = process_input(&tk_list, input);
-	if (error != ERR_NONE)
-		return (error);
-	return (*tokens = tk_list, ERR_NONE);
+	err = process_input(&tk_list, input);
+	if (err.code != ERR_NONE)
+		return (err);
+	return (*tokens = tk_list, error(ERR_NONE, NULL));
 }

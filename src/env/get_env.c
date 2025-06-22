@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:16:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/19 12:06:04 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:12:20 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ t_error	get_env(char **str, t_hash_table *env)
 	int				ret;
 
 	if (str == NULL || env == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	sb = create_strbuilder(256);
 	if (sb == NULL)
-		return (ERR_ALLOCATION);
+		return (error(ERR_ALLOCATION, NULL));
 	ret = htable_foreach(env, env_to_str, sb);
 	if (ret != 0)
-		return (free_strbuilder(sb), ERR_ALLOCATION);
+		return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
 	env_str = ft_strdup(sb->buffer);
 	if (env_str == NULL)
-		return (free_strbuilder(sb), ERR_ALLOCATION);
-	return (*str = env_str, free_strbuilder(sb), ERR_NONE);
+		return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
+	return (*str = env_str, free_strbuilder(sb), error(ERR_NONE, NULL));
 }

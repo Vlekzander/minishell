@@ -27,6 +27,14 @@ typedef enum e_error_code
 	ERR_IS_DIRECTORY,
 	ERR_PIPE,
 	ERR_INVALID_KEY
+}	t_error_code;
+
+typedef struct s_error
+{
+	t_error_code	code;
+	char			*cause;
 }	t_error;
+
+t_error	error(t_error_code code, char *cause);
 
 #endif

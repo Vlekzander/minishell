@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   remove_var.c                                       :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/22 15:16:34 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:13:31 by apierret         ###   ########.fr       */
+/*   Created: 2025/06/22 15:29:23 by apierret          #+#    #+#             */
+/*   Updated: 2025/06/22 20:44:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env.h"
+#include "error.h"
+#include "libft.h"
 
-t_error	remove_var(t_hash_table *env, char *key)
+t_error	error(t_error_code code, char *cause)
 {
-	if (env == NULL || key == NULL)
-		return (error(ERR_IMPLEMENTATION, NULL));
-	htable_remove(env, key);
-	return (error(ERR_NONE, NULL));
+	t_error	err;
+
+	err.code = code;
+	err.cause = ft_strdup(cause);
+	return (err);
 }

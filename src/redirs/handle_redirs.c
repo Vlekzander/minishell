@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 19:18:31 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 17:04:54 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:32:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,57 +16,57 @@
 static t_error	process_redir_in(t_redir *redir)
 {
 	int		fd;
-	t_error	error;
+	t_error	err;
 
 	if (redir == NULL || redir->type != REDIR_IN || redir->in == NULL)
-		return (ERR_IMPLEMENTATION);
-	error = open_file(&fd, redir->in, redir->type, 0);
-	if (error != ERR_NONE)
-		return (error);
+		return (error(ERR_IMPLEMENTATION, NULL));
+	err = open_file(&fd, redir->in, redir->type, 0);
+	if (err.code != ERR_NONE)
+		return (err);
 	dup2(fd, STDIN_FILENO);
-	return (close(fd), ERR_NONE);
+	return (close(fd), error(ERR_NONE, NULL));
 }
 
 static t_error	process_redir_out(t_redir *redir)
 {
 	int		fd;
-	t_error	error;
+	t_error	err;
 
 	if (redir == NULL || redir->type != REDIR_OUT || redir->out == NULL)
-		return (ERR_IMPLEMENTATION);
-	error = open_file(&fd, redir->out, redir->type, redir->append);
-	if (error != ERR_NONE)
-		return (error);
+		return (error(ERR_IMPLEMENTATION, NULL));
+	err = open_file(&fd, redir->out, redir->type, redir->append);
+	if (err.code != ERR_NONE)
+		return (err);
 	dup2(fd, STDOUT_FILENO);
-	return (close(fd), ERR_NONE);
+	return (close(fd), error(ERR_NONE, NULL));
 }
 
 static t_error	process_redir_heredoc(t_redir *redir)
 {
 	if (redir == NULL || redir->type != REDIR_HEREDOC)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	if (redir->fd == -1)
-		return (ERR_NONE);
+		return (error(ERR_NONE, NULL));
 	dup2(redir->fd, STDIN_FILENO);
-	return (close(redir->fd), ERR_NONE);
+	return (close(redir->fd), error(ERR_NONE, NULL));
 }
 
 t_error	handle_redirs(t_list *redirs)
 {
 	t_redir	*redir;
-	t_error	error;
+	t_error	err;
 
-	error = ERR_NONE;
+	err = error(ERR_NONE, NULL);
 	while (redirs != NULL)
 	{
 		redir = redirs->content;
 		if (redir->type == REDIR_IN)
-			error = process_redir_in(redir);
+			err = process_redir_in(redir);
 		else if (redir->type == REDIR_OUT)
-			error = process_redir_out(redir);
+			err = process_redir_out(redir);
 		else if (redir->type == REDIR_HEREDOC)
-			error = process_redir_heredoc(redir);
+			err = process_redir_heredoc(redir);
 		redirs = redirs->next;
 	}
-	return (error);
+	return (err);
 }

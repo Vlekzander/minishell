@@ -23,21 +23,21 @@ static t_error	led_word(t_ast **ast, t_token *token)
 	char	*str;
 
 	if (ast == NULL || token == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	if ((*ast)->type == NODE_COMMAND)
 		node = (*ast);
 	else if ((*ast)->type == NODE_PIPELINE)
 		node = (t_ast *) ft_lstlast((*ast)->pipeline)->content;
 	else
-		return (ERR_SYNTAX);
+		return (error(ERR_SYNTAX, NULL));
 	str = ft_strdup(token->value);
 	if (str == NULL)
-		return (ERR_ALLOCATION);
+		return (error(ERR_ALLOCATION, NULL));
 	arg = ft_lstnew(str);
 	if (arg == NULL)
-		return (free(str), ERR_ALLOCATION);
+		return (free(str), error(ERR_ALLOCATION, NULL));
 	ft_lstadd_back(&node->command_args, arg);
-	return (ERR_NONE);
+	return (error(ERR_NONE, NULL));
 }
 
 static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
@@ -45,15 +45,15 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 	t_ast	*node;
 	t_ast	*right;
 	t_token	*token;
-	t_error	error;
+	t_error	err;
 
 	if (ast == NULL || tk_lst == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	if ((*ast)->type == NODE_COMMAND)
 	{
 		node = create_ast(NODE_PIPELINE);
 		if (node == NULL)
-			return (ERR_ALLOCATION);
+			return (error(ERR_ALLOCATION, NULL));
 		ft_lstadd_back(&node->pipeline, ft_lstnew(*ast));
 		*ast = node;
 	}
@@ -61,12 +61,12 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 	token = peek_front(tk_lst, 0);
 	if (token == NULL || token->type == TK_PIPE || token->type == TK_AND
 		|| token->type == TK_OR || token->type == TK_P_OPEN)
-		error = ERR_SYNTAX;
+		err = error(ERR_SYNTAX, NULL);
 	else
-		error = parse_expression(&right, tk_lst, env, get_precedence(TK_PIPE));
-	if (error != ERR_NONE)
-		return (error);
-	return (ft_lstadd_back(&(*ast)->pipeline, ft_lstnew(right)), ERR_NONE);
+		err = parse_expression(&right, tk_lst, env, get_precedence(TK_PIPE));
+	if (err.code != ERR_NONE)
+		return (err);
+	return (ft_lstadd_back(&(*ast)->pipeline, ft_lstnew(right)), error(ERR_NONE, NULL));
 }
 
 static t_error	led_logic(t_ast **ast, t_list **tk_lst, t_hash_table *env,
@@ -74,54 +74,54 @@ static t_error	led_logic(t_ast **ast, t_list **tk_lst, t_hash_table *env,
 {
 	t_ast		*node;
 	t_ast		*right;
-	t_error		error;
+	t_error		err;
 	t_node_type	type;
 
 	if (ast == NULL || tk_lst == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	type = NODE_AND;
 	if (tk_type == TK_OR)
 		type = NODE_OR;
 	node = create_ast(type);
 	if (node == NULL)
-		return (ERR_ALLOCATION);
+		return (error(ERR_ALLOCATION, NULL));
 	node->left = *ast;
 	*ast = node;
 	right = NULL;
-	error = parse_expression(&right, tk_lst, env, get_precedence(tk_type));
-	if (error != ERR_NONE)
-		return (error);
+	err = parse_expression(&right, tk_lst, env, get_precedence(tk_type));
+	if (err.code != ERR_NONE)
+		return (err);
 	if (right == NULL)
-		return (ERR_SYNTAX);
+		return (error(ERR_SYNTAX, NULL));
 	node->right = right;
-	return (ERR_NONE);
+	return (error(ERR_NONE, NULL));
 }
 
 t_error	led(t_ast **ast, t_list **tk_lst, t_hash_table *env, t_token *token)
 {
-	t_error	error;
+	t_error	err;
 
 	if (ast == NULL || tk_lst == NULL || token == NULL)
-		return (ERR_IMPLEMENTATION);
-	error = ERR_SYNTAX;
+		return (error(ERR_IMPLEMENTATION, NULL));
+	err = error(ERR_SYNTAX, NULL);
 	if (token->type == TK_WORD)
 	{
-		error = led_word(ast, token);
-		if (error != ERR_NONE)
-			return (error);
+		err = led_word(ast, token);
+		if (err.code != ERR_NONE)
+			return (err);
 	}
 	else if (token->type == TK_PIPE
 		&& ((*ast != NULL && (*ast)->type != NODE_GROUP) || *ast == NULL))
 	{
-		error = led_pipe(ast, tk_lst, env);
-		if (error != ERR_NONE)
-			return (error);
+		err = led_pipe(ast, tk_lst, env);
+		if (err.code != ERR_NONE)
+			return (err);
 	}
 	else if (token->type == TK_AND || token->type == TK_OR)
 	{
-		error = led_logic(ast, tk_lst, env, token->type);
-		if (error != ERR_NONE)
-			return (error);
+		err = led_logic(ast, tk_lst, env, token->type);
+		if (err.code != ERR_NONE)
+			return (err);
 	}
-	return (error);
+	return (err);
 }

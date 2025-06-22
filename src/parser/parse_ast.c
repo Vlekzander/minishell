@@ -22,25 +22,25 @@ static t_error	process_redirection(t_ast **node, t_token *token,
 	t_redir_type	redir_type;
 
 	if (node == NULL || token == NULL || current_redir == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	if (*current_redir == TK_NONE)
-		return (*current_redir = token->type, ERR_NONE);
+		return (*current_redir = token->type, error(ERR_NONE, NULL));
 	if (*node == NULL)
 	{
 		*node = create_ast(NODE_REDIR);
 		if (*node == NULL)
-			return (ERR_ALLOCATION);
+			return (error(ERR_ALLOCATION, NULL));
 	}
 	list = &(*node)->redirs;
 	redir_type = get_redir_type(*current_redir);
 	redir = create_redir(redir_type, token->value, *current_redir == TK_APPEND);
 	if (redir == NULL)
-		return (ERR_ALLOCATION);
+		return (error(ERR_ALLOCATION, NULL));
 	element = ft_lstnew(redir);
 	if (element == NULL)
-		return (free_redir(redir), ERR_ALLOCATION);
+		return (free_redir(redir), error(ERR_ALLOCATION, NULL));
 	ft_lstadd_back(list, element);
-	return (*current_redir = TK_NONE, ERR_NONE);
+	return (*current_redir = TK_NONE, error(ERR_NONE, NULL));
 }
 
 static int	in_expression(t_token **token, t_list **tk_lst, int prec)
@@ -66,18 +66,18 @@ static int	in_expression(t_token **token, t_list **tk_lst, int prec)
 static t_error	finalize_expression(t_ast **ast, t_hash_table *env, t_ast *node,
 					t_token_type current_redir)
 {
-	t_error	error;
+	t_error	err;
 
 	if (ast == NULL)
-		return (ERR_IMPLEMENTATION);
-	error = ERR_NONE;
+		return (error(ERR_IMPLEMENTATION, NULL));
+	err = error(ERR_NONE, NULL);
 	if (node != NULL)
-		error = prompt_redirs(node->redirs, env);
-	if (error != ERR_NONE)
-		return (free_ast(node), ERR_SYNTAX);
+		err = prompt_redirs(node->redirs, env);
+	if (err.code != ERR_NONE)
+		return (free_ast(node), error(ERR_SYNTAX, NULL));
 	if (current_redir != TK_NONE)
-		return (free_ast(node), ERR_SYNTAX);
-	return (*ast = node, ERR_NONE);
+		return (free_ast(node), error(ERR_SYNTAX, NULL));
+	return (*ast = node, error(ERR_NONE, NULL));
 }
 
 t_error	parse_expression(t_ast **ast, t_list **tk_lst, t_hash_table *env,
@@ -85,27 +85,27 @@ t_error	parse_expression(t_ast **ast, t_list **tk_lst, t_hash_table *env,
 {
 	t_ast			*node;
 	t_token			*token;
-	t_error			error;
+	t_error			err;
 	t_token_type	current_redir;
 
 	if (ast == NULL || tk_lst == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	node = NULL;
 	current_redir = TK_NONE;
 	while (in_expression(&token, tk_lst, prec))
 	{
-		error = ERR_SYNTAX;
+		err = error(ERR_SYNTAX, NULL);
 		if (((node != NULL && node->type != NODE_GROUP) || node == NULL)
 			&& ((is_redirection(token) && current_redir == TK_NONE)
 				|| (token->type == TK_WORD && current_redir != TK_NONE)))
-			error = process_redirection(&node, token, &current_redir);
+			err = process_redirection(&node, token, &current_redir);
 		else if (current_redir == TK_NONE
 			&& (node == NULL || node->type == NODE_REDIR))
-			error = nud(&node, tk_lst, env, token);
+			err = nud(&node, tk_lst, env, token);
 		else if (current_redir == TK_NONE)
-			error = led(&node, tk_lst, env, token);
-		if (error != ERR_NONE)
-			return (free_ast(node), error);
+			err = led(&node, tk_lst, env, token);
+		if (err.code != ERR_NONE)
+			return (free_ast(node), err);
 	}
 	return (finalize_expression(ast, env, node, current_redir));
 }
@@ -113,6 +113,6 @@ t_error	parse_expression(t_ast **ast, t_list **tk_lst, t_hash_table *env,
 t_error	parse_ast(t_ast **ast, t_list *tokens, t_hash_table *env)
 {
 	if (ast == NULL || tokens == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	return (parse_expression(ast, &tokens, env, 0));
 }

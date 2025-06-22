@@ -21,13 +21,13 @@ t_error	str_array_push(char ***array, char *element)
 	size_t	i;
 
 	if (array == NULL || element == NULL)
-		return (ERR_IMPLEMENTATION);
+		return (error(ERR_IMPLEMENTATION, NULL));
 	size = 0;
 	while (*array != NULL && (*array)[size] != NULL)
 		size++;
 	new_array = ft_calloc(size + 2, sizeof(char *));
 	if (new_array == NULL)
-		return (ERR_ALLOCATION);
+		return (error(ERR_ALLOCATION, NULL));
 	i = 0;
 	while (*array != NULL && i < size)
 	{
@@ -36,6 +36,6 @@ t_error	str_array_push(char ***array, char *element)
 	}
 	new_array[i] = ft_strdup(element);
 	if (new_array[i] == NULL)
-		return (free(new_array), ERR_ALLOCATION);
-	return (free(*array), *array = new_array, ERR_NONE);
+		return (free(new_array), error(ERR_ALLOCATION, NULL));
+	return (free(*array), *array = new_array, error(ERR_NONE, NULL));
 }
