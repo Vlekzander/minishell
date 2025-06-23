@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:43:29 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/17 23:50:09 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:25:04 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ typedef enum e_error_code
 	ERR_PERMISSION,
 	ERR_IS_DIRECTORY,
 	ERR_PIPE,
-	ERR_INVALID_KEY
+	ERR_INVALID_KEY,
+	ERR_AMB_REDIR
 }	t_error_code;
 
 typedef struct s_error

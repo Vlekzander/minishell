@@ -6,11 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 19:18:31 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:32:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/23 23:07:22 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include "expand.h"
 #include "redirs.h"
 
 static t_error	process_redir_in(t_redir *redir)
@@ -51,22 +52,26 @@ static t_error	process_redir_heredoc(t_redir *redir)
 	return (close(redir->fd), error(ERR_NONE, NULL));
 }
 
-t_error	handle_redirs(t_list *redirs)
+t_error	handle_redirs(t_list *redirs, t_hash_table *env)
 {
 	t_redir	*redir;
 	t_error	err;
 
-	err = error(ERR_NONE, NULL);
 	while (redirs != NULL)
 	{
 		redir = redirs->content;
+		err = expand_redir_target(redir, env);
+		if (err.code != ERR_NONE)
+			return (err);
 		if (redir->type == REDIR_IN)
 			err = process_redir_in(redir);
 		else if (redir->type == REDIR_OUT)
 			err = process_redir_out(redir);
 		else if (redir->type == REDIR_HEREDOC)
 			err = process_redir_heredoc(redir);
+		if (err.code != ERR_NONE)
+			return (err);
 		redirs = redirs->next;
 	}
-	return (err);
+	return (error(ERR_NONE, NULL));
 }

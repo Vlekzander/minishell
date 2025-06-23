@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:04:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 23:46:16 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/23 23:06:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ t_error	over_vars(char **output, char *base, t_list *vars, t_hash_table *env);
 t_error	expand_wildcard(char **output, char *base);
 t_error	extract_pattern(t_pattern **pattern, char *str);
 t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern);
+t_error	expand_redir_target(t_redir *redir, t_hash_table *env);
 
 #endif
