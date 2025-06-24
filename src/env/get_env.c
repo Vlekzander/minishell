@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:16:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:12:20 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:25:49 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ static int	env_to_str(char *key, void *value, void *data)
 	if (key == NULL || value == NULL || data == NULL)
 		return (-1);
 	sb = data;
+	if (ft_strncmp("?", key, 2) == 0)
+		return (0);
 	ret = strbuilder_append(sb, key);
 	if (ret != 0)
 		return (ret);

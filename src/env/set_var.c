@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:16:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:14:03 by apierret         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:11:05 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static int	is_valid_key(char *key)
 
 	if (key == NULL)
 		return (0);
+	if (ft_strncmp("?", key, 2) == 0)
+		return (1);
 	i = 0;
 	while (key[i] != '\0')
 	{
