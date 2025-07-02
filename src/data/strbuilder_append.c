@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 12:42:59 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 01:32:10 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	strbuilder_append(t_strbuilder *sb, char *str)
 	char	*buf;
 
 	if (sb == NULL || str == NULL)
-		return (-1);
+		return (0);
 	str_len = ft_strlen(str);
 	if (sb->length + str_len >= sb->size)
 	{
@@ -29,12 +29,12 @@ int	strbuilder_append(t_strbuilder *sb, char *str)
 			sb->size *= 2;
 		buf = ft_calloc(sb->size, sizeof(char));
 		if (buf == NULL)
-			return (-1);
+			return (0);
 		ft_memcpy(buf, sb->buffer, sb->length);
 		free(sb->buffer);
 		sb->buffer = buf;
 	}
 	ft_memcpy(sb->buffer + sb->length, str, str_len +1);
 	sb->length += str_len;
-	return (0);
+	return (1);
 }

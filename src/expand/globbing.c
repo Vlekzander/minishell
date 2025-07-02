@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:20:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 23:21:52 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/01 21:50:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,45 +65,6 @@ static t_error	lst_dup(t_list **dest, t_list *base)
 	return (error(ERR_NONE, NULL));
 }
 
-static void	remove_node(t_list **lst, t_list **prev, t_list **node)
-{
-	t_list	*temp;
-
-	temp = *node;
-	if (*prev == NULL)
-	{
-		*lst = (*node)->next;
-		*node = *lst;
-	}
-	else
-	{
-		(*prev)->next = (*node)->next;
-		*node = (*prev)->next;
-	}
-	ft_lstdelone(temp, free);
-}
-
-static void	lst_remove_null(t_list **lst)
-{
-	t_list	*prev;
-	t_list	*node;
-
-	if (lst == NULL)
-		return ;
-	prev = NULL;
-	node = *lst;
-	while (node != NULL)
-	{
-		if (ft_strlen(node->content) == 0)
-		{
-			remove_node(lst, &prev, &node);
-			continue ;
-		}
-		prev = node;
-		node = node->next;
-	}
-}
-
 t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern)
 {
 	t_list	*node;
@@ -121,6 +82,6 @@ t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern)
 		check_pattern(node, pattern);
 		node = node->next;
 	}
-	lst_remove_null(out_files);
+	lst_remove(out_files, str_empty, free);
 	return (error(ERR_NONE, NULL));
 }

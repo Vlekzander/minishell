@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:32:26 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/23 00:01:31 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 01:36:44 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,13 @@ static t_error	lst_cat(char **output, t_list *lst, char *separator)
 	sb = create_strbuilder(256);
 	while (lst != NULL)
 	{
-		strbuilder_append(sb, lst->content);
+		if (!strbuilder_append(sb, lst->content))
+			return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
 		if (separator != NULL)
-			strbuilder_append(sb, separator);
+		{
+			if (!strbuilder_append(sb, separator))
+				return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
+		}
 		lst = lst->next;
 	}
 	str = ft_strdup(sb->buffer);

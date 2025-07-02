@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 23:30:57 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 01:27:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ static t_error	process_line(t_hash_table *env, t_strbuilder *sb, char **line,
 			*line = expanded;
 		}
 	}
-	if (strbuilder_append(sb, *line) != 0)
+	if (!strbuilder_append(sb, *line))
 		return (error(ERR_ALLOCATION, NULL));
-	if (strbuilder_append(sb, "\n") != 0)
+	if (!strbuilder_append(sb, "\n"))
 		return (error(ERR_ALLOCATION, NULL));
 	return (error(ERR_NONE, NULL));
 }
