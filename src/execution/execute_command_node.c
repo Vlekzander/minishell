@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:34:24 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 23:41:00 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 23:54:20 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_error	execute_command(int *ret, t_command *command, t_list *redirs,
 		return (error(ERR_FORK, NULL));
 	if (pid == 0)
 	{
-		err = handle_redirs(redirs);
+		err = handle_redirs(redirs, 1);
 		if (err.id == ERR_NONE)
 			execve(command->executable, command->args, command->envp);
 		*ret = 1;
