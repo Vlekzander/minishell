@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:34:24 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 20:09:59 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 23:41:00 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_error	execute_command_node(t_ast *node, t_hash_table *env)
 	t_command	*command;
 	t_error		err;
 
-	if (node == NULL || env == NULL)
+	if (node == NULL || env == NULL || node->type != NODE_COMMAND)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = prepare_cmd(&command, node->command_args, env);
 	if (err.id != ERR_NONE)

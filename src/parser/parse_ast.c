@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/21 16:06:59 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 23:38:32 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static t_error	finalize_expression(t_ast **ast, t_hash_table *env, t_ast *node,
 	if (ast == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = error(ERR_NONE, NULL);
-	if (node != NULL)
+	if (node != NULL && node->type == NODE_COMMAND)
 		err = prompt_redirs(node->redirs, env);
 	if (err.id != ERR_NONE)
 		return (free_ast(node), error(ERR_SYNTAX, NULL));
