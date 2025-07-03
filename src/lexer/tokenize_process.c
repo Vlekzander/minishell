@@ -41,14 +41,14 @@ t_error	process_operator(t_list **tokens, char **input, char *buf)
 	if (tokens == NULL || input == NULL || buf == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = add_token(tokens, TK_WORD, buf);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	ft_strlcpy(buf, *input, 3);
 	if (get_token_type(buf) == TK_WORD)
 		buf[1] = '\0';
 	*input += ft_strlen(buf);
 	err = add_token(tokens, get_token_type(buf), buf);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	return (error(ERR_NONE, NULL));
 }
@@ -60,7 +60,7 @@ t_error	process_separator(t_list **tokens, char *buf)
 	if (tokens == NULL || buf == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = add_token(tokens, TK_WORD, buf);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	return (error(ERR_NONE, NULL));
 }

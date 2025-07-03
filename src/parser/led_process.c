@@ -69,7 +69,7 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 	if ((*ast)->type == NODE_COMMAND)
 	{
 		err = prepare_pipeline(ast);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 	}
 	right = NULL;
@@ -79,7 +79,7 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 		err = error(ERR_SYNTAX, NULL);
 	else
 		err = parse_expression(&right, tk_lst, env, get_precedence(TK_PIPE));
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	return (ft_lstadd_back(&(*ast)->pipeline, ft_lstnew(right)),
 		error(ERR_NONE, NULL));
@@ -105,7 +105,7 @@ static t_error	led_logic(t_ast **ast, t_list **tk_lst, t_hash_table *env,
 	*ast = node;
 	right = NULL;
 	err = parse_expression(&right, tk_lst, env, get_precedence(tk_type));
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	if (right == NULL)
 		return (error(ERR_SYNTAX, NULL));
@@ -123,20 +123,20 @@ t_error	led(t_ast **ast, t_list **tk_lst, t_hash_table *env, t_token *token)
 	if (token->type == TK_WORD)
 	{
 		err = led_word(ast, token);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 	}
 	else if (token->type == TK_PIPE
 		&& ((*ast != NULL && (*ast)->type != NODE_GROUP) || *ast == NULL))
 	{
 		err = led_pipe(ast, tk_lst, env);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 	}
 	else if (token->type == TK_AND || token->type == TK_OR)
 	{
 		err = led_logic(ast, tk_lst, env, token->type);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 	}
 	return (err);

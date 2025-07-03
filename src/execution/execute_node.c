@@ -22,7 +22,7 @@ t_error	execute_node(t_ast *node, t_hash_table *env)
 	if (node->type == NODE_GROUP)
 	{
 		err = execute_node(node->group, env);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 		node->exit_code = node->group->exit_code;
 	}

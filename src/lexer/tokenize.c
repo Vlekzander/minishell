@@ -21,7 +21,7 @@ t_error	tokenize(t_list **tokens, char *input)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	tk_list = NULL;
 	err = process_input(&tk_list, input);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	return (*tokens = tk_list, error(ERR_NONE, NULL));
 }

@@ -50,15 +50,15 @@ static t_error	buf_to_file(int *fd, t_strbuilder *sb)
 	if (fd == NULL || sb == NULL || sb->buffer == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = get_file_path(&path);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	err = open_file(fd, path, REDIR_HEREDOC, 1);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	write(*fd, sb->buffer, sb->length);
 	close(*fd);
 	err = open_file(fd, path, REDIR_HEREDOC, 0);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	unlink(path);
 	free(path);
@@ -89,7 +89,7 @@ t_error	process_heredoc(t_redir *redir, t_strbuilder *sb)
 		err = buf_to_file(&fd, sb);
 	else
 		err = buf_to_pipe(&fd, sb);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	return (redir->fd = fd, error(ERR_NONE, NULL));
 }

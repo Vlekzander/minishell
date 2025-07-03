@@ -27,7 +27,7 @@ static t_error	handle_op_sep(t_list **tokens, char **input, char *buf)
 		err = process_separator(tokens, buf);
 		(*input)++;
 	}
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	return (error(ERR_NONE, NULL));
 }
@@ -48,7 +48,7 @@ static t_error	process_loop(t_list **tokens, char *input, char *buf)
 		{
 			i = 0;
 			err = handle_op_sep(tokens, &input, buf);
-			if (err.code != ERR_NONE)
+			if (err.id != ERR_NONE)
 				return (err);
 			continue ;
 		}
@@ -72,7 +72,7 @@ t_error	process_input(t_list **tokens, char *input)
 	if (buf == NULL)
 		return (error(ERR_ALLOCATION, NULL));
 	err = process_loop(tokens, input, buf);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (free(buf), ft_lstclear(tokens, (void *) free_token), err);
 	return (free(buf), err);
 }

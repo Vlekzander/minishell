@@ -87,7 +87,7 @@ t_error	scan_dir(t_list **content, char *path)
 	if (dir == NULL)
 		return (error(ERR_OPEN, NULL));
 	err = loop_entries(content, dir);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 	{
 		ft_lstclear(content, free);
 		*content = NULL;

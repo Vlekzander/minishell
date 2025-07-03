@@ -24,7 +24,7 @@ static t_error	check_var_content(t_vref *vref, t_hash_table *env)
 	if (vref == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = get_var(&value, env, vref->str +1);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	if (ft_strchr(value, ' '))
 		return (error(ERR_AMB_REDIR, NULL));
@@ -40,7 +40,7 @@ static t_error	val_var(char *ptr, t_vref **vref, char quote, t_hash_table *env)
 	if (*vref == NULL)
 	{
 		err = extract_var(vref, ptr, 0);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 	}
 	else
@@ -50,7 +50,7 @@ static t_error	val_var(char *ptr, t_vref **vref, char quote, t_hash_table *env)
 		if (quote == 0)
 		{
 			err = check_var_content(*vref, env);
-			if (err.code != ERR_NONE)
+			if (err.id != ERR_NONE)
 				return (err);
 		}
 		free_vref(*vref);
@@ -76,9 +76,9 @@ static t_error	validate_vars(char *str, t_hash_table *env)
 		if (is_quote(*ptr) && (quote == 0 || quote == *ptr))
 			quote = handle_quote(*ptr, quote);
 		err = val_var(ptr, &vref, quote, env);
-		if (err.code == ERR_AMB_REDIR)
+		if (err.id == ERR_AMB_REDIR)
 			return (free_vref(vref), error(ERR_AMB_REDIR, str));
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (free_vref(vref), err);
 		ptr++;
 	}
@@ -94,20 +94,20 @@ t_error	expand_redir_str(char **file, t_hash_table *env)
 	if (file == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = validate_vars(*file, env);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	base = ft_strdup(*file);
 	if (base == NULL)
 		return (error(ERR_ALLOCATION, NULL));
 	err = expand_env(&str, base, env, 0);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (free(base), err);
 	if (base == str)
 		return (free(base), error(ERR_NONE, NULL));
 	free(base);
 	base = str;
 	err = expand_wildcard(&str, base);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (free(base), err);
 	if (base != str)
 		free(base);
@@ -127,7 +127,7 @@ t_error	expand_redir_target(t_redir *redir, t_hash_table *env)
 	if (redir->type == REDIR_OUT)
 		file = &redir->out;
 	err = expand_redir_str(file, env);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	return (error(ERR_NONE, NULL));
 }

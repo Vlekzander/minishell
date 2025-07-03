@@ -73,7 +73,7 @@ static t_error	finalize_expression(t_ast **ast, t_hash_table *env, t_ast *node,
 	err = error(ERR_NONE, NULL);
 	if (node != NULL)
 		err = prompt_redirs(node->redirs, env);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (free_ast(node), error(ERR_SYNTAX, NULL));
 	if (current_redir != TK_NONE)
 		return (free_ast(node), error(ERR_SYNTAX, NULL));
@@ -104,7 +104,7 @@ t_error	parse_expression(t_ast **ast, t_list **tk_lst, t_hash_table *env,
 			err = nud(&node, tk_lst, env, token);
 		else if (current_redir == TK_NONE)
 			err = led(&node, tk_lst, env, token);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (free_ast(node), err);
 	}
 	return (finalize_expression(ast, env, node, current_redir));

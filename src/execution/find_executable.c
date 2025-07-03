@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 00:47:59 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 01:39:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 12:11:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ static t_error	check_env_path(char **executable, char *command, char **path)
 			|| !strbuilder_append(sb, command))
 			return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
 		err = check_path(&str, sb->buffer);
-		if (err.code == ERR_PERMISSION)
-			return (free_strbuilder(sb), err);
-		if (err.code == ERR_NONE && str == NULL)
+		if (err.id == ERR_PERMISSION)
+			return (free_strbuilder(sb), free(err.cause), error(err.id, NULL));
+		if (err.id == ERR_NONE && str == NULL)
 			return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
-		if (err.code == ERR_NONE)
+		if (err.id == ERR_NONE)
 			return (*executable = str, free_strbuilder(sb), err);
 		free(err.cause);
 		sb->length = 0;
@@ -80,7 +80,7 @@ t_error	find_executable(char **executable, char *command, t_hash_table *env)
 	else
 	{
 		err = get_var(&str, env, "PATH");
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 		path = ft_split(str, ':');
 		if (path == NULL)
@@ -88,7 +88,7 @@ t_error	find_executable(char **executable, char *command, t_hash_table *env)
 		err = check_env_path(&str, command, path);
 		free_ddarray((void **) path);
 	}
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	return (*executable = str, error(ERR_NONE, NULL));
 }

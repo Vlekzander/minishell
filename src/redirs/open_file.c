@@ -98,10 +98,10 @@ t_error	open_file(int *fd, char *path, t_redir_type type, int mode)
 	if (fd == NULL || path == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = check_file(path, type);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	err = prepare_of(type, mode, &flags, &perms);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	file = open(path, flags, perms);
 	if (file == -1)

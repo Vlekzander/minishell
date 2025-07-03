@@ -74,7 +74,7 @@ t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	*out_files = NULL;
 	err = lst_dup(out_files, in_files);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	node = *out_files;
 	while (node != NULL)

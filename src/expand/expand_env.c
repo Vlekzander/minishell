@@ -43,7 +43,7 @@ static	t_error	get_vars(t_list **vars_lst, char *base, int ignore_quote)
 	while (1)
 	{
 		err = extract_var(&var, str, ignore_quote);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (free_vref(var), err);
 		if (var->str == NULL)
 			break ;
@@ -62,10 +62,10 @@ t_error	expand_env(char **output, char *base, t_hash_table *env, int ign_quote)
 	if (base == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = get_vars(&vars, base, ign_quote);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	err = over_vars(&str, base, vars, env);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (ft_lstclear(&vars, (void *) free_vref), err);
 	ft_lstclear(&vars, (void *) free_vref);
 	return (*output = str, error(ERR_NONE, NULL));

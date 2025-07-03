@@ -30,7 +30,7 @@ static t_error	calculate_len(size_t *len, char *base, t_list *vars,
 	{
 		var = vars->content;
 		err = get_var(&var_content, env, var->str +1);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 		size += ft_strlen(var_content);
 		size -= ft_strlen(var->str);
@@ -71,7 +71,7 @@ static t_error	process_override(char **strs, size_t len, t_list *vars,
 	{
 		var = vars->content;
 		err = get_var(&var_content, env, var->str +1);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (free(strs[1]), err);
 		str_append_n(strs[1], strs[0] + i, var->index - i, len + 1);
 		i = var->index;
@@ -94,14 +94,14 @@ t_error	over_vars(char **output, char *base, t_list *vars, t_hash_table *env)
 	if (vars == NULL)
 		return (*output = base, error(ERR_NONE, NULL));
 	err = calculate_len(&len, base, vars, env);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	strs[1] = ft_calloc(len +1, sizeof(char));
 	if (strs[1] == NULL)
 		return (error(ERR_ALLOCATION, NULL));
 	strs[0] = base;
 	err = process_override(strs, len, vars, env);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (free(strs[1]), err);
 	return (*output = strs[1], error(ERR_NONE, NULL));
 }

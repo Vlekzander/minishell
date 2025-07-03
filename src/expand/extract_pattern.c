@@ -91,7 +91,7 @@ static t_error	parse_pattern(t_pattern **pattern, char *str, char *buf,
 			buf[*i] = '\0';
 			*i = 0;
 			err = process_star(pattern, buf, &star_seen);
-			if (err.code != ERR_NONE)
+			if (err.id != ERR_NONE)
 				return (err);
 		}
 		else
@@ -115,12 +115,12 @@ t_error	extract_pattern(t_pattern **pattern, char *str)
 		return (error(ERR_ALLOCATION, NULL));
 	i = 0;
 	err = parse_pattern(pattern, str, buf, &i);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (free_pattern(*pattern), *pattern = NULL, free(buf), err);
 	buf[i] = '\0';
 	if (ft_strlen(buf) > 0 && *pattern != NULL)
 		err = add_prefix_suffix(*pattern, buf, 0);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (free_pattern(*pattern), *pattern = NULL, free(buf), err);
 	return (free(buf), error(ERR_NONE, NULL));
 }

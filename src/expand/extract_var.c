@@ -55,7 +55,7 @@ t_error	extract_var(t_vref **varpos, char *str, int ignore_quote)
 		return (*varpos = NULL, error(ERR_ALLOCATION, NULL));
 	len = 0;
 	err = scan_next_var(str, &var->index, &len, ignore_quote);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	if (var->index != -1 && len > 1)
 		var->str = ft_strndup(str + var->index, len);

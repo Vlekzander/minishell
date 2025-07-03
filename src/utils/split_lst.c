@@ -49,7 +49,7 @@ t_error	split_lst(t_list **lst, char *input, char c)
 		if (ptr - input > 0)
 		{
 			err = new_node(&node, input, ptr - input);
-			if (err.code != ERR_NONE)
+			if (err.id != ERR_NONE)
 				return (ft_lstclear(&list, free), err);
 			ft_lstadd_back(&list, node);
 		}

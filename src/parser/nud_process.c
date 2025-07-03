@@ -60,7 +60,7 @@ static t_error	nud_group(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 		peek_front(tk_lst, 1);
 	else
 		err = error(ERR_SYNTAX, NULL);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (free_ast(node), err);
 	return (*ast = node, error(ERR_NONE, NULL));
 }
@@ -74,13 +74,13 @@ t_error	nud(t_ast **ast, t_list **tk_lst, t_hash_table *env, t_token *token)
 	if (token->type == TK_WORD)
 	{
 		err = nud_word(ast, token);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 	}
 	else if (token->type == TK_P_OPEN)
 	{
 		err = nud_group(ast, tk_lst, env);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 	}
 	else

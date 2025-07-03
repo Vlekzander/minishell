@@ -29,7 +29,7 @@ static t_error	load_var(t_hash_table *htable, char *env_str)
 		if (key == NULL)
 			return (error(ERR_ALLOCATION, NULL));
 		err = set_var(htable, key, ptr +1);
-		if (err.code != ERR_NONE && err.code != ERR_INVALID_KEY)
+		if (err.id != ERR_NONE && err.id != ERR_INVALID_KEY)
 			return (free(key), htable_destroy(htable), err);
 		free(key);
 	}
@@ -51,7 +51,7 @@ t_error	load_env(t_hash_table **env, char **envp)
 	while (envp[i] != NULL)
 	{
 		err = load_var(htable, envp[i]);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 		i++;
 	}

@@ -29,7 +29,7 @@ static t_error	process_line(t_hash_table *env, t_strbuilder *sb, char **line,
 	if (expand)
 	{
 		err = expand_env(&expanded, *line, env, 1);
-		if (err.code != ERR_NONE)
+		if (err.id != ERR_NONE)
 			return (err);
 		if (expanded != *line)
 		{
@@ -65,7 +65,7 @@ static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
 		if (is_last)
 		{
 			err = process_line(env, sb, &line, expand);
-			if (err.code != ERR_NONE)
+			if (err.id != ERR_NONE)
 				return (free(line), err);
 		}
 		free(line);
@@ -88,7 +88,7 @@ static t_error	prompt_heredoc(t_redir *redir, t_hash_table *env, int is_last)
 			return (error(ERR_ALLOCATION, NULL));
 	}
 	err = prompt_hd(env, sb, is_last, redir->heredoc);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (free_strbuilder(sb), err);
 	if (is_last)
 		err = process_heredoc(redir, sb);
@@ -131,7 +131,7 @@ t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 	t_list	*node;
 
 	err = collect_hds(redirs, &hds, &hd_end);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	if (hds != NULL)
 	{
@@ -140,7 +140,7 @@ t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 		{
 			redir = node->content;
 			err = prompt_heredoc(redir, env, node->next == NULL && hd_end);
-			if (err.code != ERR_NONE)
+			if (err.id != ERR_NONE)
 				return (ft_lstclear(&hds, NULL), err);
 			node = node->next;
 		}

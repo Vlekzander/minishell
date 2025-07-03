@@ -17,7 +17,7 @@ t_error	error(t_error_code code, char *cause)
 {
 	t_error	err;
 
-	err.code = code;
+	err.id = code;
 	err.cause = ft_strdup(cause);
 	return (err);
 }

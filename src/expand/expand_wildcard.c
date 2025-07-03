@@ -49,10 +49,10 @@ static t_error	filter_files(t_list **filtered, t_pattern *pattern)
 	if (pattern == NULL)
 		return (error(ERR_NONE, NULL));
 	err = scan_dir(&files, ".");
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	err = globbing(filtered, files, pattern);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (ft_lstclear(&files, free), err);
 	ft_lstclear(&files, free);
 	return (error(ERR_NONE, NULL));
@@ -69,10 +69,10 @@ t_error	expand_wildcard(char **output, char *base)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	filtered = NULL;
 	err = extract_pattern(&pattern, base);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (err);
 	err = filter_files(&filtered, pattern);
-	if (err.code != ERR_NONE)
+	if (err.id != ERR_NONE)
 		return (free_pattern(pattern), err);
 	free_pattern(pattern);
 	if (filtered == NULL)
