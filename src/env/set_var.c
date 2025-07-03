@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:16:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/24 17:11:05 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 12:25:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_error	set_var(t_hash_table *env, char *key, char *value)
 	if (env == NULL || key == NULL || value == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	if (!is_valid_key(key))
-		return (error(ERR_INVALID_KEY, NULL));
+		return (error(ERR_INVALID_KEY, key));
 	str_val = ft_strdup(value);
 	if (str_val == NULL)
 		return (error(ERR_ALLOCATION, NULL));
