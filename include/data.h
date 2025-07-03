@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/21 16:03:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:30:26 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,13 @@ typedef struct s_strbuilder
 	size_t	length;
 }	t_strbuilder;
 
+typedef struct s_command
+{
+	char	*executable;
+	char	**args;
+	char	**envp;
+}	t_command;
+
 t_token_type	get_token_type(char *token);
 t_token			*create_token(t_token_type type, char *value);
 t_ast			*create_ast(t_node_type type);
@@ -126,5 +133,6 @@ void			free_pattern(t_pattern *pattern);
 void			free_vref(t_vref *vref);
 void			free_strbuilder(t_strbuilder *sb);
 int				strbuilder_append(t_strbuilder *sb, char *str);
+void			free_command(t_command *command);
 
 #endif
