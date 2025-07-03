@@ -6,16 +6,22 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:13:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 14:02:22 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:32:01 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "error.h"
 #include "libft.h"
+
+static char	*get_more_error_message(t_error_code code)
+{
+	if (code == ERR_FORK)
+		return ("Fork failed");
+	return ("Unknown error");
+}
 
 static char	*get_error_message(t_error_code code)
 {
@@ -43,7 +49,7 @@ static char	*get_error_message(t_error_code code)
 		return ("Ambiguous redirect");
 	if (code == ERR_CMD_NOT_FOUND)
 		return ("Command not found");
-	return ("Unknown error");
+	return (get_more_error_message(code));
 }
 
 void	print_error(t_error err)

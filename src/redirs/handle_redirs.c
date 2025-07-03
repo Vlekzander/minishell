@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 19:18:31 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/23 23:07:22 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:24:34 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_error	process_redir_heredoc(t_redir *redir)
 	return (close(redir->fd), error(ERR_NONE, NULL));
 }
 
-t_error	handle_redirs(t_list *redirs, t_hash_table *env)
+t_error	handle_redirs(t_list *redirs)
 {
 	t_redir	*redir;
 	t_error	err;
@@ -60,9 +60,7 @@ t_error	handle_redirs(t_list *redirs, t_hash_table *env)
 	while (redirs != NULL)
 	{
 		redir = redirs->content;
-		err = expand_redir_target(redir, env);
-		if (err.id != ERR_NONE)
-			return (err);
+		err = error(ERR_NONE, NULL);
 		if (redir->type == REDIR_IN)
 			err = process_redir_in(redir);
 		else if (redir->type == REDIR_OUT)

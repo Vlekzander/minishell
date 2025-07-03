@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 00:47:59 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 14:10:03 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:08:21 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static t_error	check_env_path(char **executable, char *command, char **path)
 			return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
 		err = check_path(&str, sb->buffer);
 		if (err.id == ERR_PERMISSION)
-			return (free_strbuilder(sb), free(err.src), error(err.id, command));
+			return (free_strbuilder(sb), err);
 		if (err.id == ERR_NONE && str == NULL)
 			return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
 		if (err.id == ERR_NONE)
