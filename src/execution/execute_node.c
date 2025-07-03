@@ -6,14 +6,18 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:09:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/24 18:32:12 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/04 00:10:10 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+
+#include "env.h"
 #include "execution.h"
 
 t_error	execute_node(t_ast *node, t_hash_table *env)
 {
+	char	*str;
 	t_error	err;
 
 	if (node == NULL || env == NULL)
@@ -22,8 +26,6 @@ t_error	execute_node(t_ast *node, t_hash_table *env)
 	if (node->type == NODE_GROUP)
 	{
 		err = execute_node(node->group, env);
-		if (err.id != ERR_NONE)
-			return (err);
 		node->exit_code = node->group->exit_code;
 	}
 	else if (node->type == NODE_COMMAND)
@@ -34,5 +36,10 @@ t_error	execute_node(t_ast *node, t_hash_table *env)
 		err = execute_logic_node(node, env);
 	else if (node->type == NODE_REDIR)
 		err = execute_redir_node(node, env);
-	return (err);
+	if (err.id != ERR_NONE)
+		return (node->exit_code = 1, err);
+	str = ft_itoa(node->exit_code);
+	if (str == NULL)
+		return (error(ERR_ALLOCATION, NULL));
+	return (err = set_var(env, "?", str), free(str), err);
 }
