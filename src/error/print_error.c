@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:13:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 12:30:18 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:02:22 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*get_error_message(t_error_code code)
 	if (code == ERR_INVALID_KEY)
 		return ("Not a valid identifier");
 	if (code == ERR_AMB_REDIR)
-		return ("Ambigous redirect");
+		return ("Ambiguous redirect");
 	if (code == ERR_CMD_NOT_FOUND)
 		return ("Command not found");
 	return ("Unknown error");
