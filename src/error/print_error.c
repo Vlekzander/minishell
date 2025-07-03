@@ -49,12 +49,12 @@ static char	*get_error_message(t_error_code code)
 void	print_error(t_error err)
 {
 	if (err.id == ERR_NONE)
-		return (free(err.cause));
+		return (free(err.src));
 	ft_printf("%s: ", ERROR_PREFIX);
-	if (err.cause != NULL)
+	if (err.src != NULL)
 	{
-		ft_printf("%s: ", err.cause);
-		free(err.cause);
+		ft_printf("%s: ", err.src);
+		free(err.src);
 	}
 	ft_printf("%s\n", get_error_message(err.id));
 }

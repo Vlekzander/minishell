@@ -18,6 +18,6 @@ t_error	error(t_error_code code, char *cause)
 	t_error	err;
 
 	err.id = code;
-	err.cause = ft_strdup(cause);
+	err.src = ft_strdup(cause);
 	return (err);
 }

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 00:47:59 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 12:11:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/03 14:10:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ static t_error	check_env_path(char **executable, char *command, char **path)
 			return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
 		err = check_path(&str, sb->buffer);
 		if (err.id == ERR_PERMISSION)
-			return (free_strbuilder(sb), free(err.cause), error(err.id, NULL));
+			return (free_strbuilder(sb), free(err.src), error(err.id, command));
 		if (err.id == ERR_NONE && str == NULL)
 			return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
 		if (err.id == ERR_NONE)
 			return (*executable = str, free_strbuilder(sb), err);
-		free(err.cause);
+		free(err.src);
 		sb->length = 0;
 	}
 	return (free_strbuilder(sb), error(ERR_CMD_NOT_FOUND, command));

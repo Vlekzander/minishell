@@ -34,7 +34,7 @@ typedef enum e_error_code
 typedef struct s_error
 {
 	t_error_code	id;
-	char			*cause;
+	char			*src;
 }	t_error;
 
 t_error	error(t_error_code code, char *cause);
