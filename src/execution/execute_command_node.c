@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_cmd_node.c                                 :+:      :+:    :+:   */
+/*   execute_command_node.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 17:34:37 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/02 19:34:24 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/03 20:09:59 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static t_error	execute_command(int *ret, t_command *command, t_list *redirs,
 	return (*ret = get_exit_code(status), error(ERR_NONE, NULL));
 }
 
-t_error	execute_cmd_node(t_ast *node, t_hash_table *env)
+t_error	execute_command_node(t_ast *node, t_hash_table *env)
 {
 	t_command	*command;
 	t_error		err;

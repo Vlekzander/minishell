@@ -27,7 +27,7 @@ t_error	execute_node(t_ast *node, t_hash_table *env)
 		node->exit_code = node->group->exit_code;
 	}
 	else if (node->type == NODE_COMMAND)
-		err = execute_cmd_node(node, env);
+		err = execute_command_node(node, env);
 	else if (node->type == NODE_PIPELINE)
 		err = execute_pipeline_node(node, env);
 	else if (node->type == NODE_AND || node->type == NODE_OR)

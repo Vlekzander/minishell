@@ -17,7 +17,7 @@
 # include "hash.h"
 
 t_error	execute_node(t_ast *node, t_hash_table *env);
-t_error	execute_cmd_node(t_ast *node, t_hash_table *env);
+t_error	execute_command_node(t_ast *node, t_hash_table *env);
 t_error	execute_pipeline_node(t_ast *node, t_hash_table *env);
 t_error	execute_logic_node(t_ast *node, t_hash_table *env);
 t_error	execute_redir_node(t_ast *node, t_hash_table *env);
