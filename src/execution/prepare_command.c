@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:56:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 15:01:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:54:35 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,22 +84,22 @@ static t_error	prepare_envp(char ***envp, t_hash_table *env)
 	return (*envp = arr, error(ERR_NONE, NULL));
 }
 
-t_error	prepare_cmd(t_command **command, t_list *args, t_hash_table *env)
+t_error	prepare_cmd(t_command **command, t_list **args, t_hash_table *env)
 {
 	t_command	*cmd;
 	t_error		err;
 
-	err = expand_list(&args, env);
+	err = expand_list(args, env);
 	if (err.id != ERR_NONE)
 		return (err);
-	ft_lstiter(args, (void *) remove_str_quotes);
+	ft_lstiter(*args, (void *) remove_str_quotes);
 	cmd = ft_calloc(1, sizeof(t_command));
 	if (cmd == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	err = find_executable(&cmd->executable, args->content, env);
+	err = find_executable(&cmd->executable, (*args)->content, env);
 	if (err.id != ERR_NONE)
 		return (free_command(cmd), err);
-	err = prepare_arguments(&cmd->args, args);
+	err = prepare_arguments(&cmd->args, *args);
 	if (err.id != ERR_NONE)
 		return (free_command(cmd), err);
 	err = prepare_envp(&cmd->envp, env);
