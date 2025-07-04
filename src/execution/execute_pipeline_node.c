@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/05 00:42:06 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/05 00:46:53 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ t_error	execute_pipeline_node(t_ast *node, t_hash_table *env)
 		return (err);
 	i = 0;
 	lst = node->pipeline;
-	dwhile (lst != NULL)
+	while (lst != NULL)
 	{
 		err = process_exec_pipeline(lst, env, &fds, pids + i);
 		if (err.id != ERR_NONE)
