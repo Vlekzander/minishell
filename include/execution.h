@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:08:44 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 14:55:11 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:59:32 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_error	execute_logic_node(t_ast *node, t_hash_table *env);
 t_error	execute_redir_node(t_ast *node, t_hash_table *env);
 t_error	find_executable(char **executable, char *command, t_hash_table *env);
 t_error	prepare_cmd(t_command **command, t_list **args, t_hash_table *env);
-t_error	execute_command(pid_t *pid, t_list **cmd_args, t_list *cmd_redirs, t_hash_table *env);
+t_error	execute_command(pid_t *pid, t_list **cmd_args, t_list *cmd_redirs,
+			t_hash_table *env);
 
 #endif

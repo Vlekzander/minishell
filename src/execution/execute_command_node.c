@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 14:32:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 14:55:26 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:00:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,18 @@ t_error	execute_command_node(t_ast *node, t_hash_table *env)
 	if (err.id != ERR_NONE)
 	{
 		node->exit_code = 1;
-		if (pid != -1)
-		{
-			if (err.id == ERR_PERMISSION || err.id == ERR_IS_DIRECTORY)
-				node->exit_code = 126;
-			else if (err.id == ERR_CMD_NOT_FOUND)
-				node->exit_code = 127;
-		}
+		if (pid != -1
+			&& (err.id == ERR_PERMISSION || err.id == ERR_IS_DIRECTORY))
+			node->exit_code = 126;
+		else if (pid != -1 && err.id == ERR_CMD_NOT_FOUND)
+			node->exit_code = 127;
 		return (err);
 	}
+	node->exit_code = 1;
 	if (pid != -1)
 	{
 		waitpid(pid, &val, 0);
 		node->exit_code = get_exit_code(val);
 	}
-	else
-		node->exit_code = 1;
 	return (error(ERR_NONE, NULL));
 }

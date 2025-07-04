@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:32:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 14:56:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:59:17 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static t_error	run_exec(pid_t *pid_ret, t_command *command, t_list *redirs,
 	return (*pid_ret = pid, error(ERR_NONE, NULL));
 }
 
-t_error	execute_command(pid_t *pid, t_list **cmd_args, t_list *cmd_redirs, t_hash_table *env)
+t_error	execute_command(pid_t *pid, t_list **cmd_args, t_list *cmd_redirs,
+	t_hash_table *env)
 {
 	t_command	*command;
 	t_error		err;
