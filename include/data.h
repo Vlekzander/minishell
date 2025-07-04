@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 14:30:26 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:42:59 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ typedef enum e_redir_type
 {
 	REDIR_IN,
 	REDIR_OUT,
-	REDIR_HEREDOC
+	REDIR_HEREDOC,
+	REDIR_PIPE
 }	t_redir_type;
 
 typedef struct s_redir
@@ -67,6 +68,11 @@ typedef struct s_redir
 		{
 			char	*heredoc;
 			int		fd;
+		};
+		struct
+		{
+			int		pipe_fds[2];
+			int		fd_close;
 		};
 	};
 }	t_redir;

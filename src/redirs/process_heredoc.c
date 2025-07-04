@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:38:45 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:31:52 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "redirs.h"
+#include "utils.h"
 #define FILE_PATH_PREFIX "/tmp/msh-thd-"
 
 static t_error	get_file_path(char **filename)
@@ -56,7 +57,7 @@ static t_error	buf_to_file(int *fd, t_strbuilder *sb)
 	if (err.id != ERR_NONE)
 		return (err);
 	write(*fd, sb->buffer, sb->length);
-	close(*fd);
+	close_fd(*fd);
 	err = open_file(fd, path, REDIR_HEREDOC, 0);
 	if (err.id != ERR_NONE)
 		return (err);
@@ -74,7 +75,7 @@ static t_error	buf_to_pipe(int *fd, t_strbuilder *sb)
 	if (pipe(pipe_fds) == -1)
 		return (error(ERR_PIPE, NULL));
 	write(pipe_fds[1], sb->buffer, sb->length);
-	close(pipe_fds[1]);
+	close_fd(pipe_fds[1]);
 	return (*fd = pipe_fds[0], error(ERR_NONE, NULL));
 }
 

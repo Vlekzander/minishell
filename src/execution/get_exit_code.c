@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_command_node.c                             :+:      :+:    :+:   */
+/*   get_exit_code.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 14:32:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 21:35:07 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/04 21:33:34 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/04 21:35:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/wait.h>
 #include "execution.h"
 
-t_error	execute_command_node(t_ast *node, t_hash_table *env)
+int	get_exit_code(pid_t pid, t_error err)
 {
-	pid_t	pid;
-	t_error	err;
+	int	status;
 
-	if (node == NULL || env == NULL || node->type != NODE_COMMAND)
-		return (error(ERR_IMPLEMENTATION, NULL));
-	err = execute_command(&pid, &node->command_args, node->redirs, env);
-	node->exit_code = get_exit_code(pid, err);
-	return (err);
+	status = 0;
+	if (pid != -1)
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			status = WEXITSTATUS(status);
+		return (status);
+	}
+	if (err.id == ERR_NONE)
+		return (0);
+	if (err.id == ERR_PERMISSION)
+		return (126);
+	if (err.id == ERR_FILE_NOT_FOUND || err.id == ERR_CMD_NOT_FOUND)
+		return (127);
+	return (1);
 }

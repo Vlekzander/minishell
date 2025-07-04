@@ -6,10 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:32:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 14:59:17 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/04 23:46:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "env.h"

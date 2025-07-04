@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_command_node.c                             :+:      :+:    :+:   */
+/*   close_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 14:32:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 21:35:07 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/04 18:29:57 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/04 18:30:33 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/wait.h>
-#include "execution.h"
+#include <unistd.h>
+#include "utils.h"
 
-t_error	execute_command_node(t_ast *node, t_hash_table *env)
+void	close_fd(int fd)
 {
-	pid_t	pid;
-	t_error	err;
+	if (fd != -1)
+		close(fd);
+}
 
-	if (node == NULL || env == NULL || node->type != NODE_COMMAND)
-		return (error(ERR_IMPLEMENTATION, NULL));
-	err = execute_command(&pid, &node->command_args, node->redirs, env);
-	node->exit_code = get_exit_code(pid, err);
-	return (err);
+void	close_set(int *fd, int value)
+{
+	if (fd == NULL)
+		return ;
+	close_fd(*fd);
+	*fd = value;
 }
