@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:33:34 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/05 01:14:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/05 18:08:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	get_exit_code(pid_t pid, t_error err)
 
 	if (pid != -1)
 	{
+		status = 0;
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			status = WEXITSTATUS(status);

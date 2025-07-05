@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/05 00:46:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/05 18:02:33 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,10 @@ static t_error	process_exec_pipeline(t_list *node, t_hash_table *env,
 	err = add_pipe_redir(&cmd->redirs, fds->input, fds->pipe[1], fds->pipe[0]);
 	if (err.id != ERR_NONE)
 		return (err);
-	err = execute_command(pid, &cmd->command_args, cmd->redirs, env);
+	if (cmd->type == NODE_COMMAND)
+		err = execute_command(pid, &cmd->command_args, cmd->redirs, env);
+	else if (cmd->type == NODE_REDIR)
+		err = execute_redir_node(cmd, env);
 	if (err.id != ERR_NONE)
 		print_error(err);
 	close_set(&fds->pipe[1], -1);
