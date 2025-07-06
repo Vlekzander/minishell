@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 14:30:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 14:31:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/06 15:46:49 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ void	free_command(t_command *command)
 {
 	if (command == NULL)
 		return ;
-	free_ddarray((void **) command->args);
+	free_ddarray((void **) command->argv);
 	free_ddarray((void **) command->envp);
-	free(command->executable);
+	if (command->type == CMD_BINARY)
+		free(command->executable);
 	free(command);
 }

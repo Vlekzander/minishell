@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:43:29 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 16:27:57 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/06 21:09:21 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ typedef enum e_error_code
 	ERR_INVALID_KEY,
 	ERR_AMB_REDIR,
 	ERR_CMD_NOT_FOUND,
-	ERR_FORK
+	ERR_FORK,
+	ERR_EXIT
 }	t_error_code;
 
 typedef struct s_error

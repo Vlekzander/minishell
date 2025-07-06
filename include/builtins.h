@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirs.h                                           :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/05 23:40:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/06 21:14:30 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/06 15:22:25 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/06 21:04:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REDIRS_H
-# define REDIRS_H
-# include "data.h"
+#ifndef BUILTINS_H
+# define BUILTINS_H
 # include "error.h"
 # include "hash.h"
 
-t_error	check_file(char *path, t_redir_type type);
-t_error	open_file(int *fd, char *path, t_redir_type type, int mode);
-t_error	prompt_redirs(t_list *redirs, t_hash_table *env);
-t_error	process_heredoc(t_redir *redir, t_strbuilder *sb);
-t_error	handle_redirs(t_list *redirs, int in, int out);
-t_error	prepare_redirs(t_list *redirs, t_hash_table *env);
+typedef struct s_btin_data
+{
+	int		stdin;
+	int		stdout;
+	int		argc;
+	char	**argv;
+}	t_btin_data;
+
+typedef t_error	(*t_btin)(int *ret, t_btin_data data, t_hash_table *env);
+
+t_btin		get_builtin(char *name);
+t_error		builtin_exit(int *ret, t_btin_data data, t_hash_table *env);
 
 #endif

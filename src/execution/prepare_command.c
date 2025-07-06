@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:56:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 14:54:35 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/06 21:32:31 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,19 @@ t_error	prepare_cmd(t_command **command, t_list **args, t_hash_table *env)
 	cmd = ft_calloc(1, sizeof(t_command));
 	if (cmd == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	err = find_executable(&cmd->executable, (*args)->content, env);
+	cmd->builtin = get_builtin((*args)->content);
+	if (cmd->builtin == NULL)
+	{
+		cmd->type = CMD_BINARY;
+		err = find_executable(&cmd->executable, (*args)->content, env);
+		if (err.id != ERR_NONE)
+			return (free_command(cmd), err);
+		err = prepare_envp(&cmd->envp, env);
+		if (err.id != ERR_NONE)
+			return (free_command(cmd), err);
+	}
+	err = prepare_arguments(&cmd->argv, *args);
 	if (err.id != ERR_NONE)
 		return (free_command(cmd), err);
-	err = prepare_arguments(&cmd->args, *args);
-	if (err.id != ERR_NONE)
-		return (free_command(cmd), err);
-	err = prepare_envp(&cmd->envp, env);
-	if (err.id != ERR_NONE)
-		return (free_command(cmd), err);
-	return (*command = cmd, error(ERR_NONE, NULL));
+	return (cmd->argc = ft_lstsize(*args), *command = cmd, err);
 }

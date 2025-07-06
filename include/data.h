@@ -6,12 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 18:42:59 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/06 21:30:19 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DATA_H
 # define DATA_H
+# include "builtins.h"
 # include "libft.h"
 
 typedef enum e_token_type
@@ -28,12 +29,6 @@ typedef enum e_token_type
 	TK_P_OPEN,
 	TK_P_CLOSE
 }	t_token_type;
-
-typedef struct s_token
-{
-	t_token_type	type;
-	char			*value;
-}	t_token;
 
 typedef enum e_node_type
 {
@@ -52,6 +47,18 @@ typedef enum e_redir_type
 	REDIR_HEREDOC,
 	REDIR_PIPE
 }	t_redir_type;
+
+typedef enum e_cmd_type
+{
+	CMD_BUILTIN,
+	CMD_BINARY,
+}	t_cmd_type;
+
+typedef struct s_token
+{
+	t_token_type	type;
+	char			*value;
+}	t_token;
 
 typedef struct s_redir
 {
@@ -120,9 +127,15 @@ typedef struct s_strbuilder
 
 typedef struct s_command
 {
-	char	*executable;
-	char	**args;
-	char	**envp;
+	t_cmd_type	type;
+	int			argc;
+	char		**argv;
+	char		**envp;
+	union
+	{
+		char	*executable;
+		t_btin	builtin;
+	};
 }	t_command;
 
 t_token_type	get_token_type(char *token);

@@ -6,25 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/05 18:02:33 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/06 22:11:56 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/wait.h>
 #include "execution.h"
 #include "utils.h"
-
-static void	exit_code(int *code, pid_t *pids, int size, t_error err)
-{
-	int		i;
-
-	i = 0;
-	while (i < size - 1)
-		waitpid(pids[i++], NULL, 0);
-	*code = get_exit_code(pids[i], err);
-}
 
 static t_error	add_pipe_redir(t_list **redirs, int in, int out, int close)
 {
@@ -66,14 +55,10 @@ static t_error	prepare_pids(pid_t **pids, int size)
 	return (*pids = arr, error(ERR_NONE, NULL));
 }
 
-static t_error	process_exec_pipeline(t_list *node, t_hash_table *env,
-	t_pipe_fds *fds, pid_t *pid)
+static t_error	prepare_pipe_fds(t_list *node, t_ast **cmd, t_pipe_fds *fds)
 {
-	t_ast	*cmd;
 	t_error	err;
 
-	if (node == NULL || env == NULL || fds == NULL || pid == NULL)
-		return (error(ERR_IMPLEMENTATION, NULL));
 	if (node->next == NULL)
 	{
 		close_set(&fds->pipe[1], -1);
@@ -81,19 +66,37 @@ static t_error	process_exec_pipeline(t_list *node, t_hash_table *env,
 	}
 	else if (pipe(fds->pipe) == -1)
 		return (error(ERR_PIPE, NULL));
-	cmd = node->content;
-	err = add_pipe_redir(&cmd->redirs, fds->input, fds->pipe[1], fds->pipe[0]);
+	*cmd = node->content;
+	err = add_pipe_redir(&(*cmd)->redirs, fds->input, fds->pipe[1],
+			fds->pipe[0]);
+	return (err);
+}
+
+static t_error	process_exec_pipeline(t_list *node, t_hash_table *env,
+	t_pipe_fds *fds, pid_t *pid)
+{
+	t_ast	*cmd;
+	t_ret	ret;
+	t_error	err;
+
+	if (node == NULL || env == NULL || fds == NULL || pid == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	ret.type = RET_PID;
+	ret.pid = -1;
+	err = prepare_pipe_fds(node, &cmd, fds);
 	if (err.id != ERR_NONE)
 		return (err);
 	if (cmd->type == NODE_COMMAND)
-		err = execute_command(pid, &cmd->command_args, cmd->redirs, env);
+	{
+		err = execute_command(&ret, &cmd->command_args, cmd->redirs, env);
+		close_set(&fds->input, fds->pipe[0]);
+	}
 	else if (cmd->type == NODE_REDIR)
 		err = execute_redir_node(cmd, env);
 	if (err.id != ERR_NONE)
 		print_error(err);
 	close_set(&fds->pipe[1], -1);
-	close_set(&fds->input, fds->pipe[0]);
-	return (error(ERR_NONE, NULL));
+	return (*pid = ret.pid, error(ERR_NONE, NULL));
 }
 
 t_error	execute_pipeline_node(t_ast *node, t_hash_table *env)
@@ -121,6 +124,6 @@ t_error	execute_pipeline_node(t_ast *node, t_hash_table *env)
 		i++;
 		lst = lst->next;
 	}
-	exit_code(&node->exit_code, pids, ft_lstsize(node->pipeline), err);
+	node->exit_code = get_exit_code_pipe(pids, ft_lstsize(node->pipeline), err);
 	return (free(pids), error(ERR_NONE, NULL));
 }

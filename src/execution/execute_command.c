@@ -6,56 +6,109 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:32:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 23:46:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/06 21:27:23 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "env.h"
 #include "execution.h"
 #include "expand.h"
 #include "redirs.h"
+#include "utils.h"
 
-static t_error	run_exec(pid_t *pid_ret, t_command *command, t_list *redirs,
+static t_error	get_std_backup(int *stdin, int *stdout)
+{
+	if (stdin == NULL || stdout == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	*stdin = dup(STDIN_FILENO);
+	if (*stdin == -1)
+		return (error(ERR_ERRNO, NULL));
+	*stdout = dup(STDOUT_FILENO);
+	if (*stdout == -1)
+		return (close_fd(*stdin), error(ERR_ERRNO, NULL));
+	return (error(ERR_NONE, NULL));
+}
+
+static t_error	exec_binary(t_ret *ret, t_command *cmd, t_list *redirs,
 			t_hash_table *env)
 {
 	pid_t	pid;
 	t_error	err;
 
-	if (command == NULL || env == NULL)
+	if (ret == NULL || cmd == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = prepare_redirs(redirs, env);
 	if (err.id != ERR_NONE)
-		return (*pid_ret = -1, err);
+		return (err);
 	pid = fork();
 	if (pid == -1)
-		return (*pid_ret = -1, error(ERR_FORK, NULL));
+		return (error(ERR_FORK, NULL));
 	if (pid == 0)
 	{
-		err = handle_redirs(redirs, 1);
+		err = handle_redirs(redirs, STDIN_FILENO, STDOUT_FILENO);
 		if (err.id == ERR_NONE)
-			execve(command->executable, command->args, command->envp);
-		*pid_ret = -1;
+			execve(cmd->executable, cmd->argv, cmd->envp);
 		exit(EXIT_FAILURE);
 	}
-	return (*pid_ret = pid, error(ERR_NONE, NULL));
+	return (ret->pid = pid, error(ERR_NONE, NULL));
 }
 
-t_error	execute_command(pid_t *pid, t_list **cmd_args, t_list *cmd_redirs,
-	t_hash_table *env)
+static t_error	exec_builtin(t_ret *ret, t_command *cmd, t_list *redirs,
+			t_hash_table *env)
 {
-	t_command	*command;
+	t_btin_data	data;
 	t_error		err;
 
-	if (pid == NULL || cmd_args == NULL || env == NULL)
+	if (ret == NULL || cmd == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = prepare_cmd(&command, cmd_args, env);
+	data.argc = cmd->argc;
+	data.argv = cmd->argv;
+	err = prepare_redirs(redirs, env);
 	if (err.id != ERR_NONE)
-		return (*pid = -1, err);
-	err = run_exec(pid, command, cmd_redirs, env);
+		return (err);
+	if (ret->type == RET_VALUE)
+	{
+		err = get_std_backup(&data.stdin, &data.stdout);
+		if (err.id != ERR_NONE)
+			return (err);
+	}
+	err = handle_redirs(redirs, data.stdin, data.stdout);
+	if (err.id == ERR_NONE)
+		err = cmd->builtin(&ret->value, data, env);
+	if (ret->type == RET_VALUE)
+	{
+		close_fd(data.stdin);
+		close_fd(data.stdout);
+	}
+	return (err);
+}
+
+t_error	execute_command(t_ret *ret, t_list **cmd_args, t_list *cmd_redirs,
+			t_hash_table *env)
+{
+	t_command	*cmd;
+	t_error		err;
+
+	if (ret == NULL || cmd_args == NULL || env == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	err = prepare_cmd(&cmd, cmd_args, env);
 	if (err.id != ERR_NONE)
-		return (free_command(command), err);
-	return (free_command(command), error(ERR_NONE, NULL));
+		return (ret->pid = -1, err);
+	ret->type = RET_VALUE;
+	ret->value = 1;
+	if (cmd->type == CMD_BINARY
+		|| (cmd->type == CMD_BUILTIN && cmd_redirs != NULL
+			&& cmd_redirs->content != NULL
+			&& ((t_redir *) cmd_redirs->content)->type == REDIR_PIPE))
+	{
+		ret->type = RET_PID;
+		ret->pid = -1;
+	}
+	if (cmd->type == CMD_BINARY)
+		err = exec_binary(ret, cmd, cmd_redirs, env);
+	else if (cmd->type == CMD_BUILTIN)
+		err = exec_builtin(ret, cmd, cmd_redirs, env);
+	return (free_command(cmd), err);
 }

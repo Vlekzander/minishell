@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_command_node.c                             :+:      :+:    :+:   */
+/*   get_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/04 14:32:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/06 21:47:13 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/06 15:22:48 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/06 15:25:00 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/wait.h>
-#include "execution.h"
+#include <stddef.h>
 
-t_error	execute_command_node(t_ast *node, t_hash_table *env)
+#include "builtins.h"
+#include "libft.h"
+
+t_btin	get_builtin(char *name)
 {
-	t_ret	ret;
-	t_error	err;
-
-	if (node == NULL || env == NULL || node->type != NODE_COMMAND)
-		return (error(ERR_IMPLEMENTATION, NULL));
-	ret.type = RET_VALUE;
-	ret.value = 0;
-	err = execute_command(&ret, &node->command_args, node->redirs, env);
-	node->exit_code = get_exit_code(ret, err);
-	return (err);
+	if (name == NULL)
+		return (NULL);
+	if (ft_strncmp("exit", name, 5) == 0)
+		return (builtin_exit);
+	return (NULL);
 }
