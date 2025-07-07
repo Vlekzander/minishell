@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_builtin.c                                      :+:      :+:    :+:   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/06 15:22:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 19:15:39 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/07 19:05:33 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/07 19:16:52 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-
+#include <stdlib.h>
+#include <unistd.h>
+#include <linux/limits.h>
 #include "builtins.h"
-#include "libft.h"
 
-t_btin	get_builtin(char *name)
+t_error	builtin_pwd(int *ret, t_btin_data data, t_hash_table *env)
 {
-	if (name == NULL)
-		return (NULL);
-	if (ft_strncmp("echo", name, 5) == 0)
-		return (builtin_echo);
-	if (ft_strncmp("exit", name, 5) == 0)
-		return (builtin_exit);
-	if (ft_strncmp("pwd", name, 4) == 0)
-		return (builtin_pwd);
-	return (NULL);
+	char	path[PATH_MAX];
+
+	if (ret == NULL || data.argv == NULL || env == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	if (getcwd(path, PATH_MAX) == NULL)
+		return (error(ERR_ERRNO, NULL));
+	ft_putendl_fd(path, data.stdout);
+	return (*ret = 0, error(ERR_NONE, NULL));
 }
