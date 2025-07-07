@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 01:27:58 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:26:24 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
 	run = 1;
 	while (run)
 	{
-		line = readline("> ");
+		line = readline(HEREDOC_PREFIX);
 		if (line == NULL || ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)
 			break ;
 		if (is_last)

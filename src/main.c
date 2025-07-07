@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/05 22:48:51 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:29:47 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <readline/history.h>
 #include <readline/readline.h>
-
 #include "env.h"
 #include "execution.h"
 #include "lexer.h"
@@ -22,21 +21,33 @@
 #include "parser.h"
 #include "signals.h"
 
-//TODO Modifier cette fonction pour une bonne gestion d'erreur + de mémoire en cas d'erreur
-static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
+static t_error	prepare_ast(t_ast **ast, char *line, t_hash_table *env)
 {
 	t_list	*tokens;
+	t_error	err;
+
+	if (ast == NULL || line == NULL || env == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	err = tokenize(&tokens, line);
+	if (err.id != ERR_NONE)
+		return (err);
+	err = parse_ast(ast, tokens, env);
+	if (err.id != ERR_NONE)
+		return (ft_lstclear(&tokens, (void *) free_token), err);
+	ft_lstclear(&tokens, (void *) free_token);
+	return (error(ERR_NONE, NULL));
+}
+
+static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
+{
 	t_ast	*ast;
 	t_error	err;
 
 	if (line == NULL)
 		return ;
-	err = tokenize(&tokens, line);
+	err = prepare_ast(&ast, line, env);
 	if (err.id != ERR_NONE)
 		return (print_error(err));
-	err = parse_ast(&ast, tokens, env);
-	if (err.id != ERR_NONE)
-		return (ft_lstclear(&tokens, (void *) free_token), print_error(err));
 	err = execute_node(ast, env);
 	if (err.id != ERR_NONE)
 	{
@@ -47,34 +58,42 @@ static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
 		}
 		else
 			print_error(err);
-		ft_lstclear(&tokens, (void *) free_token);
-		free_ast(ast);
-		return ;
 	}
-	ft_lstclear(&tokens, (void *) free_token);
 	free_ast(ast);
 }
 
+static t_error	prepare(t_hash_table **env, int *ret, int *run, char **envp)
+{
+	t_error	err;
+
+	err = load_env(env, envp);
+	if (err.id != ERR_NONE)
+		return (err);
+	err = set_var(*env, "?", "0");
+	if (err.id != ERR_NONE)
+		return (err);
+	setup_signals();
+	*ret = 0;
+	*run = 1;
+	return (error(ERR_NONE, NULL));
+}
+
 int	main(int argc, char **argv, char **envp)
-{ (void) argc; (void) argv;
+{
 	char			*line;
 	int				run;
 	int				ret;
 	t_hash_table	*env;
 	t_error			err;
 
-	err = load_env(&env, envp);
+	(void) argc;
+	(void) argv;
+	err = prepare(&env, &ret, &run, envp);
 	if (err.id != ERR_NONE)
-		return (print_error(err), err.id);
-	err = set_var(env, "?", "0");
-	if (err.id != ERR_NONE)
-		return (print_error(err), err.id);
-	setup_signals();
-	ret = 0;
-	run = 1;
+		return (print_error(err), 1);
 	while (run)
 	{
-		line = readline("ms > ");
+		line = readline(INPUT_PREFIX);
 		if (line != NULL)
 		{
 			if (ft_strlen(line) == 0)

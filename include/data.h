@@ -6,12 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/06 21:30:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:26:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DATA_H
 # define DATA_H
+# define INPUT_PREFIX "ms > "
+# define HEREDOC_PREFIX "> "
 # include "builtins.h"
 # include "libft.h"
 
