@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:22:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/06 15:25:00 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/07 18:04:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ t_btin	get_builtin(char *name)
 {
 	if (name == NULL)
 		return (NULL);
+	if (ft_strncmp("echo", name, 5) == 0)
+		return (builtin_echo);
 	if (ft_strncmp("exit", name, 5) == 0)
 		return (builtin_exit);
 	return (NULL);
