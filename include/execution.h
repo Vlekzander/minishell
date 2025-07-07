@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:08:44 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/06 22:05:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/06 23:54:30 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ t_error	find_executable(char **executable, char *command, t_hash_table *env);
 t_error	prepare_cmd(t_command **command, t_list **args, t_hash_table *env);
 t_error	execute_command(t_ret *ret, t_list **cmd_args, t_list *cmd_redirs,
 			t_hash_table *env);
-int		get_exit_code_pipe(pid_t *pids, int size, t_error err);
+int		get_exit_code_pipe(t_ret *rets, int size, t_error err);
 int		get_exit_code(t_ret ret, t_error err);
 #endif

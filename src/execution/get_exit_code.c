@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:33:34 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/06 22:07:08 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/07 12:31:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,14 @@
 
 extern int	g_signal;
 
-int	get_exit_code_pipe(pid_t *pids, int size, t_error err)
+int	get_exit_code_pipe(t_ret *rets, int size, t_error err)
 {
 	int		i;
-	t_ret	ret;
 
 	i = 0;
-	while (i < size - 1)
-		waitpid(pids[i++], NULL, 0);
-	ret.type = RET_PID;
-	ret.pid = pids[i];
-	return (get_exit_code(ret, err));
+	while (i < size - 1 && rets[i].type == RET_PID)
+		waitpid(rets[i++].pid, NULL, 0);
+	return (get_exit_code(rets[i], err));
 }
 
 int	get_exit_code(t_ret ret, t_error err)
@@ -48,7 +45,7 @@ int	get_exit_code(t_ret ret, t_error err)
 	status = 1;
 	if (ret.type == RET_VALUE)
 		status = ret.value;
-	else if (err.id == ERR_PERMISSION)
+	if (err.id == ERR_PERMISSION)
 		status = 126;
 	else if (err.id == ERR_FILE_NOT_FOUND || err.id == ERR_CMD_NOT_FOUND)
 		status = 127;

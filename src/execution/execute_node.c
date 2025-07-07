@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:09:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 14:42:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/07 12:32:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,8 @@ t_error	execute_node(t_ast *node, t_hash_table *env)
 		err = execute_logic_node(node, env);
 	else if (node->type == NODE_REDIR)
 		err = execute_redir_node(node, env);
-	if (err.id != ERR_NONE)
-		return (err);
 	str = ft_itoa(node->exit_code);
 	if (str == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	return (err = set_var(env, "?", str), free(str), err);
+	return (set_var(env, "?", str), free(str), err);
 }
