@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_redir_node.c                               :+:      :+:    :+:   */
+/*   add_pipe_redir.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/06 21:15:00 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/07 14:05:24 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/07 14:05:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include "execution.h"
-#include "redirs.h"
+#include "executor.h"
 
-t_error	execute_redir_node(t_ast *node, t_hash_table *env)
+t_error	add_pipe_redir(t_list **redirs, int in, int out, int close)
 {
-	t_error	err;
+	t_redir	*redir;
+	t_list	*node;
 
-	if (node == NULL || env == NULL || node->type != NODE_REDIR)
+	if (redirs == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = prepare_redirs(node->redirs, env);
-	if (err.id != ERR_NONE)
-		return (node->exit_code = 1, err);
-	err = handle_redirs(node->redirs, -1, -1);
-	if (err.id != ERR_NONE)
-		return (node->exit_code = 1, err);
+	redir = ft_calloc(1, sizeof(t_redir));
+	if (redir == NULL)
+		return (error(ERR_ALLOCATION, NULL));
+	redir->type = REDIR_PIPE;
+	redir->pipe_fds[0] = in;
+	redir->pipe_fds[1] = out;
+	redir->fd_close = close;
+	node = ft_lstnew(redir);
+	if (node == NULL)
+		return (free_redir(redir), error(ERR_ALLOCATION, NULL));
+	ft_lstadd_front(redirs, node);
 	return (error(ERR_NONE, NULL));
 }

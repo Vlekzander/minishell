@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include "env.h"
-#include "execution.h"
+#include "executor.h"
 #include "utils.h"
 
 static t_error	check_path(char **executable, char *command)

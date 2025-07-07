@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution.h                                        :+:      :+:    :+:   */
+/*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 18:08:44 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 14:05:52 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/06 23:32:51 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/07 16:10:31 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTION_H
-# define EXECUTION_H
+#ifndef EXECUTOR_H
+# define EXECUTOR_H
 # include <fcntl.h>
 # include "data.h"
 # include "error.h"
