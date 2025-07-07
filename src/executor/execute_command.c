@@ -117,7 +117,7 @@ t_error	execute_command(t_ret *ret, t_list **cmd_args, t_list *cmd_redirs,
 
 	if (ret == NULL || cmd_args == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = prepare_cmd(&cmd, cmd_args, env);
+	err = prepare_command(&cmd, cmd_args, env);
 	if (err.id != ERR_NONE)
 		return (ret->pid = -1, err);
 	ret->type = RET_VALUE;

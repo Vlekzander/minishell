@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:31:23 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/01 22:11:36 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/07 16:20:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,7 @@ t_error	expand_list(t_list **lst, t_hash_table *env)
 		node = node->next;
 	}
 	lst_remove(lst, str_empty, free);
+	if (*lst == NULL)
+		return (error(ERR_CMD_EMPTY, NULL));
 	return (error(ERR_NONE, NULL));
 }

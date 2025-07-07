@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:56:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 12:27:45 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/07 16:18:22 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static t_error	prepare_envp(char ***envp, t_hash_table *env)
 	return (*envp = arr, error(ERR_NONE, NULL));
 }
 
-t_error	prepare_cmd(t_command **command, t_list **args, t_hash_table *env)
+t_error	prepare_command(t_command **command, t_list **args, t_hash_table *env)
 {
 	t_command	*cmd;
 	t_error		err;
