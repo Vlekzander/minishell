@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 14:29:47 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:32:55 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,6 @@ int	main(int argc, char **argv, char **envp)
 	t_hash_table	*env;
 	t_error			err;
 
-	(void) argc;
-	(void) argv;
 	err = prepare(&env, &ret, &run, envp);
 	if (err.id != ERR_NONE)
 		return (print_error(err), 1);
@@ -105,5 +103,5 @@ int	main(int argc, char **argv, char **envp)
 		else
 			process_line("exit", env, &run, &ret);
 	}
-	return (htable_destroy(env), ret);
+	return ((void) argc, (void) argv, htable_destroy(env), ret);
 }
