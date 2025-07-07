@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:33:34 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 12:31:13 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:01:20 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,39 +15,53 @@
 
 extern int	g_signal;
 
+static int	exit_code(t_ret ret, t_error err, int status)
+{
+	int	exit_code;
+
+	exit_code = 1;
+	if (ret.type == RET_PID && ret.pid != -1)
+	{
+		if (WIFEXITED(status))
+			exit_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			g_signal = 0;
+			exit_code = 128 + WTERMSIG(status);
+		}
+		return (exit_code);
+	}
+	if (ret.type == RET_VALUE)
+		exit_code = ret.value;
+	if (err.id == ERR_PERMISSION)
+		exit_code = 126;
+	else if (err.id == ERR_FILE_NOT_FOUND || err.id == ERR_CMD_NOT_FOUND)
+		exit_code = 127;
+	return (exit_code);
+}
+
 int	get_exit_code_pipe(t_ret *rets, int size, t_error err)
 {
 	int		i;
+	int		status;
 
+	status = 0;
 	i = 0;
-	while (i < size - 1 && rets[i].type == RET_PID)
-		waitpid(rets[i++].pid, NULL, 0);
-	return (get_exit_code(rets[i], err));
+	while (i < size -1 && rets[i].type == RET_PID)
+		waitpid(rets[i++].pid, &status, 0);
+	waitpid(rets[i].pid, &status, 0);
+	return (exit_code(rets[i], err, status));
 }
 
 int	get_exit_code(t_ret ret, t_error err)
 {
 	int	status;
 
+	status = 0;
 	if (ret.type == RET_PID && ret.pid != -1)
 	{
-		status = 0;
 		waitpid(ret.pid, &status, 0);
-		if (WIFEXITED(status))
-			status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-		{
-			g_signal = 0;
-			status = 128 + WTERMSIG(status);
-		}
-		return (status);
+		return (exit_code(ret, err, status));
 	}
-	status = 1;
-	if (ret.type == RET_VALUE)
-		status = ret.value;
-	if (err.id == ERR_PERMISSION)
-		status = 126;
-	else if (err.id == ERR_FILE_NOT_FOUND || err.id == ERR_CMD_NOT_FOUND)
-		status = 127;
-	return (status);
+	return (exit_code(ret, err, status));
 }
