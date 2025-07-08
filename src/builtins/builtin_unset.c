@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   remove_var.c                                       :+:      :+:    :+:   */
+/*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/22 15:16:34 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 14:28:42 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/08 14:18:01 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/08 14:25:31 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "builtins.h"
 #include "env.h"
 
-t_error	remove_var(t_hash_table *env, char *key)
+t_error		builtin_unset(int *ret, t_btin_data data, t_hash_table *env)
 {
-	if (env == NULL || key == NULL)
+	int		i;
+
+	if (ret == NULL || data.argv == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	if (ft_strncmp("?", key, 2) != 0 && ft_strncmp("_", key, 2) != 0)
-		htable_remove(env, key);
-	return (error(ERR_NONE, NULL));
+	i = 1;
+	while (i < data.argc)
+		remove_var(env, data.argv[i++]);
+	return (*ret = 0, error(ERR_NONE, NULL));
 }

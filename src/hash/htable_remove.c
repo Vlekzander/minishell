@@ -6,14 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 12:31:58 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/17 14:08:12 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 14:23:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "hash.h"
 
-static t_list	*find_deleted_node(t_list **head, char *key)
+static t_list	*find_node(t_list **head, char *key)
 {
 	size_t		key_len;
 	t_list		*lst;
@@ -48,7 +48,7 @@ int	htable_remove(t_hash_table *htable, char *key)
 	if (htable == NULL || key == NULL)
 		return (-1);
 	index = htable->hash(key) % htable->buckets_count;
-	node = find_deleted_node(&htable->buckets[index], key);
+	node = find_node(&htable->buckets[index], key);
 	if (node != NULL)
 	{
 		free_hnode(node->content, htable->del);
