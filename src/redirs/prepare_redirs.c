@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:13:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 17:26:34 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:31:51 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "expand.h"
 #include "libft.h"
 #include "redirs.h"
+#include "utils.h"
 
 t_error	prepare_redirs(t_list *redirs, t_hash_table *env)
 {
@@ -29,9 +30,9 @@ t_error	prepare_redirs(t_list *redirs, t_hash_table *env)
 		if (err.id != ERR_NONE)
 			return (err);
 		if (redir->type == REDIR_IN)
-			err = check_file(redir->in, REDIR_IN);
+			err = check_file(redir->in, 1, 1, 0);
 		else if (redir->type == REDIR_OUT)
-			err = check_file(redir->in, REDIR_OUT);
+			err = check_file(redir->in, 1, 0, 1);
 		if (err.id != ERR_NONE)
 			return (err);
 		redirs = redirs->next;

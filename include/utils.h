@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:00:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 12:22:57 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:28:17 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ void	close_fd(int fd);
 void	close_fds(int fd1, int fd2);
 void	close_pipe(int *pipe);
 void	close_set(int *fd, int value);
+t_error	check_file(char *path, int is_file, int read, int write);
 
 #endif

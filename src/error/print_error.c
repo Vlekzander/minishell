@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:13:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/06 16:45:01 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:56:01 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static char	*get_more_error_message(t_error_code code)
 {
 	if (code == ERR_FORK)
 		return ("Fork failed");
+	if (code == ERR_HEREDOC_FILE)
+		return ("Open heredoc file failed");
 	return ("Unknown error");
 }
 

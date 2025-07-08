@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:40:30 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 17:27:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:57:34 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <sys/stat.h>
 #include "libft.h"
 #include "redirs.h"
+#include "utils.h"
 
 static t_error	prepare_of(t_redir_type type, int mode,
 		int *flags, int *perms)
@@ -43,6 +44,22 @@ static t_error	prepare_of(t_redir_type type, int mode,
 	return (error(ERR_NONE, NULL));
 }
 
+static t_error	check_open_file(char *path, t_redir_type type, int mode)
+{
+	int	read;
+	int	write;
+
+	if (path == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	read = 0;
+	write = 0;
+	if (type == REDIR_IN || (type == REDIR_HEREDOC && !mode))
+		read = 1;
+	if (type == REDIR_OUT || (type == REDIR_HEREDOC && mode))
+		write = 1;
+	return (check_file(path, 1, read, write));
+}
+
 t_error	open_file(int *fd, char *path, t_redir_type type, int mode)
 {
 	int		file;
@@ -52,7 +69,7 @@ t_error	open_file(int *fd, char *path, t_redir_type type, int mode)
 
 	if (fd == NULL || path == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = check_file(path, type);
+	err = check_open_file(path, type, mode);
 	if (err.id != ERR_NONE)
 		return (err);
 	err = prepare_of(type, mode, &flags, &perms);
