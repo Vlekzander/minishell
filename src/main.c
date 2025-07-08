@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 16:20:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:58:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
 		return ;
 	err = prepare_ast(&ast, line, env);
 	if (err.id != ERR_NONE)
-		return (print_error(err));
+		return (print_error(err, NULL));
 	err = execute_node(ast, env);
 	if (err.id != ERR_NONE && err.id != ERR_CMD_EMPTY)
 	{
@@ -57,7 +57,7 @@ static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
 			*ret = ast->exit_code;
 		}
 		else
-			print_error(err);
+			print_error(err, NULL);
 	}
 	free_ast(ast);
 }
@@ -88,7 +88,7 @@ int	main(int argc, char **argv, char **envp)
 
 	err = prepare(&env, &ret, &run, envp);
 	if (err.id != ERR_NONE)
-		return (print_error(err), 1);
+		return (print_error(err, NULL), 1);
 	while (run)
 	{
 		line = readline(INPUT_PREFIX);

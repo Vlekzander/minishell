@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:05:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 19:16:52 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 13:09:21 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_error	builtin_pwd(int *ret, t_btin_data data, t_hash_table *env)
 	if (ret == NULL || data.argv == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	if (getcwd(path, PATH_MAX) == NULL)
-		return (error(ERR_ERRNO, NULL));
+		return (error(ERR_ERRNO, path));
 	ft_putendl_fd(path, data.stdout);
 	return (*ret = 0, error(ERR_NONE, NULL));
 }

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:25:20 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/06 21:20:47 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 13:05:35 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,12 @@ static int	str_isdigit(char *str)
 
 t_error	process_errors(int *ret, int is_digit, char *str)
 {
-	ft_putstr_fd(ERROR_PREFIX, 2);
-	ft_putstr_fd(": exit: ", 2);
 	if (!is_digit)
 	{
-		ft_putstr_fd(str, 2);
-		ft_putstr_fd(": Numeric argument required\n", 2);
+		print_error(error(ERR_NUMERIC_ARG, str), "exit");
 		return (*ret = 2, error(ERR_EXIT, NULL));
 	}
-	ft_putstr_fd("Too many arguments\n", 2);
+	print_error(error(ERR_TOO_MANY_ARGS, NULL), "exit");
 	return (*ret = 1, error(ERR_NONE, NULL));
 }
 

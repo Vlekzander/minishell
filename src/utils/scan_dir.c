@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:46:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 12:24:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 13:10:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ t_error	scan_dir(t_list **content, char *path)
 	*content = NULL;
 	dir = opendir(path);
 	if (dir == NULL)
-		return (error(ERR_ERRNO, NULL));
+		return (error(ERR_ERRNO, path));
 	err = loop_entries(content, dir);
 	if (err.id != ERR_NONE)
 	{
@@ -94,6 +94,6 @@ t_error	scan_dir(t_list **content, char *path)
 	}
 	sort_ascii_list(*content);
 	if (closedir(dir) == -1)
-		return (error(ERR_ERRNO, NULL));
+		return (error(ERR_ERRNO, path));
 	return (err);
 }

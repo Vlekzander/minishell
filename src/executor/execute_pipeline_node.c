@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 14:18:38 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:59:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ t_error	execute_pipeline_node(t_ast *node, t_hash_table *env)
 			return (close_fd(fds.input), close_pipe(fds.pipe), free(rets), err);
 		err = process_exec_pipeline(lst, env, &fds, rets + i++);
 		if (lst->next != NULL && err.id != ERR_EXIT)
-			print_error(err);
+			print_error(err, NULL);
 		lst = lst->next;
 	}
 	node->exit_code = get_exit_code_pipe(rets, ft_lstsize(node->pipeline), err);

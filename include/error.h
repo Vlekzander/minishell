@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:43:29 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 11:55:35 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 13:20:42 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ typedef enum e_error_code
 	ERR_CMD_NOT_FOUND,
 	ERR_FORK,
 	ERR_HEREDOC_FILE,
+	ERR_NUMERIC_ARG,
+	ERR_TOO_MANY_ARGS,
+	ERR_HOME_NOT_SET,
 	ERR_EXIT,
 	ERR_CMD_EMPTY
 }	t_error_code;
@@ -42,6 +45,6 @@ typedef struct s_error
 }	t_error;
 
 t_error	error(t_error_code code, char *cause);
-void	print_error(t_error err);
+void	print_error(t_error err, char *source);
 
 #endif
