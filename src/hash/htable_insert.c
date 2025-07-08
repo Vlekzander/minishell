@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 12:07:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/17 13:56:22 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:44:09 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	htable_insert(t_hash_table *htable, char *key, void *value)
 	t_list		*lst;
 	t_hash_node	*node;
 
-	if (htable == NULL || key == NULL || value == NULL)
+	if (htable == NULL || key == NULL)
 		return (-1);
 	index = htable->hash(key) % htable->buckets_count;
 	node = htable_search_node(key, htable->buckets[index]);

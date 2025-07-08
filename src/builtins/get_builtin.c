@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:22:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 14:18:51 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 14:33:42 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ t_btin	get_builtin(char *name)
 		return (builtin_env);
 	if (ft_strncmp("exit", name, 5) == 0)
 		return (builtin_exit);
+	if (ft_strncmp("export", name, 7) == 0)
+		return (builtin_export);
 	if (ft_strncmp("pwd", name, 4) == 0)
 		return (builtin_pwd);
 	if (ft_strncmp("unset", name, 5) == 0)

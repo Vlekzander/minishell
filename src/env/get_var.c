@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:16:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/05 01:12:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:37:06 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ t_error	get_var(char **str, t_hash_table *env, char *key)
 
 	if (str == NULL || env == NULL || key == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
+	if (*key == '\0')
+		return (error(ERR_INVALID_KEY, NULL));
 	if (g_signal != 0)
 	{
 		sig_str[0] = '\0';

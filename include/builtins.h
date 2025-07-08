@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:22:25 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 14:18:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 14:31:23 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_error		builtin_cd(int *ret, t_btin_data data, t_hash_table *env);
 t_error		builtin_echo(int *ret, t_btin_data data, t_hash_table *env);
 t_error		builtin_env(int *ret, t_btin_data data, t_hash_table *env);
 t_error		builtin_exit(int *ret, t_btin_data data, t_hash_table *env);
+t_error		builtin_export(int *ret, t_btin_data data, t_hash_table *env);
 t_error		builtin_pwd(int *ret, t_btin_data data, t_hash_table *env);
 t_error		builtin_unset(int *ret, t_btin_data data, t_hash_table *env);
 

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:56:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 16:18:22 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 19:08:34 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static t_error	prepare_envp(char ***envp, t_hash_table *env)
 	char	*str;
 	t_error	err;
 
-	err = get_env(&str, env);
+	err = get_env(&str, 0, env);
 	if (err.id != ERR_NONE)
 		return (err);
 	arr = ft_split(str, '\n');

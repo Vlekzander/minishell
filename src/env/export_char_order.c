@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_hnode.c                                     :+:      :+:    :+:   */
+/*   export_char_order.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/17 13:56:17 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 18:42:22 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/08 21:52:26 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/08 21:55:41 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "hash.h"
+#include "env.h"
 
-t_hash_node	*create_hnode(char *key, void *value)
+int	export_char_order(char c)
 {
-	t_hash_node	*hnode;
-
-	if (key == NULL)
-		return (NULL);
-	hnode = ft_calloc(1, sizeof(t_hash_node));
-	if (hnode == NULL)
-		return (NULL);
-	hnode->key = ft_strdup(key);
-	if (hnode->key == NULL)
-		return (free(hnode), NULL);
-	hnode->content = value;
-	return (hnode);
+	if (ft_isdigit(c))
+		return (c - '0');
+	if (ft_isalpha(c))
+	{
+		if (c <= 'Z')
+			return (c - 'A' + 10);
+		return (c - 'a' + 37);
+	}
+	if (c == '_')
+		return (36);
+	return (100 + c);
 }
