@@ -6,14 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:18:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 14:25:31 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 14:30:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "env.h"
 
-t_error		builtin_unset(int *ret, t_btin_data data, t_hash_table *env)
+t_error	builtin_unset(int *ret, t_btin_data data, t_hash_table *env)
 {
 	int		i;
 
