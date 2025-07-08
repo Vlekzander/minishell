@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 23:32:51 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 16:10:31 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:13:11 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_pipe_fds
 typedef struct s_ret
 {
 	t_ret_type	type;
+	int			redir_error;
 	union
 	{
 		pid_t	pid;

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 14:26:24 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 22:22:53 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
 	int		run;
 	t_error	err;
 
-	if (env == NULL || sb == NULL || eof == NULL)
+	if (env == NULL || (sb == NULL && is_last) || eof == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	expand = (ft_strchr(eof, '"') == NULL && ft_strchr(eof, '\'') == NULL);
 	remove_str_quotes(eof);

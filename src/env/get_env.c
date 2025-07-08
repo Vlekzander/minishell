@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:16:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 21:55:03 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 22:57:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	export_format(char *key, void *value, void *data)
 	if (key == NULL || data == NULL)
 		return (0);
 	sb = data;
-	if (ft_strncmp("?", key, 2) == 0)
+	if (ft_strncmp("?", key, 2) == 0 || ft_strncmp("_", key, 2) == 0)
 		return (1);
 	if (!strbuilder_append(sb, "declare -x "))
 		return (0);

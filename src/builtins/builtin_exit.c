@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:25:20 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 13:05:35 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:29:05 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ t_error	builtin_exit(int *ret, t_btin_data data, t_hash_table *env)
 
 	if (ret == NULL || data.argv == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	ft_putendl_fd("exit", 2);
+	if (!data.forked)
+		ft_putendl_fd("exit", 2);
 	if (data.argv[1] != NULL)
 	{
 		is_digit = str_isdigit(data.argv[1]);

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:22:25 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 14:31:23 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:28:31 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 typedef struct s_btin_data
 {
+	int		forked;
 	int		stdin;
 	int		stdout;
 	int		argc;

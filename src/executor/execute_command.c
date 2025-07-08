@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:32:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 12:02:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:34:51 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static t_error	exec_binary(t_ret *ret, t_command *cmd, t_list *redirs,
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = prepare_redirs(redirs, env);
 	if (err.id != ERR_NONE)
-		return (err);
+		return (ret->redir_error = 1, err);
 	pid = fork();
 	if (pid == -1)
 		return (error(ERR_FORK, NULL));
@@ -88,25 +88,24 @@ static t_error	exec_builtin_fork(t_ret *ret, t_command *cmd, t_list *redirs,
 
 	if (ret == NULL || cmd == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	data.argc = cmd->argc;
-	data.argv = cmd->argv;
+	data.forked = 1;
 	data.stdin = STDIN_FILENO;
 	data.stdout = STDOUT_FILENO;
+	data.argc = cmd->argc;
+	data.argv = cmd->argv;
 	err = prepare_redirs(redirs, env);
 	if (err.id != ERR_NONE)
 		return (err);
 	pid = fork();
 	if (pid == -1)
 		return (error(ERR_FORK, NULL));
-	if (pid == 0)
-	{
-		ret->type = RET_VALUE;
-		err = handle_redirs(redirs, STDIN_FILENO, STDOUT_FILENO);
-		if (err.id == ERR_NONE)
-			cmd->builtin(&ret->value, data, env);
-		return (error(ERR_EXIT, NULL));
-	}
-	return (ret->pid = pid, error(ERR_NONE, NULL));
+	if (pid != 0)
+		return (ret->pid = pid, error(ERR_NONE, NULL));
+	ret->type = RET_VALUE;
+	err = handle_redirs(redirs, STDIN_FILENO, STDOUT_FILENO);
+	if (err.id == ERR_NONE)
+		cmd->builtin(&ret->value, data, env);
+	return (error(ERR_EXIT, NULL));
 }
 
 t_error	execute_command(t_ret *ret, t_list **cmd_args, t_list *cmd_redirs,
@@ -119,7 +118,7 @@ t_error	execute_command(t_ret *ret, t_list **cmd_args, t_list *cmd_redirs,
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = prepare_command(&cmd, cmd_args, env);
 	if (err.id != ERR_NONE)
-		return (ret->pid = -1, err);
+		return (ret->type = RET_PID, ret->pid = -1, err);
 	ret->type = RET_VALUE;
 	ret->value = 1;
 	if (cmd->type == CMD_BINARY

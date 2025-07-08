@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:13:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 13:21:01 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 22:00:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*get_error_message(t_error_code code)
 	if (code == ERR_IMPLEMENTATION)
 		return ("Implementation error");
 	if (code == ERR_SYNTAX)
-		return ("Syntax error");
+		return ("syntax error");
 	if (code == ERR_ALLOCATION)
 		return ("Allocation error");
 	if (code == ERR_FILE_NOT_FOUND)
@@ -54,11 +54,11 @@ static char	*get_error_message(t_error_code code)
 	if (code == ERR_PIPE)
 		return ("Pipe failed");
 	if (code == ERR_INVALID_KEY)
-		return ("Not a valid identifier");
+		return ("not a valid identifier");
 	if (code == ERR_AMB_REDIR)
-		return ("Ambiguous redirect");
+		return ("ambiguous redirect");
 	if (code == ERR_CMD_NOT_FOUND)
-		return ("Command not found");
+		return ("command not found");
 	return (get_more_error_message(code));
 }
 

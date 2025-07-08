@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 19:18:31 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/06 21:14:20 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 22:32:08 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,13 @@ static t_error	process_redir_heredoc(t_redir *redir, int in)
 	ret = 0;
 	err = error(ERR_NONE, NULL);
 	if (in != -1)
+	{
 		ret = dup2(redir->fd, in);
+		close_fd(redir->fd);
+	}
 	if (ret == -1)
 		err = error(ERR_ERRNO, NULL);
-	return (close_fd(redir->fd), err);
+	return (err);
 }
 
 static t_error	process_redir_pipe(t_redir *redir, int in, int out)

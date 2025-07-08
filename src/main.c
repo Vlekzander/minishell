@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 12:58:58 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 22:59:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,9 @@ static t_error	prepare(t_hash_table **env, int *ret, int *run, char **envp)
 	if (err.id != ERR_NONE)
 		return (err);
 	err = set_var(*env, "?", "0");
+	if (err.id != ERR_NONE)
+		return (err);
+	err = set_var(*env, "OLDPWD", NULL);
 	if (err.id != ERR_NONE)
 		return (err);
 	setup_signals();
