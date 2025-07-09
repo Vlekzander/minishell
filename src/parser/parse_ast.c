@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 12:39:00 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 00:30:39 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,9 @@ t_error	parse_expression(t_ast **ast, t_list **tk_lst, t_hash_table *env,
 			&& (node == NULL || node->type == NODE_REDIR))
 			err = nud(&node, tk_lst, env, token);
 		else if (current_redir == TK_NONE)
+			err = led(&node, tk_lst, env, token);
+		if (current_redir == TK_NONE && node != NULL
+			&& node->type == NODE_REDIR && token->type == TK_PIPE)
 			err = led(&node, tk_lst, env, token);
 		if (err.id != ERR_NONE)
 			return (free_ast(node), err);

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 22:59:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 00:18:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,11 @@ static t_error	prepare_ast(t_ast **ast, char *line, t_hash_table *env)
 		return (err);
 	err = parse_ast(ast, tokens, env);
 	if (err.id != ERR_NONE)
-		return (ft_lstclear(&tokens, (void *) free_token), err);
-	ft_lstclear(&tokens, (void *) free_token);
-	return (error(ERR_NONE, NULL));
+	{
+		if (err.id == ERR_SYNTAX)
+			set_var(env, "?", "2");
+	}
+	return (ft_lstclear(&tokens, (void *) free_token), err);
 }
 
 static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
@@ -52,12 +54,8 @@ static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
 	if (err.id != ERR_NONE && err.id != ERR_CMD_EMPTY)
 	{
 		if (err.id == ERR_EXIT)
-		{
-			*run = 0;
-			*ret = ast->exit_code;
-		}
-		else
-			print_error(err, NULL);
+			return (*run = 0, *ret = ast->exit_code, free_ast(ast));
+		print_error(err, NULL);
 	}
 	free_ast(ast);
 }

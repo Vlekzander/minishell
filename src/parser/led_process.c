@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:41:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/21 16:07:09 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 00:28:42 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static t_error	prepare_pipeline(t_ast **ast)
 	t_ast	*node;
 	t_list	*lst_node;
 
-	if (ast == NULL || *ast == NULL || (*ast)->type != NODE_COMMAND)
+	if (ast == NULL || *ast == NULL
+		|| ((*ast)->type != NODE_COMMAND && (*ast)->type != NODE_REDIR))
 		return (error(ERR_IMPLEMENTATION, NULL));
 	node = create_ast(NODE_PIPELINE);
 	if (node == NULL)
@@ -66,7 +67,7 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 
 	if (ast == NULL || tk_lst == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	if ((*ast)->type == NODE_COMMAND)
+	if ((*ast)->type == NODE_COMMAND || (*ast)->type == NODE_REDIR)
 	{
 		err = prepare_pipeline(ast);
 		if (err.id != ERR_NONE)

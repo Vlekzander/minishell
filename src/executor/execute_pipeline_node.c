@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 12:59:16 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 00:26:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static t_error	prepare_pipe_fds(t_list *node, t_pipe_fds *fds)
 	else if (pipe(fds->pipe) == -1)
 		return (error(ERR_PIPE, NULL));
 	cmd = node->content;
+	if (cmd->type != NODE_COMMAND)
+		return (error(ERR_NONE, NULL));
 	err = add_pipe_redir(&cmd->redirs, fds->input, fds->pipe[1],
 			fds->pipe[0]);
 	return (err);
@@ -75,7 +77,10 @@ static t_error	process_exec_pipeline(t_list *node, t_hash_table *env,
 			close_fds(STDIN_FILENO, STDOUT_FILENO);
 	}
 	else if (cmd->type == NODE_REDIR)
+	{
 		err = execute_redir_node(cmd, env);
+		close_set(&fds->input, fds->pipe[0]);
+	}
 	if (ret->type == RET_PID)
 		close_set(&fds->pipe[1], -1);
 	return (err);

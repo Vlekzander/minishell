@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 23:37:37 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:43:20 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 00:53:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,30 @@
 #include "error.h"
 #include "libft.h"
 #include "utils.h"
+
+static char	*ft_strchr_quote(const char *s, int c)
+{
+	size_t	i;
+	char	ch;
+	char	quote;
+
+	if (s == NULL)
+		return (NULL);
+	ch = (char) c;
+	quote = 0;
+	i = 0;
+	while (s[i] != '\0')
+	{
+		if (quote == 0 && s[i] == ch)
+			break ;
+		if (is_quote(s[i]))
+			quote = handle_quote(s[i], quote);
+		i++;
+	}
+	if (quote == 0 && s[i] == ch)
+		return ((char *) &s[i]);
+	return (NULL);
+}
 
 static t_error	new_node(t_list **node, char *input, size_t size)
 {
@@ -43,7 +67,7 @@ t_error	split_lst(t_list **lst, char *input, char c)
 	list = NULL;
 	while (*input != '\0')
 	{
-		ptr = ft_strchr(input, c);
+		ptr = ft_strchr_quote(input, c);
 		if (ptr == NULL)
 			ptr = input + ft_strlen(input);
 		if (ptr - input > 0)

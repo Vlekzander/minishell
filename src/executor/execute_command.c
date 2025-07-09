@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:32:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 23:34:51 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:56:53 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ static t_error	exec_builtin(t_ret *ret, t_command *cmd, t_list *redirs,
 
 	if (ret == NULL || cmd == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
+	data.forked = 0;
 	data.argc = cmd->argc;
 	data.argv = cmd->argv;
 	err = prepare_redirs(redirs, env);
