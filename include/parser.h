@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:22:41 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/21 16:06:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:08:31 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ t_error			led(t_ast **ast, t_list **tk_lst, t_hash_table *env,
 t_error			parse_expression(t_ast **ast, t_list **tk_lst,
 					t_hash_table *env, int prec);
 void			clear_redirs(t_list	**redirs);
+int				redir_cond(t_ast *node, t_token *token, t_token_type redir);
 
 #endif

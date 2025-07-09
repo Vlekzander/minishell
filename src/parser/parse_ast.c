@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 00:30:39 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:08:49 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,31 +93,28 @@ t_error	parse_expression(t_ast **ast, t_list **tk_lst, t_hash_table *env,
 	t_ast			*node;
 	t_token			*token;
 	t_error			err;
-	t_token_type	current_redir;
+	t_token_type	redir;
 
 	if (ast == NULL || tk_lst == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	node = NULL;
-	current_redir = TK_NONE;
+	redir = TK_NONE;
 	while (in_expression(&token, tk_lst, prec))
 	{
 		err = error(ERR_SYNTAX, NULL);
-		if (((node != NULL && node->type != NODE_GROUP) || node == NULL)
-			&& ((is_redirection(token) && current_redir == TK_NONE)
-				|| (token->type == TK_WORD && current_redir != TK_NONE)))
-			err = process_redirection(&node, token, &current_redir);
-		else if (current_redir == TK_NONE
-			&& (node == NULL || node->type == NODE_REDIR))
+		if (redir_cond(node, token, redir))
+			err = process_redirection(&node, token, &redir);
+		else if (redir == TK_NONE && (node == NULL || node->type == NODE_REDIR))
 			err = nud(&node, tk_lst, env, token);
-		else if (current_redir == TK_NONE)
+		else if (redir == TK_NONE)
 			err = led(&node, tk_lst, env, token);
-		if (current_redir == TK_NONE && node != NULL
+		if (redir == TK_NONE && node != NULL
 			&& node->type == NODE_REDIR && token->type == TK_PIPE)
 			err = led(&node, tk_lst, env, token);
 		if (err.id != ERR_NONE)
 			return (free_ast(node), err);
 	}
-	return (finalize_expression(ast, env, node, current_redir));
+	return (finalize_expression(ast, env, node, redir));
 }
 
 t_error	parse_ast(t_ast **ast, t_list *tokens, t_hash_table *env)
