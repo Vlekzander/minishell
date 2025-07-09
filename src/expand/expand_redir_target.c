@@ -74,7 +74,7 @@ static t_error	validate_vars(char *str, t_hash_table *env)
 	while (*ptr != '\0')
 	{
 		if (is_quote(*ptr) && (quote == 0 || quote == *ptr))
-			quote = handle_quote(*ptr, quote);
+			quote = toggle_quote(*ptr, quote);
 		err = val_var(ptr, &vref, quote, env);
 		if (err.id == ERR_AMB_REDIR)
 			return (free_vref(vref), error(ERR_AMB_REDIR, str));

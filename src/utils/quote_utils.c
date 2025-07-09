@@ -17,7 +17,7 @@ int	is_quote(char c)
 	return (c == '"' || c == '\'');
 }
 
-char	handle_quote(char c, char current)
+char	toggle_quote(char c, char current)
 {
 	if (current == 0)
 		return (c);

@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   remove_str_quotes.c                                :+:      :+:    :+:   */
+/*   hd_prepare_eof.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/07 16:17:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/07 18:22:32 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/09 17:28:15 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/09 17:38:26 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "lexer.h"
+#include "redirs.h"
 #include "utils.h"
 
-void	remove_str_quotes(char *str)
+void	hd_prepare_eof(char *str)
 {
-	char	quote;
-	size_t	i;
+	int		i;
 	size_t	len;
+	char	quote;
 
 	if (str == NULL)
 		return ;
@@ -25,12 +27,14 @@ void	remove_str_quotes(char *str)
 	while (str[i] != '\0')
 	{
 		if (is_quote(str[i]) && (quote == 0 || quote == str[i]))
+			quote = toggle_quote(str[i], quote);
+		if (quote == 0 && str[i] == '$' && is_quote(str[i + 1]))
 		{
 			len = ft_strlen(str + i + 1);
-			quote = toggle_quote(str[i], quote);
 			ft_memmove(str + i, str + i + 1, len + 1);
 		}
 		else
 			i++;
 	}
+	remove_str_quotes(str);
 }

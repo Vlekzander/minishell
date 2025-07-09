@@ -53,7 +53,7 @@ static t_error	process_loop(t_list **tokens, char *input, char *buf)
 			continue ;
 		}
 		if (is_quote(*input) && (quote == 0 || quote == *input))
-			quote = handle_quote(*input, quote);
+			quote = toggle_quote(*input, quote);
 		buf[i++] = *(input++);
 	}
 	if (quote != 0)

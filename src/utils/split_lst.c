@@ -31,7 +31,7 @@ static char	*ft_strchr_quote(const char *s, int c)
 		if (quote == 0 && s[i] == ch)
 			break ;
 		if (is_quote(s[i]))
-			quote = handle_quote(s[i], quote);
+			quote = toggle_quote(s[i], quote);
 		i++;
 	}
 	if (quote == 0 && s[i] == ch)

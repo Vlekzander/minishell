@@ -85,7 +85,7 @@ static t_error	parse_pattern(t_pattern **pattern, char *str, char *buf,
 	while (*str != '\0')
 	{
 		if (is_quote(*str) && (quote == 0 || quote == *str))
-			quote = handle_quote(*str, quote);
+			quote = toggle_quote(*str, quote);
 		else if (quote == 0 && *str == '*')
 		{
 			buf[*i] = '\0';

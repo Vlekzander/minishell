@@ -29,7 +29,7 @@ static t_error	scan_next_var(char *str, int *index, int *len, int ignore_quote)
 		if (*index == -1 && (quote != '\'' || ignore_quote) && str[i] == '$')
 			*index = i;
 		if (is_quote(str[i]) && (quote == 0 || quote == str[i]))
-			quote = handle_quote(str[i], quote);
+			quote = toggle_quote(str[i], quote);
 		if (*index != -1 && *len == 1 && str[i] == '?')
 			(*len)++;
 		if (*index != -1 && ((*len == 1 && !ft_isalpha(str[i]) && str[i] != '_')
