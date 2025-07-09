@@ -6,26 +6,53 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:02:26 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 18:15:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 13:58:49 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
+static int	new_line_option(char *str)
+{
+	int	i;
+
+	if (str == NULL)
+		return (0);
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static int	process_setup(char *str, int *new_line)
+{
+	if (str == NULL || new_line == NULL)
+		return (0);
+	if (str[0] == '-' && new_line_option(str + 1))
+		return (*new_line = 0, 1);
+	return (0);
+}
+
 t_error	builtin_echo(int *ret, t_btin_data data, t_hash_table *env)
 {
 	int	i;
 	int	new_line;
+	int	setup;
 
 	if (ret == NULL || data.argv == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
+	setup = 1;
 	new_line = 1;
 	i = 1;
 	while (i < data.argc)
 	{
-		if (i == 1 && ft_strncmp(data.argv[i], "-n", 3) == 0)
-			new_line = 0;
-		else
+		if (setup)
+			setup = process_setup(data.argv[i], &new_line);
+		if (!setup)
 		{
 			ft_putstr_fd(data.argv[i], data.stdout);
 			if (i != data.argc -1)

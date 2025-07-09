@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:33:34 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 00:04:31 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:42:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	exit_code(t_ret ret, t_error err, int status)
 {
 	int	exit_code;
 
-	exit_code = 1;
+	exit_code = 0;
 	if (ret.type == RET_PID && ret.pid != -1)
 	{
 		if (WIFEXITED(status))
@@ -33,7 +33,7 @@ static int	exit_code(t_ret ret, t_error err, int status)
 	}
 	if (ret.type == RET_VALUE)
 		exit_code = ret.value;
-	if (err.id == ERR_NONE || err.id == ERR_CMD_EMPTY)
+	if (err.id == ERR_CMD_EMPTY)
 		exit_code = 0;
 	else if (err.id == ERR_PERMISSION || err.id == ERR_IS_DIRECTORY)
 		exit_code = 126;

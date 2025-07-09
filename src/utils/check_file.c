@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:09:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 12:31:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:52:59 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_error	check_file(char *path, int is_file, int read, int write)
 	err = check_read_write(path, read, write);
 	if (err.id != ERR_NONE)
 		return (err);
-	if (!is_file || write)
+	if ((!is_file || write) && access(path, F_OK) == -1)
 		err = check_subpath(path, write);
 	return (err);
 }

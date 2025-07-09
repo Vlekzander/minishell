@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:31:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 23:15:08 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:56:22 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static t_error	append_var(t_hash_table *env, char *key, char *value)
 	var = ft_strjoin(var, value);
 	if (var == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	return (err = set_var(env, value, var), free(var), err);
+	return (err = set_var(env, key, var), free(var), err);
 }
 
 static t_error	append_set_var(t_hash_table *env, char *str, char *ptr)
@@ -81,7 +81,6 @@ static t_error	export_vars(int *ret, int argc, char **argv, t_hash_table *env)
 	if (ret == NULL || argv == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	value = 0;
-	err = error(ERR_NONE, NULL);
 	i = 1;
 	while (i < argc)
 	{
@@ -93,7 +92,7 @@ static t_error	export_vars(int *ret, int argc, char **argv, t_hash_table *env)
 		}
 		i++;
 	}
-	return (*ret = value, err);
+	return (*ret = value, error(ERR_NONE, NULL));
 }
 
 t_error	builtin_export(int *ret, t_btin_data data, t_hash_table *env)
@@ -115,6 +114,8 @@ t_error	builtin_export(int *ret, t_btin_data data, t_hash_table *env)
 		ft_putstr_fd(str, data.stdout);
 		return (free(str), *ret = 0, error(ERR_NONE, NULL));
 	}
-	export_vars(&value, data.argc, data.argv, env);
+	err = export_vars(&value, data.argc, data.argv, env);
+	if (err.id != ERR_NONE)
+		print_error(err, "export");
 	return (*ret = value, error(ERR_NONE, NULL));
 }
