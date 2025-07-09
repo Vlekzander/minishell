@@ -45,6 +45,6 @@ typedef struct s_error
 }	t_error;
 
 t_error	error(t_error_code code, char *cause);
-void	print_error(t_error err, char *source);
+void	print_error(t_error err, char *builtin);
 
 #endif

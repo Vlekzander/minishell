@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:13:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 22:00:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/10 00:09:45 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,15 @@ static char	*get_error_message(t_error_code code)
 	return (get_more_error_message(code));
 }
 
-void	print_error(t_error err, char *source)
+void	print_error(t_error err, char *builtin)
 {
 	if (err.id == ERR_NONE)
 		return (free(err.src));
 	ft_putstr_fd(ERROR_PREFIX, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
-	if (source != NULL)
+	if (builtin != NULL)
 	{
-		ft_putstr_fd(source, STDERR_FILENO);
+		ft_putstr_fd(builtin, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 	}
 	if (err.src != NULL)

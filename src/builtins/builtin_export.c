@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:31:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 12:56:22 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/10 00:08:01 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,11 @@ static t_error	export_vars(int *ret, int argc, char **argv, t_hash_table *env)
 		if (err.id != ERR_NONE)
 		{
 			value = 1;
+			if (err.id == ERR_INVALID_KEY)
+			{
+				free(err.src);
+				err.src = prefix_suffix_str(argv[i], "`", "'");
+			}
 			print_error(err, "export");
 		}
 		i++;
