@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 12:38:03 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:19:07 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:06:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static t_error	scan_next_var(char *str, int *index, int *len, int ignore_quote)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if ((quote != '\'' || ignore_quote) && str[i] == '$')
+		if (*index == -1 && (quote != '\'' || ignore_quote) && str[i] == '$')
 			*index = i;
 		if (is_quote(str[i]) && (quote == 0 || quote == str[i]))
 			quote = handle_quote(str[i], quote);
@@ -59,6 +59,8 @@ t_error	extract_var(t_vref **varpos, char *str, int ignore_quote)
 		return (err);
 	if (var->index != -1 && len > 1)
 		var->str = ft_strndup(str + var->index, len);
+	else if (var->index == 0 && is_quote(str[1]))
+		var->str = ft_strndup(str + var->index, 1);
 	if (var->index != -1 && len > 1 && var->str == NULL)
 		return (*varpos = NULL, error(ERR_ALLOCATION, NULL));
 	return (*varpos = var, error(ERR_NONE, NULL));

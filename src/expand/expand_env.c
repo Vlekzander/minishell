@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 15:13:11 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:44:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:14:39 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static t_error	add_var_node(t_list **vrefs, t_vref *var, char *str, char *base)
 		return (ft_lstclear(vrefs, (void *) free_vref), free_vref(var),
 			error(ERR_ALLOCATION, NULL));
 	ft_lstadd_back(vrefs, node_var);
-	var->index += (int)(str - base);
 	return (error(ERR_NONE, NULL));
 }
 
@@ -48,7 +47,7 @@ static	t_error	get_vars(t_list **vars_lst, char *base, int ignore_quote)
 		if (var->str == NULL)
 			break ;
 		add_var_node(&vrefs, var, str, base);
-		str = base + var->index + ft_strlen(var->str);
+		str[var->index] = 'S';
 	}
 	return (*vars_lst = vrefs, free_vref(var), error(ERR_NONE, NULL));
 }

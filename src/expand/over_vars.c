@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 15:15:26 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:44:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:13:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@ static t_error	calculate_len(size_t *len, char *base, t_list *vars,
 	{
 		var = vars->content;
 		err = get_var(&var_content, env, var->str +1);
-		if (err.id != ERR_NONE)
+		if (err.id != ERR_NONE && var->str[1] != '\0')
 			return (err);
-		size += ft_strlen(var_content);
+		if (err.id != ERR_INVALID_KEY)
+			size += ft_strlen(var_content);
 		size -= ft_strlen(var->str);
 		vars = vars->next;
 	}
@@ -71,11 +72,12 @@ static t_error	process_override(char **strs, size_t len, t_list *vars,
 	{
 		var = vars->content;
 		err = get_var(&var_content, env, var->str +1);
-		if (err.id != ERR_NONE)
-			return (free(strs[1]), err);
+		if (err.id != ERR_NONE && var->str[1] != '\0')
+			return (err);
 		str_append_n(strs[1], strs[0] + i, var->index - i, len + 1);
 		i = var->index;
-		ft_strlcat(strs[1], var_content, len +1);
+		if (err.id != ERR_INVALID_KEY)
+			ft_strlcat(strs[1], var_content, len +1);
 		i += ft_strlen(var->str);
 		vars = vars->next;
 	}
