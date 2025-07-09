@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:33:34 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 17:09:43 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 22:12:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static int	exit_code(t_ret ret, t_error err, int status)
 	int	exit_code;
 
 	exit_code = 0;
+	setup_signals(0);
 	if (ret.type == RET_PID && ret.pid != -1)
 	{
-		setup_signals(0);
 		if (WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
