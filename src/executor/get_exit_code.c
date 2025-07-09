@@ -6,12 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:33:34 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 12:42:16 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:09:43 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include <sys/wait.h>
 #include "executor.h"
+#include "signals.h"
 
 extern int	g_signal;
 
@@ -22,14 +24,12 @@ static int	exit_code(t_ret ret, t_error err, int status)
 	exit_code = 0;
 	if (ret.type == RET_PID && ret.pid != -1)
 	{
+		setup_signals(0);
 		if (WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-		{
-			g_signal = 0;
 			exit_code = 128 + WTERMSIG(status);
-		}
-		return (exit_code);
+		return (g_signal = 0, exit_code);
 	}
 	if (ret.type == RET_VALUE)
 		exit_code = ret.value;
@@ -41,7 +41,7 @@ static int	exit_code(t_ret ret, t_error err, int status)
 		exit_code = 1;
 	else if (err.id == ERR_FILE_NOT_FOUND || err.id == ERR_CMD_NOT_FOUND)
 		exit_code = 127;
-	return (exit_code);
+	return (g_signal = 0, exit_code);
 }
 
 int	get_exit_code_pipe(t_ret *rets, int size, t_error err)
@@ -54,6 +54,8 @@ int	get_exit_code_pipe(t_ret *rets, int size, t_error err)
 	while (i < size -1 && rets[i].type == RET_PID)
 		waitpid(rets[i++].pid, &status, 0);
 	waitpid(rets[i].pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		write(STDOUT_FILENO, "\n", 1);
 	return (exit_code(rets[i], err, status));
 }
 
@@ -65,6 +67,8 @@ int	get_exit_code(t_ret ret, t_error err)
 	if (ret.type == RET_PID && ret.pid != -1)
 	{
 		waitpid(ret.pid, &status, 0);
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			write(STDOUT_FILENO, "\n", 1);
 		return (exit_code(ret, err, status));
 	}
 	return (exit_code(ret, err, status));

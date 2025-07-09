@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 00:26:12 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:00:36 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "executor.h"
+#include "signals.h"
 #include "utils.h"
 
 static t_error	prepare_pids(t_ret **rets, int size)
@@ -119,6 +120,7 @@ t_error	execute_pipeline_node(t_ast *node, t_hash_table *env)
 			print_error(err, NULL);
 		lst = lst->next;
 	}
+	ignore_signal();
 	node->exit_code = get_exit_code_pipe(rets, ft_lstsize(node->pipeline), err);
 	return (free(rets), err);
 }

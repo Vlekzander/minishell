@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 00:47:59 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 15:04:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 16:29:55 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ static t_error	check_path(char **executable, char *command)
 	return (*executable = str, error(ERR_NONE, NULL));
 }
 
-static t_error	check_target_path(char **exec, t_strbuilder *sb, char *path, char *cmd)
+static t_error	check_target_path(char **exec, t_strbuilder *sb,
+	char *path, char *cmd)
 {
 	char	*str;
 	t_error	err;
@@ -46,7 +47,7 @@ static t_error	check_target_path(char **exec, t_strbuilder *sb, char *path, char
 	if (exec == NULL || sb == NULL || path == NULL || cmd == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	if (!strbuilder_append(sb, path) || !strbuilder_append(sb, "/")
-			|| !strbuilder_append(sb, cmd))
+		|| !strbuilder_append(sb, cmd))
 		return (error(ERR_ALLOCATION, NULL));
 	err = check_path(&str, sb->buffer);
 	if (err.id == ERR_PERMISSION)
@@ -61,7 +62,6 @@ static t_error	check_target_path(char **exec, t_strbuilder *sb, char *path, char
 static t_error	check_env_path(char **executable, char *command, char **path)
 {
 	char			*str;
-	int				i;
 	t_strbuilder	*sb;
 	t_error			err;
 
@@ -70,37 +70,26 @@ static t_error	check_env_path(char **executable, char *command, char **path)
 	sb = create_strbuilder(64);
 	if (sb == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	i = 0;
-	while (path[i] != NULL)
+	while (*path != NULL)
 	{
-		err = check_target_path(&str, sb, path[i], command);
+		err = check_target_path(&str, sb, *path, command);
 		if (err.id != ERR_FILE_NOT_FOUND && err.id != ERR_IS_DIRECTORY)
 		{
 			free_strbuilder(sb);
 			if (err.id == ERR_NONE)
-				*executable = str;
-			return (err);
+				return (*executable = str, err);
+			return (free(err.src), error(err.id, command));
 		}
-		i++;
+		path++;
 		free(err.src);
 		sb->length = 0;
-	}
-	if (path[0] == NULL)
-	{
-		err = check_target_path(&str, sb, "./", command);
-		if (err.id != ERR_FILE_NOT_FOUND)
-		{
-			free_strbuilder(sb);
-			if (err.id == ERR_NONE)
-				*executable = str;
-			return (err);
-		}
 	}
 	return (free_strbuilder(sb), error(ERR_CMD_NOT_FOUND, command));
 }
 
 t_error	find_executable(char **executable, char *command, t_hash_table *env)
 {
+	char	*var;
 	char	*str;
 	char	**path;
 	t_error	err;
@@ -111,10 +100,12 @@ t_error	find_executable(char **executable, char *command, t_hash_table *env)
 		err = check_path(&str, command);
 	else
 	{
-		err = get_var(&str, env, "PATH");
+		err = get_var(&var, env, "PATH");
 		if (err.id != ERR_NONE)
 			return (err);
-		path = ft_split(str, ':');
+		if (ft_strncmp("", var, 1) == 0)
+			var = ".";
+		path = ft_split(var, ':');
 		if (path == NULL)
 			return (error(ERR_ALLOCATION, NULL));
 		err = check_env_path(&str, command, path);

@@ -6,16 +6,18 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:32:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 23:56:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 16:58:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "env.h"
 #include "executor.h"
 #include "expand.h"
 #include "redirs.h"
+#include "signals.h"
 #include "utils.h"
 
 static t_error	get_std_backup(int *stdin, int *stdout)
@@ -47,6 +49,7 @@ static t_error	exec_binary(t_ret *ret, t_command *cmd, t_list *redirs,
 		return (error(ERR_FORK, NULL));
 	if (pid == 0)
 	{
+		restore_signals();
 		err = handle_redirs(redirs, STDIN_FILENO, STDOUT_FILENO);
 		if (err.id == ERR_NONE)
 			execve(cmd->executable, cmd->argv, cmd->envp);

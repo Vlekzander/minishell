@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 00:18:13 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 16:47:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
 
 static t_error	prepare(t_hash_table **env, int *ret, int *run, char **envp)
 {
+	char	*str;
 	t_error	err;
 
 	err = load_env(env, envp);
@@ -70,10 +71,16 @@ static t_error	prepare(t_hash_table **env, int *ret, int *run, char **envp)
 	err = set_var(*env, "?", "0");
 	if (err.id != ERR_NONE)
 		return (err);
-	err = set_var(*env, "OLDPWD", NULL);
+	err = get_var(&str, *env, "OLDPWD");
 	if (err.id != ERR_NONE)
 		return (err);
-	setup_signals();
+	if (ft_strncmp("", str, 1) == 0)
+	{
+		err = set_var(*env, "OLDPWD", NULL);
+		if (err.id != ERR_NONE)
+			return (err);
+	}
+	setup_signals(1);
 	*ret = 0;
 	*run = 1;
 	return (error(ERR_NONE, NULL));

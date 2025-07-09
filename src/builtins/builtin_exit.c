@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:25:20 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 13:57:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/09 15:06:35 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include "libft.h"
 #define EXIT_MAX "9223372036854775807"
 #define EXIT_MIN "9223372036854775808"
-
 
 static char	*str_trim(char *s1, char *set)
 {
