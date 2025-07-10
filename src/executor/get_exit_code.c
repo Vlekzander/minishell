@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 21:33:34 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 22:12:16 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:45:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,11 @@
 
 extern int	g_signal;
 
-static int	exit_code(t_ret ret, t_error err, int status)
+static int	exit_code_err(t_ret ret, t_error err)
 {
 	int	exit_code;
 
 	exit_code = 0;
-	setup_signals(0);
-	if (ret.type == RET_PID && ret.pid != -1)
-	{
-		if (WIFEXITED(status))
-			exit_code = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			exit_code = 128 + WTERMSIG(status);
-		return (g_signal = 0, exit_code);
-	}
 	if (ret.type == RET_VALUE)
 		exit_code = ret.value;
 	if (err.id == ERR_CMD_EMPTY)
@@ -41,6 +32,30 @@ static int	exit_code(t_ret ret, t_error err, int status)
 		exit_code = 1;
 	else if (err.id == ERR_FILE_NOT_FOUND || err.id == ERR_CMD_NOT_FOUND)
 		exit_code = 127;
+	return (exit_code);
+}
+
+static int	exit_code(t_ret ret, t_error err, int status)
+{
+	int	exit_code;
+	int	sig;
+
+	exit_code = 0;
+	setup_signals(0);
+	if (ret.type == RET_PID && ret.pid != -1)
+	{
+		if (WIFEXITED(status))
+			exit_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			sig = WTERMSIG(status);
+			if (sig == SIGQUIT)
+				write(2, "Quit (core dumped)\n", 19);
+			exit_code = 128 + sig;
+		}
+		return (g_signal = 0, exit_code);
+	}
+	exit_code = exit_code_err(ret, err);
 	return (g_signal = 0, exit_code);
 }
 
