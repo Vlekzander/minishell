@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 16:47:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:15:34 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "libft.h"
 #include "parser.h"
 #include "signals.h"
+#include "utils.h"
 
 static t_error	prepare_ast(t_ast **ast, char *line, t_hash_table *env)
 {
@@ -102,10 +103,11 @@ int	main(int argc, char **argv, char **envp)
 		line = readline(INPUT_PREFIX);
 		if (line != NULL)
 		{
-			if (ft_strlen(line) == 0)
-				continue ;
-			add_history(line);
-			process_line(line, env, &run, &ret);
+			if (ft_strlen(line) != 0 && !str_is_blank(line))
+			{
+				add_history(line);
+				process_line(line, env, &run, &ret);
+			}
 			free(line);
 		}
 		else

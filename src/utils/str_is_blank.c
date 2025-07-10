@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   str_empty.c                                        :+:      :+:    :+:   */
+/*   str_is_blank.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/01 21:50:25 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/01 21:50:49 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/10 17:06:28 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/10 17:29:06 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "utils.h"
 
-int	str_empty(void *content)
+int	str_is_blank(char *str)
 {
-	char	*str;
+	int	i;
 
-	str = content;
-	return (ft_strlen(str) == 0);
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
+			return (0);
+		i++;
+	}
+	return (1);
 }

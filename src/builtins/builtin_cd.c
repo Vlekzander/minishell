@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 10:58:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 13:36:30 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:15:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static t_error	change_dir(char *path)
 
 	if (path == NULL)
 		return (error (ERR_IMPLEMENTATION, NULL));
-	if (str_empty(path))
+	if (ft_strlen(path) == 0)
 		return (error(ERR_NONE, NULL));
 	err = check_file(path, 0, 0, 0);
 	if (err.id != ERR_NONE)

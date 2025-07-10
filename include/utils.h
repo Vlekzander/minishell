@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:00:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/10 00:08:18 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:14:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ void	close_set(int *fd, int value);
 t_error	check_file(char *path, int is_file, int read, int write);
 void	sort_array(char **array, int (*cmp)(char c));
 char	*prefix_suffix_str(char *str, char *prefix, char *suffix);
+int		str_is_blank(char *str);
 
 #endif
