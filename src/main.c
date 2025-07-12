@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/10 17:15:34 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/12 16:38:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
 	t_ast	*ast;
 	t_error	err;
 
-	if (line == NULL)
+	if (line == NULL || str_is_blank(line))
 		return ;
 	err = prepare_ast(&ast, line, env);
 	if (err.id != ERR_NONE)
@@ -103,7 +103,7 @@ int	main(int argc, char **argv, char **envp)
 		line = readline(INPUT_PREFIX);
 		if (line != NULL)
 		{
-			if (ft_strlen(line) != 0 && !str_is_blank(line))
+			if (ft_strlen(line) != 0)
 			{
 				add_history(line);
 				process_line(line, env, &run, &ret);
