@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 17:24:57 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/13 17:27:33 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/13 18:35:22 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_error	expand_env(char **output, char *base, t_hash_table *env, int ign_quote)
 	if (err.id != ERR_NONE)
 		return (err);
 	if (vars == NULL)
-		return (error(ERR_NONE, NULL));
+		return (*output = base, error(ERR_NONE, NULL));
 	err = substitute_vars(&str, base, vars, 0);
 	if (err.id != ERR_NONE)
 		return (ft_lstclear(&vars, free), err);
