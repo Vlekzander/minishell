@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:56:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 19:08:34 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/12 23:48:29 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ t_error	prepare_command(t_command **command, t_list **args, t_hash_table *env)
 	err = expand_list(args, env);
 	if (err.id != ERR_NONE)
 		return (err);
-	ft_lstiter(*args, (void *) remove_str_quotes);
 	cmd = ft_calloc(1, sizeof(t_command));
 	if (cmd == NULL)
 		return (error(ERR_ALLOCATION, NULL));

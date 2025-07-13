@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 12:11:50 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:18:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/13 17:08:29 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,40 +71,43 @@ static t_error	process_star(t_pattern **pattern, char *buf, int *star_seen)
 	return (err);
 }
 
-static t_error	parse_pattern(t_pattern **pattern, char *str, char *buf,
-	size_t *i)
+static t_error	parse_pattern(t_pattern **pattern, char *str, char *buf, char *mask)
 {
 	t_error	err;
 	char	quote;
 	int		star_seen;
+	int		i;
 
-	if (pattern == NULL || str == NULL || buf == NULL || i == NULL)
+	if (pattern == NULL || str == NULL || buf == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
+	i = 0;
 	star_seen = 0;
 	quote = 0;
 	while (*str != '\0')
 	{
-		if (is_quote(*str) && (quote == 0 || quote == *str))
+		if (((mask != NULL && *mask == 'Q') || mask == NULL) && is_quote(*str) && (quote == 0 || quote == *str))
 			quote = toggle_quote(*str, quote);
 		else if (quote == 0 && *str == '*')
 		{
-			buf[*i] = '\0';
-			*i = 0;
+			buf[i] = '\0';
+			i = 0;
 			err = process_star(pattern, buf, &star_seen);
 			if (err.id != ERR_NONE)
 				return (err);
 		}
 		else
-			buf[(*i)++] = *str;
+			buf[i++] = *str;
 		str++;
+		if (mask != NULL)
+			mask++;
 	}
+	buf[i] = '\0';
 	return (error(ERR_NONE, NULL));
 }
 
-t_error	extract_pattern(t_pattern **pattern, char *str)
+t_error	extract_pattern(t_pattern **pattern, char *str, char *mask)
 {
 	char			*buf;
-	size_t			i;
 	t_error			err;
 
 	if (pattern == NULL || str == NULL)
@@ -113,11 +116,9 @@ t_error	extract_pattern(t_pattern **pattern, char *str)
 	buf = ft_calloc(ft_strlen(str) +1, sizeof(char));
 	if (buf == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	i = 0;
-	err = parse_pattern(pattern, str, buf, &i);
+	err = parse_pattern(pattern, str, buf, mask);
 	if (err.id != ERR_NONE)
 		return (free_pattern(*pattern), *pattern = NULL, free(buf), err);
-	buf[i] = '\0';
 	if (ft_strlen(buf) > 0 && *pattern != NULL)
 		err = add_prefix_suffix(*pattern, buf, 0);
 	if (err.id != ERR_NONE)

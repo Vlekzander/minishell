@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:32:26 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 01:36:44 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/13 17:08:35 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static t_error	filter_files(t_list **filtered, t_pattern *pattern)
 	return (error(ERR_NONE, NULL));
 }
 
-t_error	expand_wildcard(char **output, char *base)
+t_error	expand_wildcard(char **output, char *base, char *mask)
 {
 	t_pattern	*pattern;
 	t_list		*filtered;
@@ -68,7 +68,7 @@ t_error	expand_wildcard(char **output, char *base)
 	if (output == NULL || base == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	filtered = NULL;
-	err = extract_pattern(&pattern, base);
+	err = extract_pattern(&pattern, base, mask);
 	if (err.id != ERR_NONE)
 		return (err);
 	err = filter_files(&filtered, pattern);

@@ -5,67 +5,30 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/21 15:13:11 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 12:14:39 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/13 17:24:57 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/13 17:27:33 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <inttypes.h>
-
+#include <stdlib.h>
 #include "expand.h"
-
-static t_error	add_var_node(t_list **vrefs, t_vref *var, char *str, char *base)
-{
-	t_list	*node_var;
-
-	if (vrefs == NULL || var == NULL || str == NULL || base == NULL)
-		return (error(ERR_IMPLEMENTATION, NULL));
-	node_var = ft_lstnew(var);
-	if (node_var == NULL)
-		return (ft_lstclear(vrefs, (void *) free_vref), free_vref(var),
-			error(ERR_ALLOCATION, NULL));
-	ft_lstadd_back(vrefs, node_var);
-	return (error(ERR_NONE, NULL));
-}
-
-static	t_error	get_vars(t_list **vars_lst, char *base, int ignore_quote)
-{
-	char	*str;
-	t_vref	*var;
-	t_list	*vrefs;
-	t_error	err;
-
-	if (vars_lst == NULL || base == NULL)
-		return (error(ERR_IMPLEMENTATION, NULL));
-	vrefs = NULL;
-	str = base;
-	while (1)
-	{
-		err = extract_var(&var, str, ignore_quote);
-		if (err.id != ERR_NONE)
-			return (free_vref(var), err);
-		if (var->str == NULL)
-			break ;
-		add_var_node(&vrefs, var, str, base);
-		str[var->index] = 'S';
-	}
-	return (*vars_lst = vrefs, free_vref(var), error(ERR_NONE, NULL));
-}
 
 t_error	expand_env(char **output, char *base, t_hash_table *env, int ign_quote)
 {
-	char	*str;
 	t_list	*vars;
+	char	*str;
 	t_error	err;
 
-	if (base == NULL || env == NULL)
+	if (output == NULL || base == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = get_vars(&vars, base, ign_quote);
+	err = extract_vars(&vars, base, ign_quote, env);
 	if (err.id != ERR_NONE)
 		return (err);
-	err = over_vars(&str, base, vars, env);
+	if (vars == NULL)
+		return (error(ERR_NONE, NULL));
+	err = substitute_vars(&str, base, vars, 0);
 	if (err.id != ERR_NONE)
-		return (ft_lstclear(&vars, (void *) free_vref), err);
-	ft_lstclear(&vars, (void *) free_vref);
-	return (*output = str, error(ERR_NONE, NULL));
+		return (ft_lstclear(&vars, free), err);
+	*output = str;
+	return (ft_lstclear(&vars, free), error(ERR_NONE, NULL));
 }

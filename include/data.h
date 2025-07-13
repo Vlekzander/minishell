@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 14:26:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/13 17:08:45 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,12 @@ typedef struct s_pattern
 	t_list	*infixes;
 }	t_pattern;
 
-typedef struct s_vref
+typedef struct s_var
 {
-	char	*str;
-	int		index;
-}	t_vref;
+	char	*value;
+	int		id_index;
+	int		id_len;
+}	t_var;
 
 typedef struct s_strbuilder
 {
@@ -145,13 +146,11 @@ t_token			*create_token(t_token_type type, char *value);
 t_ast			*create_ast(t_node_type type);
 t_redir			*create_redir(t_redir_type type, char *value, int append);
 t_pattern		*create_pattern(void);
-t_vref			*create_vref(void);
 t_strbuilder	*create_strbuilder(size_t size);
 void			free_token(t_token *token);
 void			free_ast(t_ast *ast);
 void			free_redir(t_redir *redir);
 void			free_pattern(t_pattern *pattern);
-void			free_vref(t_vref *vref);
 void			free_strbuilder(t_strbuilder *sb);
 int				strbuilder_append(t_strbuilder *sb, char *str);
 void			free_command(t_command *command);

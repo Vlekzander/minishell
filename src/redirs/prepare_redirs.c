@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:13:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 11:31:51 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/13 17:30:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,8 @@ t_error	prepare_redirs(t_list *redirs, t_hash_table *env)
 	while (redirs != NULL)
 	{
 		redir = redirs->content;
-		err = expand_redir_target(redir, env);
-		if (err.id != ERR_NONE)
-			return (err);
+		(void) env; //TODO
+		err = error(ERR_NONE, NULL);
 		if (redir->type == REDIR_IN)
 			err = check_file(redir->in, 1, 1, 0);
 		else if (redir->type == REDIR_OUT)
