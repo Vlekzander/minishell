@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 12:41:24 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/13 17:08:17 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/15 00:44:26 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "error.h"
 #include "expand.h"
 
-t_error	append_value(t_strbuilder *sb, char *value, int is_mask)
+static t_error	append_value(t_strbuilder *sb, char *value, int is_mask)
 {
 	char	*str;
 
@@ -36,7 +36,7 @@ t_error	append_value(t_strbuilder *sb, char *value, int is_mask)
 	return (error(ERR_NONE, NULL));
 }
 
-t_error	loop_vars(t_strbuilder *sb, char *base, t_list *vars, int is_mask)
+static t_error	loop_vars(t_strbuilder *sb, char *base, t_list *vars, int mask)
 {
 	t_list	*node;
 	t_var	*var;
@@ -53,7 +53,7 @@ t_error	loop_vars(t_strbuilder *sb, char *base, t_list *vars, int is_mask)
 		base[var->id_index] = '\0';
 		if (!strbuilder_append(sb, base + base_index))
 			return (error(ERR_ALLOCATION, NULL));
-		err = append_value(sb, var->value, is_mask);
+		err = append_value(sb, var->value, mask);
 		if (err.id != ERR_NONE)
 			return (err);
 		base_index = var->id_index + var->id_len;

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 13:54:11 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/15 00:31:01 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/15 00:43:36 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	insert_sublist(t_list *list, t_list *sublist)
 	free(temp);
 }
 
-t_error	process_loop(t_list *node, char **mask, t_hash_table *env)
+static t_error	process_loop(t_list *node, char **mask, t_hash_table *env)
 {
 	t_list	*list;
 	t_error	err;

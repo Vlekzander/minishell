@@ -6,14 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 17:24:57 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/14 17:35:09 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/15 00:43:29 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "expand.h"
 
-t_error	check_mask(char **mask, int *fmask, char *str)
+static t_error	check_mask(char **mask, int *fmask, char *str)
 {
 	t_error	err;
 
@@ -30,7 +30,7 @@ t_error	check_mask(char **mask, int *fmask, char *str)
 	return (error(ERR_NONE, NULL));
 }
 
-void	free_mask(int fmask, char *mask)
+static void	free_mask(int fmask, char *mask)
 {
 	if (!fmask || mask == NULL)
 		return ;
