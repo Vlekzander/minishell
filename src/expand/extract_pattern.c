@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 12:11:50 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/13 17:08:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/15 00:13:45 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,20 @@
 #include "error.h"
 #include "utils.h"
 
-static t_error	add_prefix_suffix(t_pattern *pattern, char *buf, int is_prefix)
-{
-	char	**str_ptr;
-
-	if (pattern == NULL || buf == NULL)
-		return (error(ERR_IMPLEMENTATION, NULL));
-	str_ptr = &pattern->suffix;
-	if (is_prefix)
-		str_ptr = &pattern->prefix;
-	*str_ptr = ft_strdup(buf);
-	if (*str_ptr == NULL)
-		return (error(ERR_ALLOCATION, NULL));
-	return (error(ERR_NONE, NULL));
-}
-
-static t_error	add_infix(t_pattern *pattern, char *buf)
+static t_error	add_pattern_part(t_pattern *pattern, t_strbuilder *sb,
+	char **ptr)
 {
 	t_list	*node;
 	char	*str;
 
-	if (pattern == NULL || buf == NULL)
+	if (pattern == NULL || sb == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	str = ft_strdup(buf);
+	sb->length = 0;
+	str = ft_strdup(sb->buffer);
 	if (str == NULL)
 		return (error(ERR_ALLOCATION, NULL));
+	if (ptr != NULL)
+		return (*ptr = str, error(ERR_NONE, NULL));
 	node = ft_lstnew(str);
 	if (node == NULL)
 		return (error(ERR_ALLOCATION, NULL));
@@ -47,11 +36,12 @@ static t_error	add_infix(t_pattern *pattern, char *buf)
 	return (error(ERR_NONE, NULL));
 }
 
-static t_error	process_star(t_pattern **pattern, char *buf, int *star_seen)
+static t_error	process_star(t_pattern **pattern, t_strbuilder *sb,
+	int *star_seen)
 {
 	t_error	err;
 
-	if (pattern == NULL || buf == NULL || star_seen == NULL)
+	if (pattern == NULL || sb == NULL || star_seen == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = error(ERR_NONE, NULL);
 	if (*pattern == NULL)
@@ -60,68 +50,64 @@ static t_error	process_star(t_pattern **pattern, char *buf, int *star_seen)
 		if (*pattern == NULL)
 			return (error(ERR_ALLOCATION, NULL));
 	}
-	if (ft_strlen(buf) > 0)
+	if (sb->length > 0)
 	{
 		if (!*star_seen)
-			err = add_prefix_suffix(*pattern, buf, 1);
+			err = add_pattern_part(*pattern, sb, &(*pattern)->prefix);
 		else
-			err = add_infix(*pattern, buf);
+			err = add_pattern_part(*pattern, sb, NULL);
 	}
 	*star_seen = 1;
 	return (err);
 }
 
-static t_error	parse_pattern(t_pattern **pattern, char *str, char *buf, char *mask)
+static t_error	parse_pattern(t_pattern **pattern, char *str, char *mask,
+	t_strbuilder *sb)
 {
-	t_error	err;
 	char	quote;
 	int		star_seen;
 	int		i;
+	t_error	err;
 
-	if (pattern == NULL || str == NULL || buf == NULL)
+	if (pattern == NULL || str == NULL || sb == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	i = 0;
+	err = error(ERR_NONE, NULL);
 	star_seen = 0;
 	quote = 0;
-	while (*str != '\0')
+	i = 0;
+	while (str[i] != '\0')
 	{
-		if (((mask != NULL && *mask == 'Q') || mask == NULL) && is_quote(*str) && (quote == 0 || quote == *str))
-			quote = toggle_quote(*str, quote);
-		else if (quote == 0 && *str == '*')
-		{
-			buf[i] = '\0';
-			i = 0;
-			err = process_star(pattern, buf, &star_seen);
-			if (err.id != ERR_NONE)
-				return (err);
-		}
-		else
-			buf[i++] = *str;
-		str++;
-		if (mask != NULL)
-			mask++;
+		if (((mask != NULL && mask[i] == 'Q') || mask == NULL)
+			&& is_quote(str[i]) && (quote == 0 || quote == str[i]))
+			quote = toggle_quote(str[i], quote);
+		else if (quote == 0 && str[i] == '*')
+			err = process_star(pattern, sb, &star_seen);
+		else if (!strbuilder_append_char(sb, str[i]))
+			err = error(ERR_ALLOCATION, NULL);
+		if (err.id != ERR_NONE)
+			return (err);
+		i++;
 	}
-	buf[i] = '\0';
 	return (error(ERR_NONE, NULL));
 }
 
 t_error	extract_pattern(t_pattern **pattern, char *str, char *mask)
 {
-	char			*buf;
+	t_strbuilder	*sb;
 	t_error			err;
 
 	if (pattern == NULL || str == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	*pattern = NULL;
-	buf = ft_calloc(ft_strlen(str) +1, sizeof(char));
-	if (buf == NULL)
-		return (error(ERR_ALLOCATION, NULL));
-	err = parse_pattern(pattern, str, buf, mask);
+	sb = create_strbuilder(64);
+	err = parse_pattern(pattern, str, mask, sb);
 	if (err.id != ERR_NONE)
-		return (free_pattern(*pattern), *pattern = NULL, free(buf), err);
-	if (ft_strlen(buf) > 0 && *pattern != NULL)
-		err = add_prefix_suffix(*pattern, buf, 0);
+		return (free_pattern(*pattern), *pattern = NULL, free_strbuilder(sb),
+			err);
+	if (sb->length > 0 && *pattern != NULL)
+		err = add_pattern_part(*pattern, sb, &(*pattern)->suffix);
 	if (err.id != ERR_NONE)
-		return (free_pattern(*pattern), *pattern = NULL, free(buf), err);
-	return (free(buf), error(ERR_NONE, NULL));
+		return (free_pattern(*pattern), *pattern = NULL, free_strbuilder(sb),
+			err);
+	return (free_strbuilder(sb), error(ERR_NONE, NULL));
 }

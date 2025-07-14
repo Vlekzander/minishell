@@ -46,7 +46,7 @@ static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
 	t_ast	*ast;
 	t_error	err;
 
-	if (line == NULL || str_is_blank(line))
+	if (line == NULL || str_blank(line))
 		return ;
 	err = prepare_ast(&ast, line, env);
 	if (err.id != ERR_NONE)

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:22:39 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/13 21:48:09 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/14 17:26:36 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,18 @@ static t_error	check_expanded_target(char *str)
 static t_error	expand_redir_str(char **output, char *base, t_hash_table *env)
 {
 	char	*str;
+	char	*mask;
 	t_error	err;
 
 	if (output == NULL || base == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = expand_env(&str, base, env, 0);
+	err = prepare_mask(&mask, base, 0);
 	if (err.id != ERR_NONE)
 		return (err);
+	err = expand_env(&str, base, env, mask);
+	if (err.id != ERR_NONE)
+		return (free(mask), err);
+	free(mask);
 	if (base != str)
 		base = str;
 	err = expand_wildcard(&str, base, NULL);

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/12 23:50:26 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/14 17:24:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static t_error	process_line(t_hash_table *env, t_strbuilder *sb, char **line,
 	expanded = NULL;
 	if (expand)
 	{
-		err = expand_env(&expanded, *line, env, 1);
+		err = expand_env(&expanded, *line, env, NULL);
 		if (err.id != ERR_NONE)
 			return (err);
 		if (expanded != *line)

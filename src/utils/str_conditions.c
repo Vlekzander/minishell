@@ -1,18 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   str_is_blank.c                                     :+:      :+:    :+:   */
+/*   cond_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/10 17:06:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/10 17:29:06 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/14 17:38:14 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/14 17:39:39 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "utils.h"
 
-int	str_is_blank(char *str)
+int	str_empty(void *content)
+{
+	char	*str;
+
+	str = content;
+	return (ft_strlen(str) == 0);
+}
+
+int	str_blank(char *str)
 {
 	int	i;
 
@@ -24,4 +33,9 @@ int	str_is_blank(char *str)
 		i++;
 	}
 	return (1);
+}
+
+int	ptr_null(void *ptr)
+{
+	return (ptr == NULL);
 }
