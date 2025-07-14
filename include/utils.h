@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:00:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/10 17:14:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/14 15:02:20 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_error	split_lst(t_list **lst, char *input, char c);
 void	remove_str_quotes(char *str);
 int		is_quote(char c);
 char	toggle_quote(char c, char current);
-t_error	insert_sublist(t_list **list, t_list *sublist);
 void	lst_remove(t_list **lst, int (*f)(void *), void (*del)(void *));
 int		str_empty(void *content);
 void	close_fd(int fd);

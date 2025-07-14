@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:22:39 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/13 19:37:28 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/13 21:48:09 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,7 @@ t_error	expand_redir_target(t_redir *redir, t_hash_table *env)
 			return (free(base), error(ERR_AMB_REDIR, *file));
 		return (free(base), err);
 	}
-	return (free(base), free(*file), *file = expanded, error(ERR_NONE, NULL));
+	if (expanded != base)
+		return (free(base), free(*file), *file = expanded, err);
+	return (free(base), err);
 }

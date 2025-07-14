@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:04:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/13 18:23:08 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/14 15:25:45 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,13 @@
 t_error	expand_wildcard(char **output, char *base, char *mask);
 t_error	extract_pattern(t_pattern **pattern, char *str, char *mask);
 t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern);
-t_error	extract_vars(t_list **vars, char *str, int i_quote, t_hash_table *env);
+t_error	extract_vars(t_list **vars, char *base, char *mask, t_hash_table *env);
 t_error	substitute_vars(char **output, char *base, t_list *vars, int is_mask);
 t_error	expand_list(t_list **lst, t_hash_table *env);
 t_error	expand_env(char **output, char *base, t_hash_table *env, int ign_quote);
 t_error	expand_redir_target(t_redir *redir, t_hash_table *env);
+t_error	split_list_mask(t_list **lst, char *str, char *mask);
+t_error	prepare_mask(char **mask, char *str);
+t_error	remove_quotes_mask(char *str, char *mask);
 
 #endif
