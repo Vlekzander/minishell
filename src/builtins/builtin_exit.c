@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:25:20 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 15:06:35 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/15 00:53:24 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,15 @@ static t_error	check_str(int *ret, t_btin_data *data)
 
 	str = str_trim(data->argv[1], " \t\n");
 	is_digit = str_isdigit(data->argv[1]);
-	if (data->argc > 2)
-	{
-		print_error(error(ERR_TOO_MANY_ARGS, NULL), "exit");
-		return (*ret = 1, error(ERR_NONE, NULL));
-	}
 	if (!is_digit)
 	{
 		print_error(error(ERR_NUMERIC_ARG, str), "exit");
 		return (*ret = 2, error(ERR_EXIT, NULL));
+	}
+	if (data->argc > 2)
+	{
+		print_error(error(ERR_TOO_MANY_ARGS, NULL), "exit");
+		return (*ret = 1, error(ERR_NONE, NULL));
 	}
 	return (error(ERR_NONE, NULL));
 }
