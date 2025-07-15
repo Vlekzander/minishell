@@ -23,6 +23,9 @@ $(NAME): $(OBJECTS)
 	@$(CC) $(CFLAGS) -MMD -c $< -o $@
 	@printf "$(GREEN)➤ Successfully compiled %s$(RESET)\n" $<
 
+valgrind: $(NAME)
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --trace-children=yes --suppressions=readline.supp -s ./$(NAME)
+
 norm:
 	@echo "$(BLUE)✦ Running norminette...$(RESET)"
 	@norminette src include libft | grep Error || echo "$(GREEN)➤ No norms errors.$(RESET)"
@@ -44,6 +47,7 @@ help:
 	@echo ""
 	@echo "$(BLUE)Targets:$(RESET)"
 	@echo "  $(GREEN)all$(RESET)        : $(YELLOW)Build the project (default)$(RESET)"
+	@echo "  $(GREEN)valgrind$(RESET)   : $(YELLOW)Run project with valgrind$(RESET)"
 	@echo "  $(GREEN)norm$(RESET)       : $(YELLOW)Run norminette$(RESET)"
 	@echo "  $(GREEN)clean$(RESET)      : $(YELLOW)Remove object files$(RESET)"
 	@echo "  $(GREEN)fclean$(RESET)     : $(YELLOW)Remove object files and the executable$(RESET)"
@@ -52,7 +56,7 @@ help:
 
 -include $(DEPS)
 
-.PHONY: all norm clean fclean re help
+.PHONY: all norm clean fclean re help valgrind
 
 YELLOW = \033[1;33m
 GREEN = \033[1;32m
