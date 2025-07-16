@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 19:18:31 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 22:32:08 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 21:34:44 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,40 +17,30 @@
 
 static t_error	process_redir_in(t_redir *redir, int in)
 {
-	int		fd;
 	int		ret;
-	t_error	err;
 
 	if (redir == NULL || redir->type != REDIR_IN || redir->in == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = open_file(&fd, redir->in, redir->type, 0);
-	if (err.id != ERR_NONE)
-		return (err);
 	ret = 0;
 	if (in != -1)
-		ret = dup2(fd, in);
+		ret = dup2(redir->fd, in);
 	if (ret == -1)
-		err = error(ERR_ERRNO, NULL);
-	return (close_fd(fd), err);
+		return (close_fd(redir->fd), error(ERR_ERRNO, NULL));
+	return (close_fd(redir->fd), error(ERR_NONE, NULL));
 }
 
 static t_error	process_redir_out(t_redir *redir, int out)
 {
-	int		fd;
 	int		ret;
-	t_error	err;
 
 	if (redir == NULL || redir->type != REDIR_OUT || redir->out == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = open_file(&fd, redir->out, redir->type, redir->append);
-	if (err.id != ERR_NONE)
-		return (err);
 	ret = 0;
 	if (out != -1)
-		ret = dup2(fd, out);
+		ret = dup2(redir->fd, out);
 	if (ret == -1)
-		err = error(ERR_ERRNO, NULL);
-	return (close_fd(fd), err);
+		return (close_fd(redir->fd), error(ERR_ERRNO, NULL));
+	return (close_fd(redir->fd), error(ERR_NONE, NULL));
 }
 
 static t_error	process_redir_heredoc(t_redir *redir, int in)
@@ -94,7 +84,7 @@ static t_error	process_redir_pipe(t_redir *redir, int in, int out)
 		err = error(ERR_ERRNO, NULL);
 	close_set(&redir->pipe_fds[0], -1);
 	close_set(&redir->pipe_fds[1], -1);
-	close_set(&redir->fd_close, -1);
+	close_set(&redir->fd, -1);
 	return (err);
 }
 

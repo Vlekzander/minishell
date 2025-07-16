@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:13:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/13 19:26:12 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 21:54:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,36 @@
 #include "libft.h"
 #include "redirs.h"
 #include "utils.h"
+
+static t_error	prepare_redir_in(t_redir *redir)
+{
+	t_error	err;
+
+	if (redir == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	err = check_file(redir->in, 1, 1, 0);
+	if (err.id != ERR_NONE)
+		return (err);
+	err = open_file(&redir->fd, redir->in, redir->type, 0);
+	if (err.id != ERR_NONE)
+		return (err);
+	return (error(ERR_NONE, NULL));
+}
+
+static t_error	prepare_redir_out(t_redir *redir)
+{
+	t_error	err;
+
+	if (redir == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	err = check_file(redir->out, 1, 0, 1);
+	if (err.id != ERR_NONE)
+		return (err);
+	err = open_file(&redir->fd, redir->out, redir->type, redir->append);
+	if (err.id != ERR_NONE)
+		return (err);
+	return (error(ERR_NONE, NULL));
+}
 
 t_error	prepare_redirs(t_list *redirs, t_hash_table *env)
 {
@@ -30,9 +60,9 @@ t_error	prepare_redirs(t_list *redirs, t_hash_table *env)
 		if (err.id != ERR_NONE)
 			return (err);
 		if (redir->type == REDIR_IN)
-			err = check_file(redir->in, 1, 1, 0);
+			err = prepare_redir_in(redir);
 		else if (redir->type == REDIR_OUT)
-			err = check_file(redir->out, 1, 0, 1);
+			err = prepare_redir_out(redir);
 		if (err.id != ERR_NONE)
 			return (err);
 		redirs = redirs->next;

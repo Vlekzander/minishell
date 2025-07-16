@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/16 12:24:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 21:54:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ t_error	execute_redir_node(t_ast *node, t_hash_table *env)
 	ret.redir_error = 0;
 	err = prepare_redirs(node->redirs, env);
 	if (err.id != ERR_NONE)
-		return (ret.redir_error = 1, node->exit_code = get_exit_code(ret, err),
-			err);
+		return (close_redirs(node->redirs), ret.redir_error = 1,
+			node->exit_code = get_exit_code(ret, err), err);
 	err = handle_redirs(node->redirs, -1, -1);
 	if (err.id != ERR_NONE)
-		return (ret.redir_error = 1, node->exit_code = get_exit_code(ret, err),
-			err);
+		return (ret.redir_error = 1,
+			node->exit_code = get_exit_code(ret, err), err);
 	return (error(ERR_NONE, NULL));
 }

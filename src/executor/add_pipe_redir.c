@@ -25,7 +25,7 @@ t_error	add_pipe_redir(t_list **redirs, int in, int out, int close)
 	redir->type = REDIR_PIPE;
 	redir->pipe_fds[0] = in;
 	redir->pipe_fds[1] = out;
-	redir->fd_close = close;
+	redir->fd = close;
 	node = ft_lstnew(redir);
 	if (node == NULL)
 		return (free_redir(redir), error(ERR_ALLOCATION, NULL));

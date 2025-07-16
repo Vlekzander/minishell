@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:32:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/16 12:01:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 21:38:49 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static t_error	exec_binary(t_ret *ret, t_command *cmd, t_list *redirs,
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = prepare_redirs(redirs, env);
 	if (err.id != ERR_NONE)
-		return (ret->redir_error = 1, err);
+		return (close_redirs(redirs), ret->redir_error = 1, err);
 	pid = fork();
 	if (pid == -1)
 		return (error(ERR_FORK, NULL));
@@ -55,7 +55,7 @@ static t_error	exec_binary(t_ret *ret, t_command *cmd, t_list *redirs,
 			execve(cmd->executable, cmd->argv, cmd->envp);
 		exit(EXIT_FAILURE);
 	}
-	return (ret->pid = pid, error(ERR_NONE, NULL));
+	return (close_redirs(redirs), ret->pid = pid, error(ERR_NONE, NULL));
 }
 
 static t_error	exec_builtin(t_ret *ret, t_command *cmd, t_list *redirs,
@@ -71,7 +71,7 @@ static t_error	exec_builtin(t_ret *ret, t_command *cmd, t_list *redirs,
 	data.argv = cmd->argv;
 	err = prepare_redirs(redirs, env);
 	if (err.id != ERR_NONE)
-		return (ret->redir_error = 1, err);
+		return (close_redirs(redirs), ret->redir_error = 1, err);
 	err = get_std_backup(&data.stdin, &data.stdout);
 	if (err.id != ERR_NONE)
 		return (err);
@@ -99,12 +99,12 @@ static t_error	exec_builtin_fork(t_ret *ret, t_command *cmd, t_list *redirs,
 	data.argv = cmd->argv;
 	err = prepare_redirs(redirs, env);
 	if (err.id != ERR_NONE)
-		return (ret->redir_error = 1, err);
+		return (close_redirs(redirs), ret->redir_error = 1, err);
 	pid = fork();
 	if (pid == -1)
 		return (error(ERR_FORK, NULL));
 	if (pid != 0)
-		return (ret->pid = pid, error(ERR_NONE, NULL));
+		return (close_redirs(redirs), ret->pid = pid, error(ERR_NONE, NULL));
 	ret->type = RET_VALUE;
 	err = handle_redirs(redirs, STDIN_FILENO, STDOUT_FILENO);
 	if (err.id == ERR_NONE)

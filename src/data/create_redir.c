@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 13:22:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/09 22:45:14 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 21:43:37 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_redir	*create_redir(t_redir_type type, char *value, int append)
 	if (str == NULL)
 		return (free_redir(redir), NULL);
 	redir->type = type;
+	redir->fd = -1;
 	if (type == REDIR_IN)
 		redir->in = str;
 	else if (type == REDIR_OUT)
@@ -34,9 +35,6 @@ t_redir	*create_redir(t_redir_type type, char *value, int append)
 		redir->append = append;
 	}
 	else if (type == REDIR_HEREDOC)
-	{
 		redir->heredoc = str;
-		redir->fd = -1;
-	}
 	return (redir);
 }
