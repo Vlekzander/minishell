@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:09:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 12:52:59 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 12:13:14 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,20 @@
 static t_error	check_subpath(char *path, int write)
 {
 	char	*slash;
-	t_error	err;
 
-	err = error(ERR_NONE, NULL);
 	slash = ft_strrchr(path, '/');
 	if (slash != NULL && slash != path)
 	{
 		*slash = '\0';
 		if (access(path, F_OK) == -1)
-			err = error(ERR_FILE_NOT_FOUND, path);
-		else if (write && access(path, W_OK) == -1)
-			err = error(ERR_PERMISSION, path);
+			return (*slash = '/', error(ERR_FILE_NOT_FOUND, path));
+		if (write && access(path, W_OK) == -1)
+			return (*slash = '/', error(ERR_PERMISSION, path));
 		*slash = '/';
 	}
-	else if (!write)
-	{
-		if (access(path, F_OK) == -1)
-			err = error(ERR_FILE_NOT_FOUND, path);
-	}
-	return (err);
+	else if (!write && access(path, F_OK) == -1)
+		return (error(ERR_FILE_NOT_FOUND, path));
+	return (error(ERR_NONE, NULL));
 }
 
 t_error	check_read_write(char *path, int read, int write)

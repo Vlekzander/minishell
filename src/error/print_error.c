@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:13:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/10 00:09:45 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:58:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ static char	*get_more_error_message(t_error_code code)
 	if (code == ERR_HEREDOC_FILE)
 		return ("Open heredoc file failed");
 	if (code == ERR_NUMERIC_ARG)
-		return ("Numeric argument required");
+		return ("numeric argument required");
 	if (code == ERR_TOO_MANY_ARGS)
-		return ("Too many arguments");
+		return ("too many arguments");
 	if (code == ERR_HOME_NOT_SET)
 		return ("HOME not set");
 	return ("Unknown error");

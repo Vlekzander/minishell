@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:32:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 16:58:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 12:01:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static t_error	exec_builtin(t_ret *ret, t_command *cmd, t_list *redirs,
 	data.argv = cmd->argv;
 	err = prepare_redirs(redirs, env);
 	if (err.id != ERR_NONE)
-		return (err);
+		return (ret->redir_error = 1, err);
 	err = get_std_backup(&data.stdin, &data.stdout);
 	if (err.id != ERR_NONE)
 		return (err);
@@ -99,7 +99,7 @@ static t_error	exec_builtin_fork(t_ret *ret, t_command *cmd, t_list *redirs,
 	data.argv = cmd->argv;
 	err = prepare_redirs(redirs, env);
 	if (err.id != ERR_NONE)
-		return (err);
+		return (ret->redir_error = 1, err);
 	pid = fork();
 	if (pid == -1)
 		return (error(ERR_FORK, NULL));
