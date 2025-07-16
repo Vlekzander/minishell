@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 18:22:39 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/14 17:26:36 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:50:41 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ static t_error	expand_redir_str(char **output, char *base, t_hash_table *env)
 	if (err.id != ERR_NONE)
 		return (free(str), err);
 	remove_str_quotes(str);
+	if (base == str)
+		return (*output = str, error(ERR_NONE, NULL));
 	err = check_expanded_target(str);
 	if (err.id != ERR_NONE)
 		return (free(str), err);
@@ -87,6 +89,6 @@ t_error	expand_redir_target(t_redir *redir, t_hash_table *env)
 		return (free(base), err);
 	}
 	if (expanded != base)
-		return (free(base), free(*file), *file = expanded, err);
-	return (free(base), err);
+		free(base);
+	return (free(*file), *file = expanded, err);
 }
