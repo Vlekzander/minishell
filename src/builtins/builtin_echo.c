@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:02:26 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/16 22:06:55 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:08:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ static int	new_line_option(char *str)
 			return (0);
 		i++;
 	}
-	return (i > 1);
+	return (1);
 }
 
 static int	process_setup(char *str, int *new_line)
 {
 	if (str == NULL || new_line == NULL)
 		return (0);
-	if (str[0] == '-' && new_line_option(str + 1))
+	if (str[0] == '-' && str[1] != '\0' && new_line_option(str + 1))
 		return (*new_line = 0, 1);
 	return (0);
 }
