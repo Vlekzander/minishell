@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:02:26 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 13:58:49 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:06:55 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	new_line_option(char *str)
 			return (0);
 		i++;
 	}
-	return (1);
+	return (i > 1);
 }
 
 static int	process_setup(char *str, int *new_line)
