@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 11:13:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 17:09:55 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/17 23:17:09 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ static void	signal_handler(int sig)
 void	setup_signals(int init)
 {
 	if (init)
-	{
 		g_signal = 0;
-		signal(SIGQUIT, SIG_IGN);
-	}
+	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, signal_handler);
 }
