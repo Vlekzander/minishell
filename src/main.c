@@ -71,15 +71,15 @@ static t_error	prepare(t_hash_table **env, int *ret, int *run, char **envp)
 		return (err);
 	err = set_var(*env, "?", "0");
 	if (err.id != ERR_NONE)
-		return (err);
+		return (htable_destroy(*env), err);
 	err = get_var(&str, *env, "OLDPWD");
 	if (err.id != ERR_NONE)
-		return (err);
+		return (htable_destroy(*env), err);
 	if (ft_strncmp("", str, 1) == 0)
 	{
 		err = set_var(*env, "OLDPWD", NULL);
 		if (err.id != ERR_NONE)
-			return (err);
+			return (htable_destroy(*env), err);
 	}
 	setup_signals(1);
 	*ret = 0;
@@ -97,7 +97,7 @@ int	main(int argc, char **argv, char **envp)
 
 	err = prepare(&env, &ret, &run, envp);
 	if (err.id != ERR_NONE)
-		return (print_error(err, NULL), 1);
+		return ((void) argc, (void) argv, print_error(err, NULL), 1);
 	while (run)
 	{
 		line = readline(INPUT_PREFIX);
@@ -113,5 +113,5 @@ int	main(int argc, char **argv, char **envp)
 		else
 			process_line("exit", env, &run, &ret);
 	}
-	return ((void) argc, (void) argv, htable_destroy(env), ret);
+	return (rl_clear_history(), htable_destroy(env), ret);
 }
