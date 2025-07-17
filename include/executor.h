@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 23:32:51 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 23:13:11 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/17 16:15:23 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,11 @@ t_error	execute_logic_node(t_ast *node, t_hash_table *env);
 t_error	execute_redir_node(t_ast *node, t_hash_table *env);
 t_error	find_executable(char **executable, char *command, t_hash_table *env);
 t_error	prepare_command(t_command **command, t_list **args, t_hash_table *env);
-t_error	execute_command(t_ret *ret, t_list **cmd_args, t_list *cmd_redirs,
+t_error	execute_command(t_ret *ret, t_list **cmd_args, t_list *redirs,
 			t_hash_table *env);
 int		get_exit_code_pipe(t_ret *rets, int size, t_error err);
 int		get_exit_code(t_ret ret, t_error err);
 t_error	add_pipe_redir(t_list **redirs, int in, int out, int close);
+t_error	prepare_return(t_ret *ret, t_cmd_type type, t_list *redirs);
 
 #endif
