@@ -6,10 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:24:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/19 13:54:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/19 12:19:18 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include "data.h"
 #include "error.h"
@@ -43,18 +44,20 @@ static t_error	nud_word(t_ast **ast, t_token *token)
 	return (*ast = node, error(ERR_NONE, NULL));
 }
 
-static t_error	nud_group(t_ast **ast, t_list **tk_lst, t_hash_table *env)
+static t_error	nud_group(t_ast **ast, t_list **tk_lst, t_list **hds)
 {
 	t_ast	*node;
 	t_error	err;
 	t_token	*next;
 
+	if (ast == NULL || tk_lst == NULL || hds == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
 	if (*ast != NULL)
 		return (error(ERR_SYNTAX, NULL));
 	node = create_ast(NODE_GROUP);
 	if (node == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	err = parse_expression(&node->group, tk_lst, env, -1);
+	err = parse_expression(&node->group, tk_lst, hds, -1);
 	next = peek_front(tk_lst, 0);
 	if (node->group != NULL && next != NULL && next->type == TK_P_CLOSE)
 		peek_front(tk_lst, 1);
@@ -65,11 +68,11 @@ static t_error	nud_group(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 	return (*ast = node, error(ERR_NONE, NULL));
 }
 
-t_error	nud(t_ast **ast, t_list **tk_lst, t_hash_table *env, t_token *token)
+t_error	nud(t_ast **ast, t_list **tk_lst, t_token *token, t_list **hds)
 {
 	t_error	err;
 
-	if (ast == NULL || token == NULL)
+	if (ast == NULL || token == NULL || hds == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	if (token->type == TK_WORD)
 	{
@@ -79,7 +82,7 @@ t_error	nud(t_ast **ast, t_list **tk_lst, t_hash_table *env, t_token *token)
 	}
 	else if (token->type == TK_P_OPEN)
 	{
-		err = nud_group(ast, tk_lst, env);
+		err = nud_group(ast, tk_lst, hds);
 		if (err.id != ERR_NONE)
 			return (err);
 	}

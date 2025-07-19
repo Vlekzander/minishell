@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 16:41:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/09 00:28:42 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/19 12:22:28 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "data.h"
 #include "error.h"
 #include "parser.h"
-#include "utils.h"
 
 static t_error	led_word(t_ast **ast, t_token *token)
 {
@@ -59,13 +58,13 @@ static t_error	prepare_pipeline(t_ast **ast)
 	return (error(ERR_NONE, NULL));
 }
 
-static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
+static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_list **hds)
 {
 	t_ast	*right;
 	t_token	*token;
 	t_error	err;
 
-	if (ast == NULL || tk_lst == NULL)
+	if (ast == NULL || tk_lst == NULL || hds == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	if ((*ast)->type == NODE_COMMAND || (*ast)->type == NODE_REDIR)
 	{
@@ -79,22 +78,22 @@ static t_error	led_pipe(t_ast **ast, t_list **tk_lst, t_hash_table *env)
 		|| token->type == TK_OR || token->type == TK_P_OPEN)
 		err = error(ERR_SYNTAX, NULL);
 	else
-		err = parse_expression(&right, tk_lst, env, get_precedence(TK_PIPE));
+		err = parse_expression(&right, tk_lst, hds, get_precedence(TK_PIPE));
 	if (err.id != ERR_NONE)
 		return (err);
 	return (ft_lstadd_back(&(*ast)->pipeline, ft_lstnew(right)),
 		error(ERR_NONE, NULL));
 }
 
-static t_error	led_logic(t_ast **ast, t_list **tk_lst, t_hash_table *env,
-					t_token_type tk_type)
+static t_error	led_logic(t_ast **ast, t_list **tk_lst, t_token_type tk_type,
+	t_list **hds)
 {
 	t_ast		*node;
 	t_ast		*right;
 	t_error		err;
 	t_node_type	type;
 
-	if (ast == NULL || tk_lst == NULL)
+	if (ast == NULL || tk_lst == NULL || hds == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	type = NODE_AND;
 	if (tk_type == TK_OR)
@@ -105,7 +104,7 @@ static t_error	led_logic(t_ast **ast, t_list **tk_lst, t_hash_table *env,
 	node->left = *ast;
 	*ast = node;
 	right = NULL;
-	err = parse_expression(&right, tk_lst, env, get_precedence(tk_type));
+	err = parse_expression(&right, tk_lst, hds, get_precedence(tk_type));
 	if (err.id != ERR_NONE)
 		return (err);
 	if (right == NULL)
@@ -114,11 +113,11 @@ static t_error	led_logic(t_ast **ast, t_list **tk_lst, t_hash_table *env,
 	return (error(ERR_NONE, NULL));
 }
 
-t_error	led(t_ast **ast, t_list **tk_lst, t_hash_table *env, t_token *token)
+t_error	led(t_ast **ast, t_list **tk_lst, t_token *token, t_list **hds)
 {
 	t_error	err;
 
-	if (ast == NULL || tk_lst == NULL || token == NULL)
+	if (ast == NULL || tk_lst == NULL || token == NULL || hds == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = error(ERR_SYNTAX, NULL);
 	if (token->type == TK_WORD)
@@ -130,13 +129,13 @@ t_error	led(t_ast **ast, t_list **tk_lst, t_hash_table *env, t_token *token)
 	else if (token->type == TK_PIPE
 		&& ((*ast != NULL && (*ast)->type != NODE_GROUP) || *ast == NULL))
 	{
-		err = led_pipe(ast, tk_lst, env);
+		err = led_pipe(ast, tk_lst, hds);
 		if (err.id != ERR_NONE)
 			return (err);
 	}
 	else if (token->type == TK_AND || token->type == TK_OR)
 	{
-		err = led_logic(ast, tk_lst, env, token->type);
+		err = led_logic(ast, tk_lst, token->type, hds);
 		if (err.id != ERR_NONE)
 			return (err);
 	}
