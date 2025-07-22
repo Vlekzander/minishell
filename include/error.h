@@ -35,7 +35,7 @@ typedef enum e_error_code
 	ERR_TOO_MANY_ARGS,
 	ERR_HOME_NOT_SET,
 	ERR_EXIT,
-	ERR_CMD_EMPTY
+	ERR_NO_EXEC
 }	t_error_code;
 
 typedef struct s_error

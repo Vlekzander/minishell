@@ -6,16 +6,25 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/14 17:24:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/22 19:00:01 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include <stdlib.h>
 #include <readline/readline.h>
 #include "data.h"
 #include "expand.h"
-#include "lexer.h"
 #include "redirs.h"
+
+extern int	g_signal;
+
+static int	heredoc_event(void)
+{
+	if (g_signal == SIGINT)
+		rl_done = 1;
+	return (0);
+}
 
 static t_error	process_line(t_hash_table *env, t_strbuilder *sb, char **line,
 					int expand)
@@ -60,7 +69,8 @@ static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
 	while (run)
 	{
 		line = readline(HEREDOC_PREFIX);
-		if (line == NULL || ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)
+		if (line == NULL || g_signal == SIGINT
+			|| ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)
 			break ;
 		if (is_last)
 		{
@@ -90,61 +100,30 @@ static t_error	prompt_heredoc(t_redir *redir, t_hash_table *env, int is_last)
 	err = prompt_hd(env, sb, is_last, redir->heredoc);
 	if (err.id != ERR_NONE)
 		return (free_strbuilder(sb), err);
-	if (is_last)
+	if (is_last && g_signal != SIGINT)
 		err = process_heredoc(redir, sb);
 	return (free_strbuilder(sb), err);
 }
 
-static t_error	collect_hds(t_list *redirs, t_list **hds, int *hd_end)
-{
-	t_redir	*redir;
-	t_list	*node;
-
-	if (hds == NULL || hd_end == NULL)
-		return (error(ERR_IMPLEMENTATION, NULL));
-	*hd_end = 0;
-	*hds = NULL;
-	while (redirs != NULL)
-	{
-		redir = redirs->content;
-		if (redir->type == REDIR_HEREDOC)
-		{
-			node = ft_lstnew(redir);
-			if (node == NULL)
-				return (ft_lstclear(hds, NULL), error(ERR_ALLOCATION, NULL));
-			ft_lstadd_back(hds, node);
-			*hd_end = 1;
-		}
-		else if (redir->type == REDIR_IN)
-			*hd_end = 0;
-		redirs = redirs->next;
-	}
-	return (error(ERR_NONE, NULL));
-}
-
 t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 {
-	t_list	*hds;
-	int		hd_end;
 	t_error	err;
 	t_redir	*redir;
 	t_list	*node;
 
-	err = collect_hds(redirs, &hds, &hd_end);
-	if (err.id != ERR_NONE)
-		return (err);
-	if (hds != NULL)
+	if (redirs == NULL)
+		return (error(ERR_NONE, NULL));
+	err = error(ERR_NONE, NULL);
+	g_signal = 0;
+	rl_event_hook = heredoc_event;
+	node = redirs;
+	while (node != NULL && err.id == ERR_NONE && g_signal != SIGINT)
 	{
-		node = hds;
-		while (node != NULL)
-		{
-			redir = node->content;
-			err = prompt_heredoc(redir, env, node->next == NULL && hd_end);
-			if (err.id != ERR_NONE)
-				return (ft_lstclear(&hds, NULL), err);
-			node = node->next;
-		}
-		ft_lstclear(&hds, NULL);
+		redir = node->content;
+		err = prompt_heredoc(redir, env, node->next == NULL);
+		node = node->next;
 	}
-	return (error(ERR_NONE, NULL));
+	if (err.id == ERR_NONE && g_signal == SIGINT)
+		err.id = ERR_NO_EXEC;
+	return (g_signal = 0, rl_event_hook = NULL, err);
 }

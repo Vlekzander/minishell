@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 11:13:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/17 23:17:09 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/22 18:59:38 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,15 @@ int	g_signal;
 
 static void	signal_handler(int sig)
 {
-	if (sig == SIGINT)
+	g_signal = sig;
+	if (sig != SIGINT)
+		return ;
+	if (rl_event_hook == NULL)
 	{
 		write(STDOUT_FILENO, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		g_signal = sig;
 	}
 }
 

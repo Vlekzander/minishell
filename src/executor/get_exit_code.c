@@ -24,7 +24,7 @@ static int	exit_code_err(t_ret ret, t_error err)
 	exit_code = 0;
 	if (ret.type == RET_VALUE)
 		exit_code = ret.value;
-	if (err.id == ERR_CMD_EMPTY)
+	if (err.id == ERR_NO_EXEC)
 		exit_code = 0;
 	else if (ret.redir_error)
 		exit_code = 1;

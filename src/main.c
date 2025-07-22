@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/12 16:38:57 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/22 18:50:07 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,8 @@ static t_error	prepare_ast(t_ast **ast, char *line, t_hash_table *env)
 	if (err.id != ERR_NONE)
 		return (err);
 	err = parse_ast(ast, tokens, env);
-	if (err.id != ERR_NONE)
-	{
-		if (err.id == ERR_SYNTAX)
-			set_var(env, "?", "2");
-	}
+	if (err.id == ERR_SYNTAX)
+		set_var(env, "?", "2");
 	return (ft_lstclear(&tokens, (void *) free_token), err);
 }
 
@@ -49,10 +46,12 @@ static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
 	if (line == NULL || str_blank(line))
 		return ;
 	err = prepare_ast(&ast, line, env);
+	if (err.id == ERR_NO_EXEC)
+		return ;
 	if (err.id != ERR_NONE)
 		return (print_error(err, NULL));
 	err = execute_node(ast, env);
-	if (err.id != ERR_NONE && err.id != ERR_CMD_EMPTY)
+	if (err.id != ERR_NONE && err.id != ERR_NO_EXEC)
 	{
 		if (err.id == ERR_EXIT)
 			return (*run = 0, *ret = ast->exit_code, free_ast(ast));

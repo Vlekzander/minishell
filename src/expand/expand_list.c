@@ -129,6 +129,6 @@ t_error	expand_list(t_list **lst, t_hash_table *env)
 	}
 	lst_remove(lst, ptr_null, NULL);
 	if (*lst == NULL)
-		return (error(ERR_CMD_EMPTY, NULL));
+		return (error(ERR_NO_EXEC, NULL));
 	return (error(ERR_NONE, NULL));
 }

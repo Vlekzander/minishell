@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 16:23:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/19 12:26:44 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/22 18:49:46 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,10 @@ t_error	parse_ast(t_ast **ast, t_list *tokens, t_hash_table *env)
 	hds = NULL;
 	err = parse_expression(ast, &tokens, &hds, 0);
 	if (err.id != ERR_NONE)
-		return (ft_lstclear(&hds, NULL), err);
+		return (ft_lstclear(&hds, NULL), free_ast(*ast), err);
 	err = prompt_redirs(hds, env);
+	if (err.id != ERR_NONE)
+		return (ft_lstclear(&hds, NULL), free_ast(*ast), err);
 	ft_lstclear(&hds, NULL);
 	return (err);
 }
