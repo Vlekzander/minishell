@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 19:18:31 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/24 14:13:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/24 14:14:26 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static t_error	process_redir_heredoc(t_redir *redir, int in)
 	if (redir == NULL || redir->type != REDIR_HEREDOC)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	if (redir->fd == -1 || in == -1)
-		return (error(ERR_NONE, NULL));
+		return (close_set(&redir->fd, -1), error(ERR_NONE, NULL));
 	ret = dup2(redir->fd, in);
 	close_set(&redir->fd, -1);
 	if (ret == -1)
