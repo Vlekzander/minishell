@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/22 19:00:01 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/24 13:48:18 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,5 +125,5 @@ t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 	}
 	if (err.id == ERR_NONE && g_signal == SIGINT)
 		err.id = ERR_NO_EXEC;
-	return (g_signal = 0, rl_event_hook = NULL, err);
+	return (rl_event_hook = NULL, err);
 }
