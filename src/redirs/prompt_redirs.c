@@ -6,12 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/24 13:48:18 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/24 14:36:41 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <readline/readline.h>
 #include "data.h"
 #include "expand.h"
@@ -80,7 +81,7 @@ static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
 		}
 		free(line);
 	}
-	return (free(line), error(ERR_NONE, NULL));
+	return (print_heredoc_warn(line, eof), free(line), error(ERR_NONE, NULL));
 }
 
 static t_error	prompt_heredoc(t_redir *redir, t_hash_table *env, int is_last)
