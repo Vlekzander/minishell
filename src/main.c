@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/22 18:50:07 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/24 15:41:19 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static t_error	prepare_ast(t_ast **ast, char *line, t_hash_table *env)
 
 	if (ast == NULL || line == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
+	*ast = NULL;
 	err = tokenize(&tokens, line);
 	if (err.id != ERR_NONE)
 		return (err);
