@@ -44,7 +44,7 @@ static t_error	process_loop(t_list **tokens, char *input, char *buf)
 	i = 0;
 	while (*input != '\0')
 	{
-		if (quote == 0 && (is_operator(input) || is_separator(*input)))
+		if (quote == 0 && (is_operator(input) || is_blank(*input)))
 		{
 			i = 0;
 			err = handle_op_sep(tokens, &input, buf);

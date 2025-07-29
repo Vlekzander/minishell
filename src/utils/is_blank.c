@@ -1,42 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cond_utils.c                                       :+:      :+:    :+:   */
+/*   is_blank.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/14 17:38:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/29 14:41:36 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/29 14:19:22 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/29 14:19:33 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
-#include "libft.h"
 #include "utils.h"
 
-int	str_empty(void *content)
+int	is_blank(char c)
 {
-	char	*str;
-
-	str = content;
-	return (ft_strlen(str) == 0);
-}
-
-int	str_blank(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (!is_blank(str[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	ptr_null(void *ptr)
-{
-	return (ptr == NULL);
+	return (c == ' ' || c == '\t');
 }

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:57:43 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/13 14:34:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/29 14:19:12 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,4 @@ int	is_operator(char *str)
 	if (str[0] == ')')
 		return (1);
 	return (0);
-}
-
-int	is_separator(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n');
 }

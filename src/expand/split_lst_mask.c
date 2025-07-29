@@ -88,7 +88,7 @@ t_error	split_list_mask(t_list **lst, char *str, char *mask, char quote)
 	while (str[i] != '\0')
 	{
 		manage_quotes(str[i], mask[i], &quote, &was_quoted);
-		if (quote == 0 && is_separator(str[i]))
+		if (quote == 0 && is_blank(str[i]))
 			err = add_str_to_list(&list, sb, &was_quoted);
 		else if (mask[i] != 'Q' && !strbuilder_append_char(sb, str[i]))
 			err = error(ERR_ALLOCATION, NULL);

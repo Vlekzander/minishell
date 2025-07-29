@@ -28,7 +28,7 @@ static t_error	check_expanded_target(char *str)
 	{
 		if (is_quote(str[i]) && (quote == 0 || quote == str[i]))
 			quote = toggle_quote(str[i], quote);
-		if (quote == 0 && is_separator(str[i]))
+		if (quote == 0 && is_blank(str[i]))
 			return (error(ERR_AMB_REDIR, NULL));
 		i++;
 	}

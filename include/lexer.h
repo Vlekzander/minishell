@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:22:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/01 17:44:14 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/29 14:19:48 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_error	process_operator(t_list **tokens, char **input, char *buf);
 t_error	process_separator(t_list **tokens, char *buf);
 t_error	remove_empty_tokens(t_list **tk_list);
 int		is_operator(char *str);
-int		is_separator(char c);
 void	remove_str_quotes(char *str);
 
 #endif

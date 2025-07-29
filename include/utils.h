@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:00:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/14 17:40:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/29 14:27:04 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,7 @@ char	*prefix_suffix_str(char *str, char *prefix, char *suffix);
 int		str_empty(void *content);
 int		str_blank(char *str);
 int		ptr_null(void *ptr);
+int		is_blank(char c);
+t_error	lst_array(char ***array, t_list *lst);
 
 #endif

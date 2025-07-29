@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:56:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/12 23:48:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/29 14:38:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,42 +17,15 @@
 #include "libft.h"
 #include "utils.h"
 
-static t_error	lst_to_arr(char ***array, t_list *lst)
-{
-	char	**arr;
-	size_t	size;
-	size_t	i;
-
-	if (lst == NULL)
-		return (error(ERR_IMPLEMENTATION, NULL));
-	size = ft_lstsize(lst);
-	arr = ft_calloc(size +1, sizeof(char *));
-	if (arr == NULL)
-		return (error(ERR_ALLOCATION, NULL));
-	i = 0;
-	while (lst != NULL)
-	{
-		arr[i] = ft_strdup(lst->content);
-		if (arr[i] == NULL)
-		{
-			free_ddarray((void **) arr);
-			return (error(ERR_ALLOCATION, NULL));
-		}
-		i++;
-		lst = lst->next;
-	}
-	return (*array = arr, error(ERR_NONE, NULL));
-}
-
-static t_error	prepare_arguments(char ***args, t_list *cmd_args)
+static t_error	prepare_arguments(char ***argv, int *argc, t_list *cmd_args)
 {
 	char	**arr;
 	char	*ptr;
 	t_error	err;
 
-	if (args == NULL || cmd_args == NULL)
+	if (argv == NULL || cmd_args == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = lst_to_arr(&arr, cmd_args);
+	err = lst_array(&arr, cmd_args);
 	if (err.id != ERR_NONE)
 		return (err);
 	ptr = ft_strrchr(arr[0], '/');
@@ -65,7 +38,9 @@ static t_error	prepare_arguments(char ***args, t_list *cmd_args)
 		}
 		ft_memmove(arr[0], ptr +1, ft_strlen(ptr));
 	}
-	return (*args = arr, error(ERR_NONE, NULL));
+	*argv = arr;
+	*argc = ft_lstsize(cmd_args);
+	return (error(ERR_NONE, NULL));
 }
 
 static t_error	prepare_envp(char ***envp, t_hash_table *env)
@@ -74,6 +49,8 @@ static t_error	prepare_envp(char ***envp, t_hash_table *env)
 	char	*str;
 	t_error	err;
 
+	if (envp == NULL || env == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
 	err = get_env(&str, 0, env);
 	if (err.id != ERR_NONE)
 		return (err);
@@ -84,11 +61,29 @@ static t_error	prepare_envp(char ***envp, t_hash_table *env)
 	return (*envp = arr, error(ERR_NONE, NULL));
 }
 
+static t_error	prepare_binary(t_command *cmd, t_list **args, t_hash_table *env)
+{
+	t_error	err;
+
+	if (cmd == NULL || args == NULL || env == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	cmd->type = CMD_BINARY;
+	err = find_executable(&cmd->executable, (*args)->content, env);
+	if (err.id != ERR_NONE)
+		return (err);
+	err = prepare_envp(&cmd->envp, env);
+	if (err.id != ERR_NONE)
+		return (err);
+	return (error(ERR_NONE, NULL));
+}
+
 t_error	prepare_command(t_command **command, t_list **args, t_hash_table *env)
 {
 	t_command	*cmd;
 	t_error		err;
 
+	if (command == NULL || args == NULL || env == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
 	err = expand_list(args, env);
 	if (err.id != ERR_NONE)
 		return (err);
@@ -98,16 +93,12 @@ t_error	prepare_command(t_command **command, t_list **args, t_hash_table *env)
 	cmd->builtin = get_builtin((*args)->content);
 	if (cmd->builtin == NULL)
 	{
-		cmd->type = CMD_BINARY;
-		err = find_executable(&cmd->executable, (*args)->content, env);
-		if (err.id != ERR_NONE)
-			return (free_command(cmd), err);
-		err = prepare_envp(&cmd->envp, env);
+		err = prepare_binary(cmd, args, env);
 		if (err.id != ERR_NONE)
 			return (free_command(cmd), err);
 	}
-	err = prepare_arguments(&cmd->argv, *args);
+	err = prepare_arguments(&cmd->argv, &cmd->argc, *args);
 	if (err.id != ERR_NONE)
 		return (free_command(cmd), err);
-	return (cmd->argc = ft_lstsize(*args), *command = cmd, err);
+	return (*command = cmd, err);
 }
