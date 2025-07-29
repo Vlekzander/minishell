@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:56:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/29 14:38:13 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/29 15:43:07 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,10 @@ static t_error	prepare_arguments(char ***argv, int *argc, t_list *cmd_args)
 	if (err.id != ERR_NONE)
 		return (err);
 	ptr = ft_strrchr(arr[0], '/');
-	if (ptr != NULL)
+	if (ptr != NULL && ptr[1] == '\0')
 	{
-		if (ptr[1] == '\0')
-		{
-			free_ddarray((void **) arr);
-			return (error(ERR_IS_DIRECTORY, cmd_args->content));
-		}
-		ft_memmove(arr[0], ptr +1, ft_strlen(ptr));
+		free_ddarray((void **) arr);
+		return (error(ERR_IS_DIRECTORY, cmd_args->content));
 	}
 	*argv = arr;
 	*argc = ft_lstsize(cmd_args);
