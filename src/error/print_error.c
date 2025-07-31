@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:13:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/16 11:58:12 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 21:09:33 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static char	*get_more_error_message(t_error_code code)
 		return ("too many arguments");
 	if (code == ERR_HOME_NOT_SET)
 		return ("HOME not set");
+	if (code == ERR_WRITE)
+		return ("Write error");
 	return ("Unknown error");
 }
 

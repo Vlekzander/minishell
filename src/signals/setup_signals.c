@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 11:13:28 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/22 18:59:38 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 20:23:25 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ void	setup_signals(int init)
 	if (init)
 		g_signal = 0;
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTERM, SIG_IGN);
 	signal(SIGINT, signal_handler);
 }

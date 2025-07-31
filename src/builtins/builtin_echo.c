@@ -6,10 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:02:26 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/16 22:08:48 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 21:08:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "builtins.h"
 
 static int	new_line_option(char *str)
@@ -37,6 +38,15 @@ static int	process_setup(char *str, int *new_line)
 	return (0);
 }
 
+static int	write_str_fd(char *str, int fd)
+{
+	if (str == NULL)
+		return (1);
+	if (write(fd, str, ft_strlen(str)) == -1)
+		return (0);
+	return (1);
+}
+
 t_error	builtin_echo(int *ret, t_btin_data data, t_hash_table *env)
 {
 	int	i;
@@ -54,13 +64,14 @@ t_error	builtin_echo(int *ret, t_btin_data data, t_hash_table *env)
 			setup = process_setup(data.argv[i], &new_line);
 		if (!setup)
 		{
-			ft_putstr_fd(data.argv[i], data.stdout);
-			if (i != data.argc -1)
-				ft_putchar_fd(' ', data.stdout);
+			if (!write_str_fd(data.argv[i], data.stdout))
+				return (error(ERR_WRITE, NULL));
+			if (i != data.argc -1 && !write_str_fd(" ", data.stdout))
+				return (error(ERR_WRITE, NULL));
 		}
 		i++;
 	}
-	if (new_line)
-		ft_putchar_fd('\n', data.stdout);
+	if (new_line && !write_str_fd("\n", data.stdout))
+		return (error(ERR_WRITE, NULL));
 	return (*ret = 0, error(ERR_NONE, NULL));
 }
