@@ -6,13 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:20:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/15 17:49:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:04:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "data.h"
-#include "expand.h"
+#include "expansion.h"
 #include "utils.h"
 
 char	*ft_strrstr(char *str, char *to_find)

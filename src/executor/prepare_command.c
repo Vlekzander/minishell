@@ -6,14 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:56:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/29 15:43:07 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/29 21:34:30 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "env.h"
 #include "executor.h"
-#include "expand.h"
+#include "expansion.h"
 #include "libft.h"
 #include "utils.h"
 

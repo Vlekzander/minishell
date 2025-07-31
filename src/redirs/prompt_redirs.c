@@ -6,16 +6,15 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/24 14:36:41 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:05:18 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <readline/readline.h>
 #include "data.h"
-#include "expand.h"
+#include "expansion.h"
 #include "redirs.h"
 
 extern int	g_signal;
@@ -30,22 +29,15 @@ static int	heredoc_event(void)
 static t_error	process_line(t_hash_table *env, t_strbuilder *sb, char **line,
 					int expand)
 {
-	char	*expanded;
 	t_error	err;
 
 	if (env == NULL || sb == NULL || line == NULL || *line == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	expanded = NULL;
 	if (expand)
 	{
-		err = expand_env(&expanded, *line, env, NULL);
+		err = variable_expansion(line, NULL, env);
 		if (err.id != ERR_NONE)
 			return (err);
-		if (expanded != *line)
-		{
-			free(*line);
-			*line = expanded;
-		}
 	}
 	if (!strbuilder_append(sb, *line))
 		return (error(ERR_ALLOCATION, NULL));
@@ -81,7 +73,7 @@ static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
 		}
 		free(line);
 	}
-	return (print_heredoc_warn(line, eof), free(line), error(ERR_NONE, NULL));
+	return (free(line), error(ERR_NONE, NULL));
 }
 
 static t_error	prompt_heredoc(t_redir *redir, t_hash_table *env, int is_last)

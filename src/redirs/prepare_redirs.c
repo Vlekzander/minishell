@@ -6,14 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 17:13:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/16 21:54:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:02:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "data.h"
 #include "error.h"
-#include "expand.h"
+#include "expansion.h"
 #include "libft.h"
 #include "redirs.h"
 #include "utils.h"
@@ -56,7 +56,12 @@ t_error	prepare_redirs(t_list *redirs, t_hash_table *env)
 	while (redirs != NULL)
 	{
 		redir = redirs->content;
-		err = expand_redir_target(redir, env);
+		if (redir->type == REDIR_HEREDOC || redir->type == REDIR_PIPE)
+			err = error(ERR_NONE, NULL);
+		else if (redir->type == REDIR_IN)
+			err = expand_redir_target(&redir->in, env);
+		else
+			err = expand_redir_target(&redir->out, env);
 		if (err.id != ERR_NONE)
 			return (err);
 		if (redir->type == REDIR_IN)

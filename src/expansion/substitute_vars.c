@@ -6,34 +6,33 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 12:41:24 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/15 00:44:26 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 13:45:49 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "expansion.h"
 
-#include "error.h"
-#include "expand.h"
-
-static t_error	append_value(t_strbuilder *sb, char *value, int is_mask)
+static t_error	append_value(t_strbuilder *sb, char *value, char context)
 {
-	char	*str;
-
 	if (sb == NULL || value == NULL)
-		return (error(ERR_ALLOCATION, NULL));
-	if (is_mask)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	if (context)
 	{
-		str = ft_strdup(value);
-		if (str == NULL)
+		if (!strbuilder_append_mchar(sb, context, ft_strlen(value)))
 			return (error(ERR_ALLOCATION, NULL));
-		ft_memset(str, ' ', ft_strlen(str));
-		if (!strbuilder_append(sb, str))
-			return (free(str), error(ERR_ALLOCATION, NULL));
-		return (free(str), error(ERR_NONE, NULL));
+		return (error(ERR_NONE, NULL));
 	}
 	if (!strbuilder_append(sb, value))
 		return (error(ERR_ALLOCATION, NULL));
 	return (error(ERR_NONE, NULL));
+}
+
+static char	get_context(int mask, char c)
+{
+	if (mask)
+		return (c);
+	return (0);
 }
 
 static t_error	loop_vars(t_strbuilder *sb, char *base, t_list *vars, int mask)
@@ -53,7 +52,8 @@ static t_error	loop_vars(t_strbuilder *sb, char *base, t_list *vars, int mask)
 		base[var->id_index] = '\0';
 		if (!strbuilder_append(sb, base + base_index))
 			return (error(ERR_ALLOCATION, NULL));
-		err = append_value(sb, var->value, mask);
+		err = append_value(sb, var->value,
+				get_context(mask, base[var->id_index +1]));
 		if (err.id != ERR_NONE)
 			return (err);
 		base_index = var->id_index + var->id_len;

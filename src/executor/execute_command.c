@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:32:33 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/17 16:16:12 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/29 21:34:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <unistd.h>
 #include "env.h"
 #include "executor.h"
-#include "expand.h"
 #include "redirs.h"
 #include "signals.h"
 #include "utils.h"

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/16 21:31:00 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/30 20:38:49 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ void			free_pattern(t_pattern *pattern);
 void			free_strbuilder(t_strbuilder *sb);
 int				strbuilder_append(t_strbuilder *sb, char *str);
 int				strbuilder_append_char(t_strbuilder *sb, char c);
+int				strbuilder_append_mchar(t_strbuilder *sb, char c, size_t count);
 void			free_command(t_command *command);
 
 #endif

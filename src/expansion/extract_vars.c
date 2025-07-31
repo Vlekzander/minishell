@@ -6,16 +6,18 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 23:24:44 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/14 17:14:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/29 22:18:27 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+
+#include "data.h"
 #include "env.h"
-#include "expand.h"
+#include "expansion.h"
 #include "utils.h"
 
-static t_error	scan_next_var(t_var *var, char *str, char *mask, char quote)
+static t_error	scan_next_var(t_var *var, char *str, char *mask)
 {
 	int		i;
 
@@ -24,9 +26,7 @@ static t_error	scan_next_var(t_var *var, char *str, char *mask, char quote)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (mask[i] == 'Q')
-			quote = toggle_quote(str[i], quote);
-		if (quote != '\'' && str[i] == '$')
+		if (mask[i] != 'S' && str[i] == '$')
 		{
 			var->id_index = i++;
 			if (str[i] == '?')
@@ -55,7 +55,7 @@ static t_error	extract_next_var(t_var **var, char *str, char *mask,
 	cvar = ft_calloc(1, sizeof(t_var));
 	if (cvar == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	err = scan_next_var(cvar, str, mask, 0);
+	err = scan_next_var(cvar, str, mask);
 	if (err.id != ERR_NONE)
 		return (err);
 	if (cvar->id_index == -1)

@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   remove_quotes_mask.c                               :+:      :+:    :+:   */
+/*   strbuilder_append_mchar.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/13 21:57:32 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/14 17:37:12 by apierret         ###   ########.fr       */
+/*   Created: 2025/07/30 20:36:27 by apierret          #+#    #+#             */
+/*   Updated: 2025/07/30 20:38:45 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "expand.h"
+#include "data.h"
 
-t_error	remove_quotes_mask(char *str, char *mask)
+int	strbuilder_append_mchar(t_strbuilder *sb, char c, size_t count)
 {
-	int	i;
-	int	len;
+	char	str[2];
+	size_t	i;
 
-	if (str == NULL || mask == NULL)
-		return (error(ERR_IMPLEMENTATION, NULL));
+	if (sb == NULL)
+		return (0);
+	str[0] = c;
+	str[1] = '\0';
 	i = 0;
-	while (mask[i] != '\0')
+	while (i < count)
 	{
-		if (mask[i] == 'Q')
-		{
-			len = ft_strlen(mask + i + 1);
-			ft_memmove(str + i, str + i + 1, len + 1);
-			ft_memmove(mask + i, mask + i + 1, len + 1);
-		}
-		else
-			i++;
+		if (!strbuilder_append(sb, str))
+			return (0);
+		i++;
 	}
-	return (error(ERR_NONE, NULL));
+	return (1);
 }

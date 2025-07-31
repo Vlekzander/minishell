@@ -6,12 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 19:18:31 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/24 14:14:26 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/29 21:34:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "expand.h"
 #include "redirs.h"
 #include "utils.h"
 

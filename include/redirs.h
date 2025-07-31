@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:40:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/24 14:40:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:05:22 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,5 @@ t_error	handle_redirs(t_list *redirs, int in, int out);
 t_error	prepare_redirs(t_list *redirs, t_hash_table *env);
 void	hd_prepare_eof(char *str);
 void	close_redirs(t_list *redirs);
-void	print_heredoc_warn(char *line, char *eof);
 
 #endif
