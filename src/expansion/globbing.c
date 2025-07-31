@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 23:20:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/30 16:04:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 16:29:15 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,6 @@ static int	check_pattern(char *str, t_pattern *pattern)
 
 	if (str == NULL || pattern == NULL)
 		return (-1);
-	if (pattern->prefix == NULL && str[0] == '.')
-		return (0);
 	ptr = str;
 	if (pattern->prefix != NULL)
 	{
@@ -87,51 +85,23 @@ static int	check_pattern(char *str, t_pattern *pattern)
 	return (1);
 }
 
-static t_error	lst_dup(t_list **dest, t_list *base)
+t_error	globbing(t_list **files, t_pattern *pattern, int include)
 {
 	t_list	*node;
-	char	*str;
-
-	if (dest == NULL)
-		return (error(ERR_IMPLEMENTATION, NULL));
-	while (base != NULL)
-	{
-		str = ft_strdup(base->content);
-		if (str == NULL)
-			return (ft_lstclear(dest, free), error(ERR_ALLOCATION, NULL));
-		node = ft_lstnew(str);
-		if (node == NULL)
-			return (ft_lstclear(dest, free), error(ERR_ALLOCATION, NULL));
-		ft_lstadd_back(dest, node);
-		base = base->next;
-	}
-	return (error(ERR_NONE, NULL));
-}
-
-t_error	globbing(t_list **out_files, t_list *in_files, t_pattern *pattern)
-{
-	t_list	*lst;
-	t_list	*node;
-	t_error	err;
 	int		ret;
 
-	if (out_files == NULL || pattern == NULL)
+	if (files == NULL || pattern == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	lst = NULL;
-	err = lst_dup(&lst, in_files);
-	if (err.id != ERR_NONE)
-		return (err);
-	node = lst;
+	node = *files;
 	while (node != NULL)
 	{
 		ret = check_pattern(node->content, pattern);
 		if (ret == -1)
-			return (ft_lstclear(&lst, free), error(ERR_IMPLEMENTATION, NULL));
-		if (ret == 0)
+			return (error(ERR_IMPLEMENTATION, NULL));
+		if (ret == include)
 			((char *) node->content)[0] = '\0';
 		node = node->next;
 	}
-	lst_remove(&lst, str_empty, free);
-	*out_files = lst;
+	lst_remove(files, str_empty, free);
 	return (error(ERR_NONE, NULL));
 }

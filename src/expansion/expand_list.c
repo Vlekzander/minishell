@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 16:02:55 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 13:50:14 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 17:38:01 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static t_error	sublist_quote_removal(t_list *sublist, char *mask)
 {
 	t_error	err;
 
-	if (sublist == NULL || mask == NULL)
+	if (mask == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	while (sublist != NULL)
 	{
@@ -47,7 +47,7 @@ static t_error	process_expand(t_list **lst, char **str, char **mask,
 	err = word_splitting(&sublist, *str, *mask, htable_get(env, "IFS"));
 	if (err.id != ERR_NONE)
 		return (err);
-	err = pathname_expand_list(&sublist, mask);
+	err = pathname_expand_list(&sublist, mask, env);
 	if (err.id != ERR_NONE)
 		return (ft_lstclear(&sublist, free), err);
 	err = sublist_quote_removal(sublist, *mask);

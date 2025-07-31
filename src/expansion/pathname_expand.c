@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:03:13 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 14:52:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:33:38 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,77 +30,79 @@ static size_t	calculate_sublist_len(t_list *sublist)
 	return (len);
 }
 
-static t_error	pathname_expand_handle(t_list **lst, char *str,
-					t_strbuilder *sb, size_t i)
+static t_error	pathname_expand_handle(t_list **lst, char *str, t_sb_index *sbi,
+					t_hash_table *env)
 {
 	t_error	err;
 	char	*temp;
 	t_list	*sublist;
 
-	if (lst == NULL || str == NULL || sb == NULL)
+	if (lst == NULL || str == NULL || sbi == NULL || sbi->sb == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = pathname_expansion(&sublist, str, sb->buffer + i, NULL);
+	err = pathname_expansion(&sublist, str, sbi->sb->buffer + sbi->index,
+			htable_get(env, "GLOBIGNORE"));
 	if (err.id != ERR_NONE)
 		return (err);
 	if (sublist != NULL)
 	{
-		temp = ft_strdup(sb->buffer + i + ft_strlen(str));
+		temp = ft_strdup(sbi->sb->buffer + sbi->index + ft_strlen(str));
 		if (temp == NULL)
 			return (error(ERR_ALLOCATION, NULL));
-		sb->length = i;
-		if (!strbuilder_append_mchar(sb, ' ', calculate_sublist_len(sublist)))
+		sbi->sb->length = sbi->index;
+		if (!strbuilder_append_mchar(sbi->sb, ' ',
+				calculate_sublist_len(sublist)))
 			return (free(temp), error(ERR_ALLOCATION, NULL));
-		if (!strbuilder_append(sb, temp))
+		if (!strbuilder_append(sbi->sb, temp))
 			return (free(temp), error(ERR_ALLOCATION, NULL));
 		free(temp);
 	}
 	return (*lst = sublist, error(ERR_NONE, NULL));
 }
 
-static t_error	process_pathname_expand(t_list **lst, t_strbuilder *sb)
+static t_error	process_pathname_expand(t_list **lst, t_sb_index *sbi,
+					t_hash_table *env)
 {
 	t_list			*sublist;
 	t_list			*node;
 	t_list			*next;
-	size_t			i;
 	t_error			err;
 
-	i = 0;
+	sbi->index = 0;
 	node = *lst;
 	while (node != NULL)
 	{
 		next = node->next;
-		err = pathname_expand_handle(&sublist, node->content, sb, i);
+		err = pathname_expand_handle(&sublist, node->content, sbi, env);
 		if (err.id != ERR_NONE)
 			return (err);
-		i += calculate_sublist_len(sublist);
+		sbi->index += calculate_sublist_len(sublist);
 		if (sublist != NULL)
 			insert_sublist(node, sublist);
 		else
-			i += ft_strlen(node->content) + 1;
+			sbi->index += ft_strlen(node->content) + 1;
 		node = next;
 	}
 	return (error(ERR_NONE, NULL));
 }
 
-t_error	pathname_expand_list(t_list **lst, char **mask)
+t_error	pathname_expand_list(t_list **lst, char **mask, t_hash_table *env)
 {
-	t_strbuilder	*sb;
+	t_sb_index		sbi;
 	t_error			err;
 
 	if (lst == NULL || mask == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	if (*lst == NULL)
 		return (error(ERR_NONE, NULL));
-	sb = create_strbuilder(ft_strlen(*mask) + 1);
-	if (sb == NULL)
+	sbi.sb = create_strbuilder(ft_strlen(*mask) + 1);
+	if (sbi.sb == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	if (!strbuilder_append(sb, *mask))
-		return (free_strbuilder(sb), error(ERR_ALLOCATION, NULL));
-	err = process_pathname_expand(lst, sb);
+	if (!strbuilder_append(sbi.sb, *mask))
+		return (free_strbuilder(sbi.sb), error(ERR_ALLOCATION, NULL));
+	err = process_pathname_expand(lst, &sbi, env);
 	if (err.id != ERR_NONE)
-		return (free_strbuilder(sb), err);
+		return (free_strbuilder(sbi.sb), err);
 	free(*mask);
-	*mask = ft_strdup(sb->buffer);
-	return (free_strbuilder(sb), error(ERR_NONE, NULL));
+	*mask = ft_strdup(sbi.sb->buffer);
+	return (free_strbuilder(sbi.sb), error(ERR_NONE, NULL));
 }
