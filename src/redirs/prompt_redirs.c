@@ -6,24 +6,27 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 15:05:18 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 23:17:35 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <readline/readline.h>
 #include "data.h"
 #include "expansion.h"
 #include "redirs.h"
+#include "signals.h"
 
 extern int	g_signal;
 
-static int	heredoc_event(void)
+static void	signal_handler(int sig)
 {
-	if (g_signal == SIGINT)
-		rl_done = 1;
-	return (0);
+	g_signal = sig;
+	if (sig != SIGINT)
+		return ;
+	close(STDIN_FILENO);
 }
 
 static t_error	process_line(t_hash_table *env, t_strbuilder *sb, char **line,
@@ -51,15 +54,13 @@ static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
 {
 	char	*line;
 	int		expand;
-	int		run;
 	t_error	err;
 
 	if (env == NULL || (sb == NULL && is_last) || eof == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	expand = (ft_strchr(eof, '"') == NULL && ft_strchr(eof, '\'') == NULL);
 	hd_prepare_eof(eof);
-	run = 1;
-	while (run)
+	while (1)
 	{
 		line = readline(HEREDOC_PREFIX);
 		if (line == NULL || g_signal == SIGINT
@@ -101,22 +102,27 @@ static t_error	prompt_heredoc(t_redir *redir, t_hash_table *env, int is_last)
 t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 {
 	t_error	err;
-	t_redir	*redir;
 	t_list	*node;
+	int		stdin;
 
 	if (redirs == NULL)
 		return (error(ERR_NONE, NULL));
 	err = error(ERR_NONE, NULL);
 	g_signal = 0;
-	rl_event_hook = heredoc_event;
+	signal(SIGINT, signal_handler);
+	stdin = dup(STDIN_FILENO);
+	if (stdin == -1)
+		return (error(ERR_DUP, NULL));
 	node = redirs;
 	while (node != NULL && err.id == ERR_NONE && g_signal != SIGINT)
 	{
-		redir = node->content;
-		err = prompt_heredoc(redir, env, node->next == NULL);
+		err = prompt_heredoc(node->content, env, node->next == NULL);
 		node = node->next;
 	}
 	if (err.id == ERR_NONE && g_signal == SIGINT)
 		err.id = ERR_NO_EXEC;
-	return (rl_event_hook = NULL, err);
+	setup_signals(0);
+	if (dup2(stdin, STDIN_FILENO) == -1)
+		err = error(ERR_DUP, NULL);
+	return (close(stdin), err);
 }

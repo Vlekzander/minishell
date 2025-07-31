@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:43:29 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 21:03:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 23:13:43 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef enum e_error_code
 	ERR_IMPLEMENTATION,
 	ERR_SYNTAX,
 	ERR_ALLOCATION,
-	ERR_OPEN,
 	ERR_FILE_NOT_FOUND,
 	ERR_PERMISSION,
 	ERR_IS_DIRECTORY,
@@ -36,7 +35,8 @@ typedef enum e_error_code
 	ERR_HOME_NOT_SET,
 	ERR_EXIT,
 	ERR_NO_EXEC,
-	ERR_WRITE
+	ERR_WRITE,
+	ERR_DUP
 }	t_error_code;
 
 typedef struct s_error

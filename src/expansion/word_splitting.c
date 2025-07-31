@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 15:51:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 17:50:07 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 22:53:10 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static t_error	word_to_lst(t_list **lst, t_strbuilder *sb, char **mask)
 
 	if (lst == NULL || sb == NULL || mask == NULL || *mask == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	if (sb->length == 0)
+	if (sb->length == 0 && ft_strlen(sb->buffer) != 0)
 		ft_memmove(*mask, (*mask) + 1, ft_strlen(*mask + 1) + 1);
 	else
 	{

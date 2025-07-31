@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:13:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 21:09:33 by apierret         ###   ########.fr       */
+/*   Updated: 2025/07/31 23:13:56 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static char	*get_more_error_message(t_error_code code)
 		return ("HOME not set");
 	if (code == ERR_WRITE)
 		return ("Write error");
+	if (code == ERR_DUP)
+		return ("FD dup failed");
 	return ("Unknown error");
 }
 
