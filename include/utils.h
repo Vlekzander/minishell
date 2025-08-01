@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:00:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 12:12:38 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/01 11:30:24 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ int		ptr_null(void *ptr);
 int		is_blank(char c);
 t_error	lst_array(char ***array, t_list *lst);
 void	insert_sublist(t_list *list, t_list *sublist);
+t_error	fill_buffer_random(char *buf, size_t len);
 
 #endif

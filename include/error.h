@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:43:29 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 23:13:43 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/01 11:23:27 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef enum e_error_code
 	ERR_EXIT,
 	ERR_NO_EXEC,
 	ERR_WRITE,
-	ERR_DUP
+	ERR_DUP,
 }	t_error_code;
 
 typedef struct s_error

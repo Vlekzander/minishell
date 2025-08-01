@@ -6,40 +6,34 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/04 18:31:52 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/01 11:32:47 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "redirs.h"
 #include "utils.h"
-#define FILE_PATH_PREFIX "/tmp/msh-thd-"
+#define FILE_PATH_PREFIX "/tmp/hd-"
+#define FILE_PATH_RANDOM_LEN 5
 
 static t_error	get_file_path(char **filename)
 {
 	char			*name;
-	char			*end;
-	size_t			i;
 	size_t			len;
-	unsigned long	ptr;
+	t_error			err;
 
 	if (filename == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	len = ft_strlen(FILE_PATH_PREFIX);
-	name = ft_calloc(len + 5 + 1, sizeof(char));
+	name = ft_calloc(len + FILE_PATH_RANDOM_LEN + 1, sizeof(char));
 	if (name == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	ptr = (unsigned long) &name;
-	ft_memcpy(name, FILE_PATH_PREFIX, len);
-	end = name + len;
-	i = 0;
-	while (i < 5)
-	{
-		end[i] = 'A' + ((ptr >> (i * 4)) % 26);
-		i++;
-	}
+	ft_strlcpy(name, FILE_PATH_PREFIX, len +1);
+	err = fill_buffer_random(name + len, FILE_PATH_RANDOM_LEN);
+	if (err.id != ERR_NONE)
+		return (free(name), err);
 	return (*filename = name, error(ERR_NONE, NULL));
 }
 
