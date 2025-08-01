@@ -6,12 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/24 15:41:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/01 13:28:28 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <errno.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <readline/history.h>
 #include <readline/readline.h>
 #include "env.h"
@@ -113,5 +114,5 @@ int	main(int argc, char **argv, char **envp)
 		else
 			process_line("exit", env, &run, &ret);
 	}
-	return (rl_clear_history(), htable_destroy(env), ret);
+	return (rl_clear_history(), htable_destroy(env), close(STDIN_FILENO), ret);
 }

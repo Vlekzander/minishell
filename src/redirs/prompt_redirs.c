@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 23:17:35 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/01 13:33:14 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static void	signal_handler(int sig)
 	g_signal = sig;
 	if (sig != SIGINT)
 		return ;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
 	close(STDIN_FILENO);
 }
 
