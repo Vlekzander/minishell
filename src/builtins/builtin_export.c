@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:31:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/10 00:08:01 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:06:46 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,17 @@ static t_error	export_vars(int *ret, int argc, char **argv, t_hash_table *env)
 	return (*ret = value, error(ERR_NONE, NULL));
 }
 
-t_error	builtin_export(int *ret, t_btin_data data, t_hash_table *env)
+t_error	builtin_export(int *ret, void *data, t_hash_table *env)
 {
-	char	*str;
-	int		value;
-	t_error	err;
+	t_command	*cmd;
+	char		*str;
+	int			value;
+	t_error		err;
 
-	if (ret == NULL || data.argv == NULL || env == NULL)
+	cmd = (t_command *) data;
+	if (ret == NULL || cmd->argv == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	if (data.argc == 1)
+	if (cmd->argc == 1)
 	{
 		err = get_env(&str, 1, env);
 		if (err.id != ERR_NONE)
@@ -116,10 +118,10 @@ t_error	builtin_export(int *ret, t_btin_data data, t_hash_table *env)
 			*ret = 1;
 			return (print_error(err, "export"), error(ERR_NONE, NULL));
 		}
-		ft_putstr_fd(str, data.stdout);
+		ft_putstr_fd(str, cmd->stdout);
 		return (free(str), *ret = 0, error(ERR_NONE, NULL));
 	}
-	err = export_vars(&value, data.argc, data.argv, env);
+	err = export_vars(&value, cmd->argc, cmd->argv, env);
 	if (err.id != ERR_NONE)
 		print_error(err, "export");
 	return (*ret = value, error(ERR_NONE, NULL));

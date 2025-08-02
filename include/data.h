@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 23:24:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/30 20:38:49 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:15:00 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define INPUT_PREFIX "ms > "
 # define HEREDOC_PREFIX "> "
 # include "builtins.h"
+# include "hash.h"
 # include "libft.h"
 
 typedef enum e_token_type
@@ -130,7 +131,13 @@ typedef struct s_command
 	union
 	{
 		char	*executable;
-		t_btin	builtin;
+		struct
+		{
+			t_btin	builtin;
+			int		forked;
+			int		stdin;
+			int		stdout;
+		};
 	};
 }	t_command;
 

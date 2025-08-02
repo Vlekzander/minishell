@@ -6,14 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:18:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/02 16:57:54 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/02 18:59:39 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "builtins.h"
 #include "env.h"
 #include "executor.h"
-#include "expansion.h"
 #include "libft.h"
 #include "utils.h"
 
@@ -84,7 +84,12 @@ t_error	prepare_command(t_command **command, t_list *args, t_hash_table *env)
 	if (cmd == NULL)
 		return (error(ERR_ALLOCATION, NULL));
 	cmd->builtin = get_builtin(args->content);
-	if (cmd->builtin == NULL)
+	if (cmd->builtin != NULL)
+	{
+		cmd->stdin = STDIN_FILENO;
+		cmd->stdout = STDOUT_FILENO;
+	}
+	else
 	{
 		err = prepare_binary(cmd, args, env);
 		if (err.id != ERR_NONE)

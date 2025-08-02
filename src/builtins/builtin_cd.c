@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 10:58:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/10 17:15:03 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:04:47 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <linux/limits.h>
 
 #include "builtins.h"
+#include "data.h"
 #include "env.h"
 #include "utils.h"
 
@@ -71,15 +72,17 @@ static t_error	process_cd(int argc, char **argv, t_hash_table *env)
 	return (err);
 }
 
-t_error	builtin_cd(int *ret, t_btin_data data, t_hash_table *env)
+t_error	builtin_cd(int *ret, void *data, t_hash_table *env)
 {
-	int		value;
-	t_error	err;
+	t_command	*cmd;
+	int			value;
+	t_error		err;
 
-	if (ret == NULL || data.argv == NULL || env == NULL)
+	cmd = (t_command *) data;
+	if (ret == NULL || cmd->argv == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	value = 0;
-	err = process_cd(data.argc, data.argv, env);
+	err = process_cd(cmd->argc, cmd->argv, env);
 	if (err.id != ERR_NONE)
 	{
 		if (err.id == ERR_IMPLEMENTATION)

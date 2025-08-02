@@ -6,12 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 18:02:26 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 21:08:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:12:59 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "builtins.h"
+#include "data.h"
 
 static int	new_line_option(char *str)
 {
@@ -47,31 +48,38 @@ static int	write_str_fd(char *str, int fd)
 	return (1);
 }
 
-t_error	builtin_echo(int *ret, t_btin_data data, t_hash_table *env)
+static t_error	end_echo(int new_line, int fd)
 {
-	int	i;
-	int	new_line;
-	int	setup;
+	if (new_line && !write_str_fd("\n", fd))
+		return (error(ERR_WRITE, NULL));
+	return (error(ERR_NONE, NULL));
+}
 
-	if (ret == NULL || data.argv == NULL || env == NULL)
+t_error	builtin_echo(int *ret, void *data, t_hash_table *env)
+{
+	t_command	*cmd;
+	int			i;
+	int			new_line;
+	int			setup;
+
+	cmd = (t_command *) data;
+	if (ret == NULL || cmd->argv == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	setup = 1;
 	new_line = 1;
 	i = 1;
-	while (i < data.argc)
+	while (i < cmd->argc)
 	{
 		if (setup)
-			setup = process_setup(data.argv[i], &new_line);
+			setup = process_setup(cmd->argv[i], &new_line);
 		if (!setup)
 		{
-			if (!write_str_fd(data.argv[i], data.stdout))
+			if (!write_str_fd(cmd->argv[i], cmd->stdout))
 				return (error(ERR_WRITE, NULL));
-			if (i != data.argc -1 && !write_str_fd(" ", data.stdout))
+			if (i != cmd->argc -1 && !write_str_fd(" ", cmd->stdout))
 				return (error(ERR_WRITE, NULL));
 		}
 		i++;
 	}
-	if (new_line && !write_str_fd("\n", data.stdout))
-		return (error(ERR_WRITE, NULL));
-	return (*ret = 0, error(ERR_NONE, NULL));
+	return (*ret = 0, end_echo(new_line, cmd->stdout));
 }

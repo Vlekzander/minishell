@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 20:49:27 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 19:08:23 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:13:39 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,19 @@
 #include "data.h"
 #include "env.h"
 
-t_error	builtin_env(int *ret, t_btin_data data, t_hash_table *env)
+t_error	builtin_env(int *ret, void *data, t_hash_table *env)
 {
-	t_error	err;
-	char	*str;
+	t_command	*cmd;
+	char		*str;
+	t_error		err;
 
-	if (ret == NULL || data.argv == NULL || env == NULL)
+	cmd = (t_command *) data;
+	if (ret == NULL || cmd->argv == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = get_env(&str, 0, env);
 	if (err.id != ERR_NONE)
 		return (*ret = 1, err);
-	ft_putstr_fd(str, data.stdout);
+	ft_putstr_fd(str, cmd->stdout);
 	free(str);
 	return (*ret = 0, error(ERR_NONE, NULL));
 }

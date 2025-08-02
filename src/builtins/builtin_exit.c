@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:25:20 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/15 00:53:24 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:14:27 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 
 #include "builtins.h"
+#include "data.h"
 #include "env.h"
 #include "libft.h"
 #define EXIT_MAX "9223372036854775807"
@@ -64,19 +65,19 @@ static int	str_isdigit(char *str)
 	return (1);
 }
 
-static t_error	check_str(int *ret, t_btin_data *data)
+static t_error	check_str(int *ret, t_command *cmd)
 {
 	int		is_digit;
 	char	*str;
 
-	str = str_trim(data->argv[1], " \t\n");
-	is_digit = str_isdigit(data->argv[1]);
+	str = str_trim(cmd->argv[1], " \t\n");
+	is_digit = str_isdigit(cmd->argv[1]);
 	if (!is_digit)
 	{
 		print_error(error(ERR_NUMERIC_ARG, str), "exit");
 		return (*ret = 2, error(ERR_EXIT, NULL));
 	}
-	if (data->argc > 2)
+	if (cmd->argc > 2)
 	{
 		print_error(error(ERR_TOO_MANY_ARGS, NULL), "exit");
 		return (*ret = 1, error(ERR_NONE, NULL));
@@ -84,30 +85,29 @@ static t_error	check_str(int *ret, t_btin_data *data)
 	return (error(ERR_NONE, NULL));
 }
 
-t_error	builtin_exit(int *ret, t_btin_data data, t_hash_table *env)
+t_error	builtin_exit(int *ret, void *data, t_hash_table *env)
 {
-	int		value;
-	char	*str;
-	t_error	err;
+	t_command	*cmd;
+	int			value;
+	char		*str;
+	t_error		err;
 
-	if (ret == NULL || data.argv == NULL || env == NULL)
+	cmd = (t_command *) data;
+	if (ret == NULL || cmd->argv == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	if (!data.forked)
+	if (!cmd->forked)
 		ft_putendl_fd("exit", 2);
-	if (data.argv[1] != NULL)
+	if (cmd->argv[1] != NULL)
 	{
-		err = check_str(&value, &data);
-		if (err.id != ERR_NONE || data.argc > 2)
+		err = check_str(&value, cmd);
+		if (err.id != ERR_NONE || cmd->argc > 2)
 			return (*ret = value, err);
 	}
 	value = 1;
-	if (data.argv[1] != NULL)
-		value = ft_atoi(data.argv[1]);
-	else
-	{
-		get_var(&str, env, "?");
-		if (*str != '\0')
-			value = ft_atoi(str);
-	}
+	if (cmd->argv[1] != NULL)
+		return (*ret = ft_atoi(cmd->argv[1]), error(ERR_EXIT, NULL));
+	get_var(&str, env, "?");
+	if (*str != '\0')
+		value = ft_atoi(str);
 	return (*ret = value, error(ERR_EXIT, NULL));
 }

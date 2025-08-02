@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:03:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/02 17:41:16 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/02 19:02:18 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,18 @@ static t_error	get_std_backup(int *stdin, int *stdout)
 static t_error	exec_builtin(t_ret *ret, t_command *cmd, t_list *redirs,
 			t_hash_table *env)
 {
-	t_btin_data	data;
 	t_error		err;
 
 	if (ret == NULL || cmd == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	data.forked = 0;
-	data.argc = cmd->argc;
-	data.argv = cmd->argv;
-	err = get_std_backup(&data.stdin, &data.stdout);
+	err = get_std_backup(&cmd->stdin, &cmd->stdout);
 	if (err.id != ERR_NONE)
 		return (err);
-	err = handle_redirs(redirs, data.stdin, data.stdout);
+	err = handle_redirs(redirs, cmd->stdin, cmd->stdout);
 	if (err.id == ERR_NONE)
-		err = cmd->builtin(&ret->value, data, env);
-	close_fd(data.stdin);
-	close_fd(data.stdout);
+		err = cmd->builtin(&ret->value, cmd, env);
+	close_fd(cmd->stdin);
+	close_fd(cmd->stdout);
 	return (err);
 }
 
