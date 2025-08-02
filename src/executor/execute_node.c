@@ -6,12 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:09:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/07 12:32:37 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:45:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-
 #include "env.h"
 #include "executor.h"
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prepare_arguments.c                                :+:      :+:    :+:   */
+/*   prepare_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/03 11:56:09 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/29 21:34:30 by apierret         ###   ########.fr       */
+/*   Created: 2025/08/02 14:18:14 by apierret          #+#    #+#             */
+/*   Updated: 2025/08/02 16:57:54 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ static t_error	prepare_envp(char ***envp, t_hash_table *env)
 	return (*envp = arr, error(ERR_NONE, NULL));
 }
 
-static t_error	prepare_binary(t_command *cmd, t_list **args, t_hash_table *env)
+static t_error	prepare_binary(t_command *cmd, t_list *args, t_hash_table *env)
 {
 	t_error	err;
 
 	if (cmd == NULL || args == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	cmd->type = CMD_BINARY;
-	err = find_executable(&cmd->executable, (*args)->content, env);
+	err = find_executable(&cmd->executable, args->content, env);
 	if (err.id != ERR_NONE)
 		return (err);
 	err = prepare_envp(&cmd->envp, env);
@@ -73,27 +73,24 @@ static t_error	prepare_binary(t_command *cmd, t_list **args, t_hash_table *env)
 	return (error(ERR_NONE, NULL));
 }
 
-t_error	prepare_command(t_command **command, t_list **args, t_hash_table *env)
+t_error	prepare_command(t_command **command, t_list *args, t_hash_table *env)
 {
 	t_command	*cmd;
 	t_error		err;
 
 	if (command == NULL || args == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	err = expand_list(args, env);
-	if (err.id != ERR_NONE)
-		return (err);
 	cmd = ft_calloc(1, sizeof(t_command));
 	if (cmd == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	cmd->builtin = get_builtin((*args)->content);
+	cmd->builtin = get_builtin(args->content);
 	if (cmd->builtin == NULL)
 	{
 		err = prepare_binary(cmd, args, env);
 		if (err.id != ERR_NONE)
 			return (free_command(cmd), err);
 	}
-	err = prepare_arguments(&cmd->argv, &cmd->argc, *args);
+	err = prepare_arguments(&cmd->argv, &cmd->argc, args);
 	if (err.id != ERR_NONE)
 		return (free_command(cmd), err);
 	return (*command = cmd, err);

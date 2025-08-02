@@ -6,13 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 23:32:51 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/17 16:15:23 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/02 17:41:32 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTOR_H
 # define EXECUTOR_H
-# include <fcntl.h>
+# include <unistd.h>
 # include "data.h"
 # include "error.h"
 # include "hash.h"
@@ -23,16 +23,17 @@ typedef enum e_ret_type
 	RET_VALUE
 }	t_ret_type;
 
-typedef struct s_pipe_fds
+typedef enum e_ret_child
 {
-	int	pipe[2];
-	int	input;
-}	t_pipe_fds;
+	RET_SUB_NONE,
+	RET_SUB_PREPARE,
+	RET_SUB_EXEC
+}	t_ret_sub;
 
 typedef struct s_ret
 {
 	t_ret_type	type;
-	int			redir_error;
+	t_ret_sub	ret_sub;
 	union
 	{
 		pid_t	pid;
@@ -45,13 +46,10 @@ t_error	execute_command_node(t_ast *node, t_hash_table *env);
 t_error	execute_pipeline_node(t_ast *node, t_hash_table *env);
 t_error	execute_logic_node(t_ast *node, t_hash_table *env);
 t_error	execute_redir_node(t_ast *node, t_hash_table *env);
-t_error	find_executable(char **executable, char *command, t_hash_table *env);
-t_error	prepare_command(t_command **command, t_list **args, t_hash_table *env);
-t_error	execute_command(t_ret *ret, t_list **cmd_args, t_list *redirs,
+t_error	execute_command(t_ret *ret, t_list *args, t_list *redirs,
 			t_hash_table *env);
-int		get_exit_code_pipe(t_ret *rets, int size, t_error err);
+t_error	find_executable(char **executable, char *command, t_hash_table *env);
+t_error	prepare_command(t_command **command, t_list *args, t_hash_table *env);
 int		get_exit_code(t_ret ret, t_error err);
-t_error	add_pipe_redir(t_list **redirs, int in, int out, int close);
-t_error	prepare_return(t_ret *ret, t_cmd_type type, t_list *redirs);
 
 #endif
