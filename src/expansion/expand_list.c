@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 16:02:55 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 17:38:01 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/03 14:40:42 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ static t_error	process_expand(t_list **lst, char **str, char **mask,
 	err = variable_expansion(str, mask, env);
 	if (err.id != ERR_NONE)
 		return (err);
+	if (ft_strlen(*str) == 0 && ft_strlen(*mask) == 0)
+		return (free(*str), *str = NULL, error(ERR_EMPTY, NULL));
 	err = word_splitting(&sublist, *str, *mask, htable_get(env, "IFS"));
 	if (err.id != ERR_NONE)
 		return (err);

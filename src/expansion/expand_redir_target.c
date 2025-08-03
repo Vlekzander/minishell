@@ -6,12 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 14:53:58 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 17:49:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/03 14:42:00 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "expansion.h"
+#include "lexer.h"
 
 t_error	expand_redir_target(char **target, t_hash_table *env)
 {
@@ -28,12 +29,11 @@ t_error	expand_redir_target(char **target, t_hash_table *env)
 	if (node == NULL)
 		return (free(content), error(ERR_ALLOCATION, NULL));
 	err = expand_list(&node, env);
-	if (err.id != ERR_NONE)
+	if (err.id != ERR_NONE && err.id != ERR_EMPTY)
 		return (ft_lstclear(&node, free), err);
-	if (node->next != NULL || ft_strncmp("", node->content, 1) == 0)
+	if (node->content == NULL || node->next != NULL)
 		return (ft_lstclear(&node, free), error(ERR_AMB_REDIR, *target));
 	free(*target);
 	*target = node->content;
-	free(node);
-	return (error(ERR_NONE, NULL));
+	return (free(node), error(ERR_NONE, NULL));
 }

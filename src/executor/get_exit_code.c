@@ -24,7 +24,7 @@ static int	exit_code_err(t_ret ret, t_error err)
 	exit_code = 0;
 	if (ret.type == RET_VALUE)
 		exit_code = ret.value;
-	if (err.id == ERR_NO_EXEC)
+	if (err.id == ERR_EMPTY)
 		exit_code = 0;
 	else if (err.id == ERR_PERMISSION || err.id == ERR_IS_DIRECTORY
 		|| ret.ret_sub == RET_SUB_EXEC)

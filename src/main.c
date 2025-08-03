@@ -48,12 +48,12 @@ static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
 	if (line == NULL || str_blank(line))
 		return ;
 	err = prepare_ast(&ast, line, env);
-	if (err.id == ERR_NO_EXEC)
+	if (err.id == ERR_EMPTY)
 		return ;
 	if (err.id != ERR_NONE)
 		return (print_error(err, NULL));
 	err = execute_node(ast, env);
-	if (err.id != ERR_NONE && err.id != ERR_NO_EXEC)
+	if (err.id != ERR_NONE && err.id != ERR_EMPTY)
 	{
 		if (err.id == ERR_EXIT)
 			return (*run = 0, *ret = ast->exit_code, free_ast(ast));

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:09:48 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/16 12:13:14 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/03 14:36:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ t_error	check_file(char *path, int is_file, int read, int write)
 
 	if (path == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
+	if (ft_strlen(path) == 0)
+		return (error(ERR_FILE_NOT_FOUND, path));
 	if (access(path, F_OK) == 0)
 	{
 		if (stat(path, &path_stat) != 0)

@@ -34,7 +34,7 @@ typedef enum e_error_code
 	ERR_TOO_MANY_ARGS,
 	ERR_HOME_NOT_SET,
 	ERR_EXIT,
-	ERR_NO_EXEC,
+	ERR_EMPTY,
 	ERR_WRITE,
 	ERR_DUP,
 }	t_error_code;

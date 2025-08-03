@@ -122,7 +122,7 @@ t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 		node = node->next;
 	}
 	if (err.id == ERR_NONE && g_signal == SIGINT)
-		err.id = ERR_NO_EXEC;
+		err.id = ERR_EMPTY;
 	setup_signals(0);
 	if (dup2(stdin, STDIN_FILENO) == -1)
 		err = error(ERR_DUP, NULL);
