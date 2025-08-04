@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 14:00:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/01 11:30:24 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:20:59 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	close_fds(int fd1, int fd2);
 void	close_pipe(int *pipe);
 void	close_set(int *fd, int value);
 t_error	check_file(char *path, int is_file, int read, int write);
-void	sort_array(char **array, int (*cmp)(char c));
+t_error	lst_sort(t_list *lst, int (*cmp)(char *s1, char *s2, size_t size));
 int		str_empty(void *content);
 int		str_blank(char *str);
 int		ptr_null(void *ptr);

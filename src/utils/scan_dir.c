@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:46:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 15:45:29 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:50:00 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include "utils.h"
 
-static int	ft_strncmp_case(const char *s1, const char *s2, size_t n)
+static int	ft_strncmp_case(char *s1, char *s2, size_t n)
 {
 	size_t	i;
 	char	a;
@@ -37,40 +37,6 @@ static int	ft_strncmp_case(const char *s1, const char *s2, size_t n)
 		i++;
 	}
 	return ((unsigned char) a - (unsigned char) b);
-}
-
-static void	lst_swap_content(t_list *a, t_list *b)
-{
-	void	*tmp;
-
-	if (a == NULL || b == NULL)
-		return ;
-	tmp = a->content;
-	a->content = b->content;
-	b->content = tmp;
-}
-
-static void	sort_files(t_list *lst)
-{
-	t_list	*a;
-	t_list	*b;
-	size_t	a_len;
-
-	if (lst == NULL)
-		return ;
-	a = lst;
-	while (a != NULL)
-	{
-		a_len = ft_strlen(a->content);
-		b = a->next;
-		while (b)
-		{
-			if (ft_strncmp_case(a->content, b->content, a_len +1) > 0)
-				lst_swap_content(a, b);
-			b = b->next;
-		}
-		a = a->next;
-	}
 }
 
 t_error	loop_entries(t_list **content, DIR *dir)
@@ -119,7 +85,7 @@ t_error	scan_dir(t_list **content, char *path)
 		ft_lstclear(content, free);
 		*content = NULL;
 	}
-	sort_files(*content);
+	lst_sort(*content, ft_strncmp_case);
 	if (closedir(dir) == -1)
 		return (error(ERR_ERRNO, path));
 	return (err);

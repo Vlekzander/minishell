@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:11:49 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 21:53:05 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:48:47 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 # include "hash.h"
 
 t_error	load_env(t_hash_table **env, char **envp);
-t_error	get_env(char **str, int export, t_hash_table *env);
+t_error	get_env(t_list **lst, int export, t_hash_table *env);
+t_error	get_env_str(char **str, int export, t_hash_table *env);
 t_error	get_var(char **str, t_hash_table *env, char *key);
 t_error	set_var(t_hash_table *env, char *key, char *value);
 t_error	remove_var(t_hash_table *env, char *key);

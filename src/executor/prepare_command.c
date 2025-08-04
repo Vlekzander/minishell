@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:18:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 19:01:44 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:31:01 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,32 +17,6 @@
 #include "libft.h"
 #include "utils.h"
 
-static int	add_env_to_lst(char *key, void *value, void *data)
-{
-	t_list			**lst;
-	size_t			len;
-	char			*str;
-	t_list			*node;
-
-	if (key == NULL || data == NULL || data + 1 == NULL)
-		return (0);
-	if (value == NULL || ft_strncmp("?", key, 2) == 0)
-		return (1);
-	lst = data;
-	len = ft_strlen(key) + ft_strlen(value) +1;
-	str = ft_calloc(len + 1, sizeof(char));
-	if (str == NULL)
-		return (0);
-	node = ft_lstnew(str);
-	if (node == NULL)
-		return (free(str), 0);
-	ft_strlcat(str, key, len + 1);
-	ft_strlcat(str, "=", len + 1);
-	ft_strlcat(str, value, len + 1);
-	ft_lstadd_back(lst, node);
-	return (1);
-}
-
 static t_error	prepare_envp(char ***envp, t_hash_table *env)
 {
 	char	**array;
@@ -51,9 +25,9 @@ static t_error	prepare_envp(char ***envp, t_hash_table *env)
 
 	if (envp == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	lst = NULL;
-	if (!htable_foreach(env, add_env_to_lst, &lst))
-		return (ft_lstclear(&lst, free), error(ERR_ALLOCATION, NULL));
+	err = get_env(&lst, 0, env);
+	if (err.id != ERR_NONE)
+		return (err);
 	err = lst_array(&array, lst);
 	if (err.id != ERR_NONE)
 		return (ft_lstclear(&lst, free), err);

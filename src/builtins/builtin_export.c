@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:31:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 19:18:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:49:15 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ t_error	builtin_export(int *ret, void *data, t_hash_table *env)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	if (cmd->argc == 1)
 	{
-		err = get_env(&str, 1, env);
+		err = get_env_str(&str, 1, env);
 		if (err.id != ERR_NONE)
 		{
 			*ret = 1;
