@@ -6,16 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:24:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/19 12:19:18 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:23:21 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <inttypes.h>
 #include <stdlib.h>
 #include "data.h"
 #include "error.h"
 #include "parser.h"
-#include "utils.h"
 
 static t_error	nud_word(t_ast **ast, t_token *token)
 {

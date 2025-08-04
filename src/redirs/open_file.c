@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:40:30 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 11:57:34 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:23:57 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "utils.h"
 
 static t_error	prepare_of(t_redir_type type, int mode,
-		int *flags, int *perms)
+							int *flags, int *perms)
 {
 	if (flags == NULL || perms == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));

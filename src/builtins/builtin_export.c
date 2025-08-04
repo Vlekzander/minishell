@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:31:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 19:07:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:18:27 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "builtins.h"
 #include "data.h"
 #include "env.h"
-#include "utils.h"
 
 static t_error	append_var(t_hash_table *env, char *key, char *value)
 {

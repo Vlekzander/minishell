@@ -6,19 +6,18 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:25:20 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 11:46:24 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:18:06 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#define EXIT_MAX "9223372036854775807"
+#define EXIT_MIN "9223372036854775808"
 #include <stddef.h>
 #include <stdlib.h>
-
 #include "builtins.h"
 #include "data.h"
 #include "env.h"
 #include "libft.h"
-#define EXIT_MAX "9223372036854775807"
-#define EXIT_MIN "9223372036854775808"
 
 static char	*str_trim(char *s1, char *set)
 {

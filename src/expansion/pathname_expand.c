@@ -6,11 +6,10 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:03:13 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 15:57:02 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:21:32 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include "expansion.h"
 #include "utils.h"

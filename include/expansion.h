@@ -6,20 +6,20 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 21:29:21 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 15:55:18 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:16:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANSION_H
 # define EXPANSION_H
-# include "data.h"
-# include "error.h"
-# include "hash.h"
 # define MASK_NONE ' '
 # define MASK_EXPAND 'E'
 # define MASK_QUOTE 'Q'
 # define MASK_DQUOTE 'D'
 # define MASK_SQUOTE 'S'
+# include "data.h"
+# include "error.h"
+# include "hash.h"
 
 typedef struct s_sb_index
 {

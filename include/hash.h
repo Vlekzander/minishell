@@ -6,14 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 16:38:56 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/19 11:59:04 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:16:34 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HASH_H
 # define HASH_H
+# include <stddef.h>
 # include "libft.h"
-# include "stddef.h"
 
 typedef struct s_hash_node
 {

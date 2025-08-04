@@ -6,14 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:26:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 14:38:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:20:50 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <sys/wait.h>
 #include "executor.h"
-#include "signals.h"
 
 extern int	g_signal;
 

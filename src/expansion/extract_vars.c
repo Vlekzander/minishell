@@ -6,16 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 23:24:44 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 15:56:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:21:26 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-
 #include "data.h"
 #include "env.h"
 #include "expansion.h"
-#include "utils.h"
 
 static t_error	scan_next_var(t_var *var, char *str, char *mask)
 {

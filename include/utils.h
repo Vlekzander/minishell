@@ -29,7 +29,6 @@ void	close_pipe(int *pipe);
 void	close_set(int *fd, int value);
 t_error	check_file(char *path, int is_file, int read, int write);
 void	sort_array(char **array, int (*cmp)(char c));
-char	*prefix_suffix_str(char *str, char *prefix, char *suffix);
 int		str_empty(void *content);
 int		str_blank(char *str);
 int		ptr_null(void *ptr);

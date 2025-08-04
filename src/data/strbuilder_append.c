@@ -6,13 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/03 01:32:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:19:22 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stddef.h>
 #include <stdlib.h>
-
 #include "data.h"
 
 int	strbuilder_append(t_strbuilder *sb, char *str)

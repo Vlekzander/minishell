@@ -6,15 +6,13 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 18:41:03 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:20:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <stdlib.h>
-
 #include "executor.h"
-#include "signals.h"
 #include "utils.h"
 
 t_error	add_pipe_redir(t_list **redirs, int in, int out, int close)

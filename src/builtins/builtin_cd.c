@@ -6,13 +6,12 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 10:58:47 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/02 19:04:47 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:17:22 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <linux/limits.h>
-
 #include "builtins.h"
 #include "data.h"
 #include "env.h"

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:13:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 19:14:42 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:20:24 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
 #include "error.h"
 #include "libft.h"
 

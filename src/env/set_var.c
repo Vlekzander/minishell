@@ -6,12 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:16:14 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 18:41:55 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:19:44 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-
 #include "env.h"
 
 static int	is_valid_key(char *key)
