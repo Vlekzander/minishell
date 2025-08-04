@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 15:51:36 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 22:53:10 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:58:00 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_error	word_splitting(t_list **lst, char *str, char *mask, char *ifs)
 		return (err);
 	while (*str != '\0')
 	{
-		if (mask[sb->length] == ' ' && ft_strchr(ifs, *str) != NULL)
+		if (mask[sb->length] == MASK_EXPAND && ft_strchr(ifs, *str) != NULL)
 			err = word_to_lst(&list, sb, &mask);
 		else if (!strbuilder_append_char(sb, *str))
 			err = error(ERR_ALLOCATION, NULL);

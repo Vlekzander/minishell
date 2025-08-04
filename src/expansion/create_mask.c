@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 18:07:56 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 12:04:46 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:55:40 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 static char	get_mask_char(char c)
 {
 	if (c == '"')
-		return ('D');
+		return (MASK_DQUOTE);
 	if (c == '\'')
-		return ('S');
-	return (' ');
+		return (MASK_SQUOTE);
+	return (MASK_NONE);
 }
 
 t_error	create_mask(char **mask, char *str)
@@ -40,7 +40,7 @@ t_error	create_mask(char **mask, char *str)
 		if (is_quote(str[i]) && (quote == 0 || quote == str[i]))
 		{
 			quote = toggle_quote(str[i], quote);
-			str_mask[i] = 'Q';
+			str_mask[i] = MASK_QUOTE;
 		}
 		else
 			str_mask[i] = get_mask_char(quote);

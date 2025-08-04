@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 15:51:44 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 18:24:18 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:57:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static t_error	filter_ignored(t_list **files, char *glob_ign)
 	mask = ft_strdup(glob_ign);
 	if (mask == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	ft_memset(mask, ' ', ft_strlen(mask));
+	ft_memset(mask, MASK_NONE, ft_strlen(mask));
 	ignored = ft_split(glob_ign, ':');
 	if (ignored == NULL)
 		return (free(mask), error(ERR_ALLOCATION, NULL));

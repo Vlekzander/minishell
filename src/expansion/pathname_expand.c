@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 13:03:13 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 15:33:38 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:57:02 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static t_error	pathname_expand_handle(t_list **lst, char *str, t_sb_index *sbi,
 		if (temp == NULL)
 			return (error(ERR_ALLOCATION, NULL));
 		sbi->sb->length = sbi->index;
-		if (!strbuilder_append_mchar(sbi->sb, ' ',
+		if (!strbuilder_append_mchar(sbi->sb, MASK_NONE,
 				calculate_sublist_len(sublist)))
 			return (free(temp), error(ERR_ALLOCATION, NULL));
 		if (!strbuilder_append(sbi->sb, temp))

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 12:11:50 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 12:01:28 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:58:24 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ static t_error	parse_pattern(t_pattern **pattern, char *str, char *mask,
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (mask[i] == ' ' && str[i] == '*')
+		if ((mask[i] == MASK_NONE || mask[i] == MASK_EXPAND) && str[i] == '*')
 			err = process_star(pattern, sb, &star_seen);
-		else if (mask[i] != 'Q' && !strbuilder_append_char(sb, str[i]))
+		else if (mask[i] != MASK_QUOTE && !strbuilder_append_char(sb, str[i]))
 			err = error(ERR_ALLOCATION, NULL);
 		if (err.id != ERR_NONE)
 			return (err);

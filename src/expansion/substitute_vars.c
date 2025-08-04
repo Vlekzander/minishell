@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 12:41:24 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 13:45:49 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:57:39 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,11 @@ static t_error	append_value(t_strbuilder *sb, char *value, char context)
 static char	get_context(int mask, char c)
 {
 	if (mask)
+	{
+		if (c == MASK_NONE)
+			return (MASK_EXPAND);
 		return (c);
+	}
 	return (0);
 }
 

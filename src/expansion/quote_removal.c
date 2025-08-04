@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 15:52:40 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/31 13:29:28 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:57:31 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_error	quote_removal(char *str, char *mask)
 	i = 0;
 	while (str[i] != '\0' && mask[i] != '\0')
 	{
-		if (mask[i] == 'Q')
+		if (mask[i] == MASK_QUOTE)
 		{
 			len = ft_strlen(mask + i + 1);
 			ft_memmove(str + i, str + i + 1, len + 1);
