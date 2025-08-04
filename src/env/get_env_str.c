@@ -6,9 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 19:46:40 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 20:21:49 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:04:23 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdlib.h>
 
 #include "data.h"
 #include "env.h"
@@ -52,5 +54,5 @@ t_error	get_env_str(char **str, int export, t_hash_table *env)
 	err = lst_cat(&str_env, lst);
 	if (err.id != ERR_NONE)
 		return (err);
-	return (*str = str_env, error(ERR_NONE, NULL));
+	return (ft_lstclear(&lst, free), *str = str_env, error(ERR_NONE, NULL));
 }
