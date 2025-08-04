@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 21:42:04 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:43:22 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_error	process_heredoc(t_redir *redir, t_strbuilder *sb)
 
 	if (redir == NULL || sb == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	if (sb->length > 1)
+	if (sb->length > 65535)
 		err = buf_to_file(&fd, sb);
 	else
 		err = buf_to_pipe(&fd, sb);
