@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/01 13:33:14 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:15:13 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 	signal(SIGINT, signal_handler);
 	stdin = dup(STDIN_FILENO);
 	if (stdin == -1)
-		return (error(ERR_DUP, NULL));
+		return (error(ERR_ERRNO, NULL));
 	node = redirs;
 	while (node != NULL && err.id == ERR_NONE && g_signal != SIGINT)
 	{
@@ -125,6 +125,6 @@ t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 		err.id = ERR_EMPTY;
 	setup_signals(0);
 	if (dup2(stdin, STDIN_FILENO) == -1)
-		err = error(ERR_DUP, NULL);
+		err = error(ERR_ERRNO, NULL);
 	return (close(stdin), err);
 }

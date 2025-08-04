@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 19:18:31 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/29 21:34:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:14:09 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static t_error	process_redir_pipe(t_redir *redir, int in, int out)
 		if (redir->pipe_fds[0] != -1)
 			ret = dup2(redir->pipe_fds[0], in);
 		if (ret != -1 && redir->pipe_fds[1] != -1)
-			dup2(redir->pipe_fds[1], out);
+			ret = dup2(redir->pipe_fds[1], out);
 	}
 	if (ret == -1)
 		err = error(ERR_ERRNO, NULL);
