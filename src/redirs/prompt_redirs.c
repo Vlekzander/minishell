@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 19:15:13 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:39:53 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,13 @@ static t_error	process_line(t_hash_table *env, t_strbuilder *sb, char **line,
 	return (error(ERR_NONE, NULL));
 }
 
-static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
-					char *eof)
+static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, char *eof)
 {
 	char	*line;
 	int		expand;
 	t_error	err;
 
-	if (env == NULL || (sb == NULL && is_last) || eof == NULL)
+	if (env == NULL || sb == NULL || eof == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	expand = (ft_strchr(eof, '"') == NULL && ft_strchr(eof, '\'') == NULL);
 	hd_prepare_eof(eof);
@@ -68,35 +67,28 @@ static t_error	prompt_hd(t_hash_table *env, t_strbuilder *sb, int is_last,
 		if (line == NULL || g_signal == SIGINT
 			|| ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)
 			break ;
-		if (is_last)
-		{
-			err = process_line(env, sb, &line, expand);
-			if (err.id != ERR_NONE)
-				return (free(line), err);
-		}
+		err = process_line(env, sb, &line, expand);
+		if (err.id != ERR_NONE)
+			return (free(line), err);
 		free(line);
 	}
 	return (free(line), error(ERR_NONE, NULL));
 }
 
-static t_error	prompt_heredoc(t_redir *redir, t_hash_table *env, int is_last)
+static t_error	prompt_heredoc(t_redir *redir, t_hash_table *env)
 {
 	t_strbuilder	*sb;
 	t_error			err;
 
 	if (redir == NULL || redir->type != REDIR_HEREDOC)
 		return (error(ERR_IMPLEMENTATION, NULL));
-	sb = NULL;
-	if (is_last)
-	{
-		sb = create_strbuilder(8192);
-		if (sb == NULL)
-			return (error(ERR_ALLOCATION, NULL));
-	}
-	err = prompt_hd(env, sb, is_last, redir->heredoc);
+	sb = create_strbuilder(8192);
+	if (sb == NULL)
+		return (error(ERR_ALLOCATION, NULL));
+	err = prompt_hd(env, sb, redir->heredoc);
 	if (err.id != ERR_NONE)
 		return (free_strbuilder(sb), err);
-	if (is_last && g_signal != SIGINT)
+	if (g_signal != SIGINT)
 		err = process_heredoc(redir, sb);
 	return (free_strbuilder(sb), err);
 }
@@ -118,7 +110,7 @@ t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 	node = redirs;
 	while (node != NULL && err.id == ERR_NONE && g_signal != SIGINT)
 	{
-		err = prompt_heredoc(node->content, env, node->next == NULL);
+		err = prompt_heredoc(node->content, env);
 		node = node->next;
 	}
 	if (err.id == ERR_NONE && g_signal == SIGINT)
