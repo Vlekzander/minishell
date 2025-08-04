@@ -6,13 +6,38 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:46:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/07/08 13:10:12 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:40:11 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <dirent.h>
+#include <limits.h>
 #include <stdlib.h>
 #include "utils.h"
+
+static int	strcmp_case(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+	char	a;
+	char	b;
+
+	if (n == 0)
+		return (0);
+	if (s1 == NULL || s2 == NULL)
+		return (INT_MAX);
+	a = 0;
+	b = 0;
+	i = 0;
+	while (i < n -1 && s1[i] != '\0' && s2[i] != '\0')
+	{
+		a = (char) ft_tolower(s1[i]);
+		b = (char) ft_tolower(s2[i]);
+		if (a != b)
+			break ;
+		i++;
+	}
+	return ((unsigned char) a - (unsigned char) b);
+}
 
 static void	lst_swap_content(t_list *a, t_list *b)
 {
@@ -25,20 +50,22 @@ static void	lst_swap_content(t_list *a, t_list *b)
 	b->content = tmp;
 }
 
-static void	sort_ascii_list(t_list *lst)
+static void	sort_files(t_list *lst)
 {
 	t_list	*a;
 	t_list	*b;
+	size_t	a_len;
 
 	if (lst == NULL)
 		return ;
 	a = lst;
 	while (a != NULL)
 	{
+		a_len = ft_strlen(a->content);
 		b = a->next;
 		while (b)
 		{
-			if (ft_strncmp(a->content, b->content, 255) > 0)
+			if (strcmp_case(a->content, b->content, a_len +1) > 0)
 				lst_swap_content(a, b);
 			b = b->next;
 		}
@@ -92,7 +119,7 @@ t_error	scan_dir(t_list **content, char *path)
 		ft_lstclear(content, free);
 		*content = NULL;
 	}
-	sort_ascii_list(*content);
+	sort_files(*content);
 	if (closedir(dir) == -1)
 		return (error(ERR_ERRNO, path));
 	return (err);
