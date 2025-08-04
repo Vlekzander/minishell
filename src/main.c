@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:49:01 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/01 13:28:28 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:48:07 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,9 @@ static void	process_line(char *line, t_hash_table *env, int *run, int *ret)
 		return (print_error(err, NULL));
 	err = execute_node(ast, env);
 	if (err.id != ERR_NONE && err.id != ERR_EMPTY)
-	{
-		if (err.id == ERR_EXIT)
-			return (*run = 0, *ret = ast->exit_code, free_ast(ast));
 		print_error(err, NULL);
-	}
+	if (err.exit)
+		return (*run = 0, *ret = ast->exit_code, free_ast(ast));
 	free_ast(ast);
 }
 

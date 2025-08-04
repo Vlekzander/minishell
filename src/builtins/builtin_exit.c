@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 15:25:20 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/02 19:14:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:46:24 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static t_error	check_str(int *ret, t_command *cmd)
 	if (!is_digit)
 	{
 		print_error(error(ERR_NUMERIC_ARG, str), "exit");
-		return (*ret = 2, error(ERR_EXIT, NULL));
+		return (*ret = 2, errorq(ERR_NONE, NULL));
 	}
 	if (cmd->argc > 2)
 	{
@@ -105,9 +105,9 @@ t_error	builtin_exit(int *ret, void *data, t_hash_table *env)
 	}
 	value = 1;
 	if (cmd->argv[1] != NULL)
-		return (*ret = ft_atoi(cmd->argv[1]), error(ERR_EXIT, NULL));
+		return (*ret = ft_atoi(cmd->argv[1]), errorq(ERR_NONE, NULL));
 	get_var(&str, env, "?");
 	if (*str != '\0')
 		value = ft_atoi(str);
-	return (*ret = value, error(ERR_EXIT, NULL));
+	return (*ret = value, errorq(ERR_NONE, NULL));
 }

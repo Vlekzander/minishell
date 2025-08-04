@@ -6,13 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:09:08 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/02 13:45:03 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 14:38:03 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "env.h"
 #include "executor.h"
+#include "signals.h"
 
 t_error	execute_node(t_ast *node, t_hash_table *env)
 {
@@ -38,5 +39,5 @@ t_error	execute_node(t_ast *node, t_hash_table *env)
 	str = ft_itoa(node->exit_code);
 	if (str == NULL)
 		return (error(ERR_ALLOCATION, NULL));
-	return (set_var(env, "?", str), free(str), err);
+	return (setup_signals(0), set_var(env, "?", str), free(str), err);
 }

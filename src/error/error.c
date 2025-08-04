@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 15:29:23 by apierret          #+#    #+#             */
-/*   Updated: 2025/06/22 20:44:03 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:47:28 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,6 @@ t_error	error(t_error_code code, char *cause)
 
 	err.id = code;
 	err.src = ft_strdup(cause);
+	err.exit = 0;
 	return (err);
 }

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:43:29 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/01 11:23:27 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:43:18 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,11 @@ typedef struct s_error
 {
 	t_error_code	id;
 	char			*src;
+	int				exit;
 }	t_error;
 
 t_error	error(t_error_code code, char *cause);
+t_error	errorq(t_error_code code, char *cause);
 void	print_error(t_error err, char *builtin);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:03:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/02 19:02:18 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 14:33:19 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static t_error	exec_builtin(t_ret *ret, t_command *cmd, t_list *redirs,
 
 	if (ret == NULL || cmd == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
+	if (in_pipeline(redirs))
+		cmd->forked = 1;
 	err = get_std_backup(&cmd->stdin, &cmd->stdout);
 	if (err.id != ERR_NONE)
 		return (err);
@@ -48,7 +50,7 @@ static t_error	exec_builtin(t_ret *ret, t_command *cmd, t_list *redirs,
 	return (err);
 }
 
-t_error	execute_command(t_ret *ret, t_list *args, t_list *redirs,
+static t_error	exec_cmd(t_ret *ret, t_list *args, t_list *redirs,
 			t_hash_table *env)
 {
 	t_command	*cmd;
@@ -63,6 +65,8 @@ t_error	execute_command(t_ret *ret, t_list *args, t_list *redirs,
 	if (cmd->type == CMD_BUILTIN)
 	{
 		err = exec_builtin(ret, cmd, redirs, env);
+		if (in_pipeline(redirs))
+			err.exit = 1;
 		return (free_command(cmd), err);
 	}
 	err = handle_redirs(redirs, STDIN_FILENO, STDOUT_FILENO);
@@ -74,4 +78,45 @@ t_error	execute_command(t_ret *ret, t_list *args, t_list *redirs,
 		return (free_command(cmd), ret->ret_sub = RET_SUB_EXEC, err);
 	}
 	return (free_command(cmd), ret->ret_sub = RET_SUB_PREPARE, err);
+}
+
+static t_error	exec_fork(t_ret *ret, t_list *args, t_list *redirs,
+					t_hash_table *env)
+{
+	pid_t		pid;
+
+	if (ret == NULL || args == NULL || env == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	ret->type = RET_PID;
+	pid = fork();
+	if (pid == -1)
+		return (ret->pid = -1, error(ERR_FORK, NULL));
+	if (pid == 0)
+		return (restore_signals(), exec_cmd(ret, args, redirs, env));
+	ret->pid = pid;
+	return (error(ERR_NONE, NULL));
+}
+
+t_error	execute_command(t_ret *ret, t_list **args, t_list *redirs,
+			t_hash_table *env)
+{
+	t_error	err;
+
+	if (ret == NULL || args == NULL || *args == NULL || env == NULL)
+		return (error(ERR_IMPLEMENTATION, NULL));
+	err = prepare_redirs(redirs, env);
+	if (err.id != ERR_NONE)
+		return (close_redirs(redirs), err);
+	err = expand_list(args, env);
+	if (err.id != ERR_NONE)
+		return (close_redirs(redirs), err);
+	if (get_builtin((*args)->content) != NULL && !in_pipeline(redirs))
+	{
+		err = exec_cmd(ret, *args, redirs, env);
+		return (close_redirs(redirs), err);
+	}
+	err = exec_fork(ret, *args, redirs, env);
+	if (err.id != ERR_NONE)
+		return (close_redirs(redirs), err);
+	return (close_redirs(redirs), err);
 }

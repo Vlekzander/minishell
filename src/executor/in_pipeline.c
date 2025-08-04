@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   restore_signals.c                                  :+:      :+:    :+:   */
+/*   in_pipeline.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/09 17:07:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 14:26:53 by apierret         ###   ########.fr       */
+/*   Created: 2025/08/04 14:34:01 by apierret          #+#    #+#             */
+/*   Updated: 2025/08/04 14:34:34 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
-#include "signals.h"
+#include "data.h"
+#include "executor.h"
+#include "libft.h"
 
-void	restore_signals(void)
+int	in_pipeline(t_list *redirs)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGTERM, SIG_DFL);
+	t_redir	*redir;
+
+	if (redirs == NULL)
+		return (0);
+	redir = redirs->content;
+	if (redir->type == REDIR_PIPE)
+		return (1);
+	return (0);
 }

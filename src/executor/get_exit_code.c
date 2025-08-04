@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:26:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/02 17:21:02 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 14:38:27 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	exit_code_err(t_ret ret, t_error err)
 		exit_code = 126;
 	else if (err.id == ERR_FILE_NOT_FOUND || err.id == ERR_CMD_NOT_FOUND)
 		exit_code = 127;
-	else if (err.id != ERR_NONE && err.id != ERR_EXIT)
+	else if (err.id != ERR_NONE)
 		return (1);
 	return (exit_code);
 }
@@ -42,7 +42,6 @@ static int	exit_code(t_ret ret, t_error err, int status)
 	int	sig;
 
 	exit_code = 0;
-	setup_signals(0);
 	if (ret.type == RET_PID && ret.pid != -1)
 	{
 		if (WIFEXITED(status))
@@ -58,6 +57,21 @@ static int	exit_code(t_ret ret, t_error err, int status)
 	}
 	exit_code = exit_code_err(ret, err);
 	return (g_signal = 0, exit_code);
+}
+
+int	get_exit_code_pipe(t_ret *rets, int size, t_error err)
+{
+	int		i;
+	int		status;
+
+	status = 0;
+	i = 0;
+	while (i < size -1 && rets[i].type == RET_PID)
+		waitpid(rets[i++].pid, &status, 0);
+	waitpid(rets[i].pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		write(STDOUT_FILENO, "\n", 1);
+	return (exit_code(rets[i], err, status));
 }
 
 int	get_exit_code(t_ret ret, t_error err)
