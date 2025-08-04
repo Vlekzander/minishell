@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:03:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 14:33:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:56:58 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ t_error	execute_command(t_ret *ret, t_list **args, t_list *redirs,
 	err = expand_list(args, env);
 	if (err.id != ERR_NONE)
 		return (close_redirs(redirs), err);
+	if (*args == NULL)
+		return (error(ERR_EMPTY, NULL));
 	if (get_builtin((*args)->content) != NULL && !in_pipeline(redirs))
 	{
 		err = exec_cmd(ret, *args, redirs, env);

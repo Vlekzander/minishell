@@ -6,10 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 16:02:55 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 19:21:17 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:56:15 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include "expansion.h"
 #include "utils.h"
@@ -75,11 +76,12 @@ t_error	expand_list(t_list **lst, t_hash_table *env)
 		if (err.id != ERR_NONE)
 			return (err);
 		err = process_expand(&sublist, (char **) &node->content, &mask, env);
-		if (err.id != ERR_NONE)
+		if (err.id != ERR_NONE && err.id != ERR_EMPTY)
 			return (free(mask), err);
 		free(mask);
-		insert_sublist(node, sublist);
+		if (err.id != ERR_EMPTY)
+			insert_sublist(node, sublist);
 		node = next;
 	}
-	return (error(ERR_NONE, NULL));
+	return (lst_remove(lst, ptr_null, NULL), error(ERR_NONE, NULL));
 }
