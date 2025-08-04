@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:46:16 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 15:40:11 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:45:29 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include "utils.h"
 
-static int	strcmp_case(const char *s1, const char *s2, size_t n)
+static int	ft_strncmp_case(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
 	char	a;
@@ -65,7 +65,7 @@ static void	sort_files(t_list *lst)
 		b = a->next;
 		while (b)
 		{
-			if (strcmp_case(a->content, b->content, a_len +1) > 0)
+			if (ft_strncmp_case(a->content, b->content, a_len +1) > 0)
 				lst_swap_content(a, b);
 			b = b->next;
 		}
