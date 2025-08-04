@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:31:04 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/02 19:06:46 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:07:53 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ static t_error	append_set_var(t_hash_table *env, char *str, char *ptr)
 	if (env == NULL || str == NULL || ptr == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	*ptr = '\0';
-	if (ft_strncmp("_", str, 2) == 0)
-		return (*ptr = '=', error(ERR_NONE, NULL));
 	if (ptr[-1] == '+')
 	{
 		ptr[-1] = '\0';
@@ -88,11 +86,6 @@ static t_error	export_vars(int *ret, int argc, char **argv, t_hash_table *env)
 		if (err.id != ERR_NONE)
 		{
 			value = 1;
-			if (err.id == ERR_INVALID_KEY)
-			{
-				free(err.src);
-				err.src = prefix_suffix_str(argv[i], "`", "'");
-			}
 			print_error(err, "export");
 		}
 		i++;
