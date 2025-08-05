@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/05 15:00:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:39:16 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,11 @@ t_error	process_exec_pipeline(t_ret *ret, t_ast *node, int *fds,
 	{
 		err = execute_redir_node(node, env);
 		close_set(&fds[0], pipe_fds[0]);
-		print_error(err, NULL);
 	}
 	if (!err.exit)
 		close_set(&pipe_fds[1], -1);
+	if (ret->ret_sub != RET_SUB_NONE)
+		err.exit = 1;
 	return (err);
 }
 
@@ -125,13 +126,11 @@ t_error	execute_pipeline_node(t_ast *node, t_hash_table *env)
 	lst = node->pipeline;
 	while (lst != NULL && !err.exit)
 	{
+		print_error(err, NULL);
 		err = prepare_pipe_fds(lst, fds);
 		if (err.id != ERR_NONE)
 			return (close_fd(fds[0]), close_pipe(fds +1), free(rets), err);
 		err = process_exec_pipeline(&rets[i], lst->content, fds, env);
-		if (rets[i].ret_sub != RET_SUB_NONE)
-			err.exit = 1;
-		i++;
 		lst = lst->next;
 	}
 	node->exit_code = get_exit_code_pipe(rets, i, err);
