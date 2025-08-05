@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:13:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 19:20:24 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/05 15:01:31 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static char	*get_error_message(t_error_code code)
 void	print_error(t_error err, char *builtin)
 {
 	if (err.id == ERR_NONE)
-		return (free(err.src));
+		return (free(err.src), err.src = NULL, (void) NULL);
 	ft_putstr_fd(ERROR_PREFIX, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	if (builtin != NULL)
@@ -79,6 +79,7 @@ void	print_error(t_error err, char *builtin)
 		ft_putstr_fd(err.src, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		free(err.src);
+		err.src = NULL;
 	}
 	ft_putendl_fd(get_error_message(err.id), STDERR_FILENO);
 }

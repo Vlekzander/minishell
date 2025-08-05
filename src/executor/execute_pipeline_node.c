@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/05 14:31:19 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/05 15:00:53 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ t_error	process_exec_pipeline(t_ret *ret, t_ast *node, int *fds,
 	{
 		err = execute_redir_node(node, env);
 		close_set(&fds[0], pipe_fds[0]);
+		print_error(err, NULL);
 	}
 	if (!err.exit)
 		close_set(&pipe_fds[1], -1);
