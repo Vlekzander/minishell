@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 14:32:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 14:30:38 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:30:29 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_error	execute_command_node(t_ast *node, t_hash_table *env)
 	if (node == NULL || env == NULL || node->type != NODE_COMMAND)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	ret = (t_ret){0};
+	ret.pid = -1;
 	signal(SIGINT, SIG_IGN);
 	err = execute_command(&ret, &node->command_args, node->redirs, env);
 	node->exit_code = get_exit_code(ret, err);

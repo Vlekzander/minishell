@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 18:32:53 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 19:20:40 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:31:19 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,7 @@ static t_error	prepare_vars(t_ret **rets, int *fds, int *index, int size)
 	i = 0;
 	while (i < size)
 	{
-		arr[i].type = RET_PID;
-		arr[i].ret_sub = RET_SUB_NONE;
+		arr[i] = (t_ret){0};
 		arr[i].pid = -1;
 		i++;
 	}

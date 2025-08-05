@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:03:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 20:56:58 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:28:51 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_error	execute_command(t_ret *ret, t_list **args, t_list *redirs,
 		return (error(ERR_IMPLEMENTATION, NULL));
 	err = prepare_redirs(redirs, env);
 	if (err.id != ERR_NONE)
-		return (close_redirs(redirs), err);
+		return (ret->redir_error = 1, close_redirs(redirs), err);
 	err = expand_list(args, env);
 	if (err.id != ERR_NONE)
 		return (close_redirs(redirs), err);

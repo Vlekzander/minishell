@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:26:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 19:20:50 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:21:00 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ static int	exit_code_err(t_ret ret, t_error err)
 	else if (err.id == ERR_FILE_NOT_FOUND || err.id == ERR_CMD_NOT_FOUND)
 		exit_code = 127;
 	else if (err.id != ERR_NONE)
-		return (1);
+		exit_code = 1;
+	if (ret.redir_error)
+		exit_code = 1;
 	return (exit_code);
 }
 
