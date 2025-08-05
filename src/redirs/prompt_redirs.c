@@ -6,7 +6,7 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 1970/01/01 01:00:00 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/04 21:39:53 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:23:35 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@
 #include "redirs.h"
 #include "signals.h"
 
-extern int	g_signal;
-
-static void	signal_handler(int sig)
+static void	hd_sig_handler(int sig)
 {
 	g_signal = sig;
 	if (sig != SIGINT)
@@ -103,7 +101,7 @@ t_error	prompt_redirs(t_list *redirs, t_hash_table *env)
 		return (error(ERR_NONE, NULL));
 	err = error(ERR_NONE, NULL);
 	g_signal = 0;
-	signal(SIGINT, signal_handler);
+	signal(SIGINT, hd_sig_handler);
 	stdin = dup(STDIN_FILENO);
 	if (stdin == -1)
 		return (error(ERR_ERRNO, NULL));

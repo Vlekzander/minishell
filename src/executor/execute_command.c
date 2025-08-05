@@ -6,10 +6,11 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:03:02 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/05 14:28:51 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:30:08 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include <unistd.h>
 #include "executor.h"
 #include "expansion.h"
@@ -38,7 +39,10 @@ static t_error	exec_builtin(t_ret *ret, t_command *cmd, t_list *redirs,
 	if (ret == NULL || cmd == NULL || env == NULL)
 		return (error(ERR_IMPLEMENTATION, NULL));
 	if (in_pipeline(redirs))
+	{
 		cmd->forked = 1;
+		signal(SIGPIPE, sig_handler);
+	}
 	err = get_std_backup(&cmd->stdin, &cmd->stdout);
 	if (err.id != ERR_NONE)
 		return (err);
@@ -47,6 +51,8 @@ static t_error	exec_builtin(t_ret *ret, t_command *cmd, t_list *redirs,
 		err = cmd->builtin(&ret->value, cmd, env);
 	close_fd(cmd->stdin);
 	close_fd(cmd->stdout);
+	if (err.id == ERR_WRITE && g_signal == SIGPIPE)
+		err = error(ERR_NONE, NULL);
 	return (err);
 }
 

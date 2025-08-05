@@ -15,7 +15,7 @@ SOURCES =	src/main.c	\
 			src/lexer/lexer_utils.c src/lexer/process_input.c src/lexer/tokenize.c src/lexer/tokenize_process.c	\
 			src/parser/led_process.c src/parser/nud_process.c src/parser/parse_ast.c src/parser/parse_utils.c src/parser/redir_cond.c src/parser/redir_to_list.c	\
 			src/redirs/close_redirs.c src/redirs/handle_redirs.c src/redirs/hd_prepare_eof.c src/redirs/open_file.c src/redirs/prepare_redirs.c src/redirs/process_heredoc.c src/redirs/prompt_redirs.c	\
-			src/signals/restore_signals.c src/signals/setup_signals.c	\
+			src/signals/restore_signals.c src/signals/setup_signals.c src/signals/sig_handler.c	\
 			src/utils/check_file.c src/utils/close_utils.c src/utils/fill_buffer_random.c src/utils/free_ddarray.c src/utils/ft_strndup.c src/utils/ft_strstr.c src/utils/insert_sublist.c src/utils/is_blank.c src/utils/lst_array.c src/utils/lst_remove.c src/utils/lst_sort.c src/utils/quote_utils.c src/utils/remove_str_quotes.c src/utils/scan_dir.c src/utils/str_conditions.c
 OBJECTS = $(SOURCES:.c=.o)
 DEPS = $(SOURCES:.c=.d)

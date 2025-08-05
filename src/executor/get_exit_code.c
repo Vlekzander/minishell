@@ -6,15 +6,14 @@
 /*   By: apierret <apierret@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:26:12 by apierret          #+#    #+#             */
-/*   Updated: 2025/08/05 14:21:00 by apierret         ###   ########.fr       */
+/*   Updated: 2025/08/05 20:21:14 by apierret         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <sys/wait.h>
 #include "executor.h"
-
-extern int	g_signal;
+#include "signals.h"
 
 static int	exit_code_err(t_ret ret, t_error err)
 {
