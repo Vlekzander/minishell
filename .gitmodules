@@ -1,0 +1,3 @@
+[submodule "libft"]
+	path = libft
+	url = ssh://git@codeberg.org/Vlekzander/libft.git
